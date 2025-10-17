@@ -16,7 +16,7 @@
 
 ---
 
-## ✨ **Features**
+## **Features**
 
 ### **Core Modules**
 
