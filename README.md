@@ -1,61 +1,173 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# ERP Food & Beverage Manufacturing System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+[![Laravel](https://img.shields.io/badge/Laravel-12.x-red.svg)](https://laravel.com)
+[![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-purple.svg)](https://getbootstrap.com)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0+-blue.svg)](https://www.mysql.com)
 
-## About Laravel
+> Sistem ERP (Enterprise Resource Planning) lengkap untuk industri manufaktur makanan dan minuman dengan fitur production planning, inventory management, quality control, dan compliance management (BPOM, Halal, HACCP).
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## **Table of Contents**
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [User Roles](#-user-roles)
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## ✨ **Features**
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### **Core Modules**
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+#### **Human Resource Management (HRM)**
+- Employee Directory & Management
+- Attendance & Shift Management
+- Leave Management & Approval Workflow
+- Payroll Processing & Salary Calculation
+- Performance Reviews & KPI Tracking
+- Training Programs & Certifications
+- Employee Self Service (ESS) Portal
 
-## Laravel Sponsors
+#### **Inventory Management**
+- Product Management (Raw Material, Semi-Finished, Finished Goods)
+- Bill of Materials (BOM) & Recipe Management
+- Lot & Batch Tracking (Full Traceability)
+- Multi-Warehouse Management
+- Stock Movement Tracking
+- Expiry Date Management & Alerts
+- Reorder Point & Automated Procurement
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+#### **Production Management**
+- Production Planning (MRP - Material Requirement Planning)
+- Work Order Management
+- Batch Production Tracking
+- Quality Control (QC) at Every Stage
+- Production Cost Calculation
+- Real-time Production Monitoring
 
-### Premium Partners
+#### **Business Management**
+- Supplier & Vendor Management
+- Purchase Orders & Receipts
+- Purchase Returns
+- Customer Management (CRM)
+- Sales Orders & Quotations
+- Delivery & Distribution Management
+- Sales Returns & Refunds
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+#### **Finance Management**
+- Chart of Accounts
+- Journal Entries (General Ledger)
+- Accounts Payable (AP)
+- Accounts Receivable (AR)
+- Payment Processing
+- Product Costing & Margin Analysis
+- Budgeting & Variance Analysis
+- Profit & Loss Reports
 
-## Contributing
+#### **Communication & Announcements**
+- Meeting Scheduling & Minutes
+- Company-wide Announcements
+- Broadcast Messages
+- Notification System
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+#### **Maintenance Management**
+- Machine & Equipment Registry
+- Preventive Maintenance Scheduling
+- Maintenance History & Logs
+- Breakdown Tickets & Requests
+- Downtime Tracking & Analysis
+- Spare Parts Inventory
 
-## Code of Conduct
+#### **Quality Assurance & Compliance**
+- Sanitation & Hygiene Checklists
+- Daily Audit Reports
+- Certification Management (ISO, HACCP, BPOM, Halal)
+- Non-Conformance Reports (NCR)
+- Corrective & Preventive Actions (CAPA)
+- Quality Parameter Tracking
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+#### **Logistics Management**
+- Fleet Management
+- Delivery Route Optimization
+- Driver Management
+- Delivery Confirmation with Proof of Delivery (POD)
+- Vehicle Maintenance Tracking
 
-## Security Vulnerabilities
+#### **Reporting & Analytics**
+- Production Batch Reports
+- Stock & Material Reports
+- Quality & Rejection Reports
+- Financial Reports (P&L, Cash Flow, Aging)
+- Employee Performance Reports
+- Custom Report Builder
+- Export to Excel/PDF
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+#### **System Settings**
+- User Management & Role-Based Access Control
+- Permissions Management (CRUD per module)
+- Audit Logs (All system activities)
+- Activity Logs (User actions)
+- Document Format Templates
+- Multi-Currency Support
+- Tax Configuration
+- Workflow & Approval Configuration
+- Email & Notification Settings
+- Company Profile Management
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## **Tech Stack**
+
+### **Backend**
+- **Framework:** Laravel 12.x
+- **Language:** PHP 8.3+
+- **Database:** MySQL 8.0+
+- **Authentication:** Laravel Sanctum (API Token)
+- **Queue:** Redis/Database Queue
+- **Cache:** Redis/File Cache
+
+### **Frontend**
+- **CSS Framework:** Bootstrap 5
+- **Pre-processor:** SASS/SCSS
+- **Build Tool:** Vite
+
+### **Additional Tools**
+- **PDF Generator:** DomPDF / Laravel Snappy
+- **Excel Export:** Laravel Excel (Maatwebsite)
+- **Barcode/QR:** SimpleSoftwareIO/simple-qrcode
+- **Logging:** Laravel Log / Monolog
+- **Testing:** Pest
+
+---
+
+## **User Roles**
+
+| Role | Code | Access Level | Description |
+|------|------|--------------|-------------|
+| **Administrator** | `admin` | Full Access | Complete system access including settings & user management |
+| **Operational Staff** | `operator` | Production & Inventory | Access to production, inventory, QC, and maintenance modules |
+| **Finance & HR Staff** | `finance_hr` | Finance & HR | Access to finance, HR, and administrative modules |
+
+### **Role Permissions Matrix**
+
+| Module | Admin | Operator | Finance/HR |
+|--------|-------|----------|------------|
+| Dashboard | ✅ | ✅ | ✅ |
+| HRM | ✅ | ❌ | ✅ |
+| Inventory | ✅ | ✅ | ❌ |
+| Production | ✅ | ✅ | ❌ |
+| Business Mgmt | ✅ | 📝 Partial | 📝 Partial |
+| Finance | ✅ | ❌ | ✅ |
+| QA/QC | ✅ | ✅ | ❌ |
+| Maintenance | ✅ | ✅ | ❌ |
+| Logistics | ✅ | ✅ | ❌ |
+| Reports | ✅ | 📝 Production | 📝 Finance |
+| Settings | ✅ | ❌ | ❌ |
+| User Management | ✅ | ❌ | ❌ |
+
+---
+
+**Built with ❤️ for Food & Beverage Manufacturing Industry**
+
+*Last Updated: October 2025*
