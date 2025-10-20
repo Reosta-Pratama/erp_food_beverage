@@ -1,0 +1,42 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('purchase_order_items', function (Blueprint $table) {
+            $table->id('po_item_id');
+            $table->unsignedBigInteger('po_id');
+            $table->unsignedBigInteger('product_id');
+            $table->decimal('quantity_ordered', 15, 4);
+            $table->decimal('quantity_received', 15, 4)->nullable()->default(0);
+            $table->unsignedBigInteger('uom_id');
+            $table->decimal('unit_price', 15, 2);
+            $table->decimal('discount_percentage', 5, 2)->nullable()->default(0);
+            $table->decimal('tax_percentage', 5, 2)->nullable()->default(0);
+            $table->decimal('line_total', 15, 2);
+            $table->date('expected_date')->nullable();
+            $table->text('notes')->nullable();
+            $table->timestamps();
+
+            $table->foreign('po_id')->references('po_id')->on('purchase_orders')->cascadeOnDelete();
+            $table->foreign('product_id')->references('product_id')->on('products');
+            $table->foreign('uom_id')->references('uom_id')->on('units_of_measure');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('purchase_order_items');
+    }
+};
