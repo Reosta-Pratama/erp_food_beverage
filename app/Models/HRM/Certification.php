@@ -4,21 +4,13 @@ namespace App\Models\HRM;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Certifications extends Model
+class Certification extends Model
 {
-    /**
-     * The table associated with the model.
-     */
+    //
     protected $table = 'certifications';
-    
-    /**
-     * The primary key associated with the table.
-     */
     protected $primaryKey = 'certification_id';
+    public $timestamps = false;
 
-    /**
-     * The attributes that are mass assignable.
-     */
     protected $fillable = [
         'employee_id',
         'certification_name',
@@ -29,10 +21,9 @@ class Certifications extends Model
         'document_path',
     ];
 
-    /**
-     * The attributes that should be cast.
-     */
     protected $casts = [
+        'issue_date' => 'date',
+        'expiry_date' => 'date',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

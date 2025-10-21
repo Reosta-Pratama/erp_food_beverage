@@ -4,21 +4,13 @@ namespace App\Models\UserManagement;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Permissions extends Model
+class Permission extends Model
 {
-    /**
-     * The table associated with the model.
-     */
+    //
     protected $table = 'permissions';
-    
-    /**
-     * The primary key associated with the table.
-     */
     protected $primaryKey = 'permission_id';
+    public $timestamps = false;
 
-    /**
-     * The attributes that are mass assignable.
-     */
     protected $fillable = [
         'module_name',
         'permission_name',
@@ -29,11 +21,11 @@ class Permissions extends Model
         'can_delete',
     ];
 
-    /**
-     * The attributes that should be cast.
-     */
     protected $casts = [
+        'can_create' => 'boolean',
+        'can_read' => 'boolean',
+        'can_update' => 'boolean',
+        'can_delete' => 'boolean',
         'created_at' => 'datetime',
-        'updated_at' => 'datetime',
     ];
 }

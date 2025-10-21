@@ -4,21 +4,13 @@ namespace App\Models\UserManagement;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ActivityLogs extends Model
+class ActivityLog extends Model
 {
-    /**
-     * The table associated with the model.
-     */
+    //
     protected $table = 'activity_logs';
-    
-    /**
-     * The primary key associated with the table.
-     */
     protected $primaryKey = 'activity_id';
+    public $timestamps = false;
 
-    /**
-     * The attributes that are mass assignable.
-     */
     protected $fillable = [
         'user_id',
         'activity_type',
@@ -27,9 +19,6 @@ class ActivityLogs extends Model
         'activity_timestamp',
     ];
 
-    /**
-     * The attributes that should be cast.
-     */
     protected $casts = [
         'activity_timestamp' => 'datetime',
     ];

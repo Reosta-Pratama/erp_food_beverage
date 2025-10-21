@@ -4,21 +4,13 @@ namespace App\Models\HRM;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Leaves extends Model
+class Leave extends Model
 {
-    /**
-     * The table associated with the model.
-     */
+    //
     protected $table = 'leaves';
-    
-    /**
-     * The primary key associated with the table.
-     */
     protected $primaryKey = 'leave_id';
+    public $timestamps = false;
 
-    /**
-     * The attributes that are mass assignable.
-     */
     protected $fillable = [
         'employee_id',
         'leave_type_id',
@@ -31,10 +23,10 @@ class Leaves extends Model
         'approval_date',
     ];
 
-    /**
-     * The attributes that should be cast.
-     */
     protected $casts = [
+        'start_date' => 'date',
+        'end_date' => 'date',
+        'approval_date' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

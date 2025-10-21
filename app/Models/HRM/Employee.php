@@ -4,21 +4,12 @@ namespace App\Models\HRM;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Employees extends Model
+class Employee extends Model
 {
-    /**
-     * The table associated with the model.
-     */
+    //
     protected $table = 'employees';
-    
-    /**
-     * The primary key associated with the table.
-     */
     protected $primaryKey = 'employee_id';
 
-    /**
-     * The attributes that are mass assignable.
-     */
     protected $fillable = [
         'employee_code',
         'first_name',
@@ -37,10 +28,11 @@ class Employees extends Model
         'base_salary',
     ];
 
-    /**
-     * The attributes that should be cast.
-     */
     protected $casts = [
+        'date_of_birth' => 'date',
+        'join_date' => 'date',
+        'resign_date' => 'date',
+        'base_salary' => 'decimal:2',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

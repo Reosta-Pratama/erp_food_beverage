@@ -2,23 +2,17 @@
 
 namespace App\Models\UserManagement;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
 
-class Users extends Model
+class User extends Authenticatable
 {
-    /**
-     * The table associated with the model.
-     */
+    //
+    use HasApiTokens;
+
     protected $table = 'users';
-    
-    /**
-     * The primary key associated with the table.
-     */
     protected $primaryKey = 'user_id';
 
-    /**
-     * The attributes that are mass assignable.
-     */
     protected $fillable = [
         'username',
         'email',
@@ -31,11 +25,19 @@ class Users extends Model
         'last_login',
     ];
 
-    /**
-     * The attributes that should be cast.
-     */
+    protected $hidden = [
+        'password_hash',
+    ];
+
     protected $casts = [
+        'is_active' => 'boolean',
+        'last_login' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    public function getAuthPassword(): string
+    {
+        return $this->password_hash;
+    }
 }

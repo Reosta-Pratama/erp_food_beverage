@@ -4,21 +4,13 @@ namespace App\Models\HRM;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Positions extends Model
+class Position extends Model
 {
-    /**
-     * The table associated with the model.
-     */
+    //
     protected $table = 'positions';
-    
-    /**
-     * The primary key associated with the table.
-     */
     protected $primaryKey = 'position_id';
+    public $timestamps = false;
 
-    /**
-     * The attributes that are mass assignable.
-     */
     protected $fillable = [
         'position_name',
         'position_code',
@@ -26,9 +18,6 @@ class Positions extends Model
         'job_description',
     ];
 
-    /**
-     * The attributes that should be cast.
-     */
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',

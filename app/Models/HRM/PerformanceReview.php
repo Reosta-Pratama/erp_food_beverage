@@ -4,21 +4,13 @@ namespace App\Models\HRM;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PerformanceReviews extends Model
+class PerformanceReview extends Model
 {
-    /**
-     * The table associated with the model.
-     */
+    //
     protected $table = 'performance_reviews';
-    
-    /**
-     * The primary key associated with the table.
-     */
     protected $primaryKey = 'review_id';
+    public $timestamps = false;
 
-    /**
-     * The attributes that are mass assignable.
-     */
     protected $fillable = [
         'employee_id',
         'reviewer_id',
@@ -30,10 +22,10 @@ class PerformanceReviews extends Model
         'comments',
     ];
 
-    /**
-     * The attributes that should be cast.
-     */
     protected $casts = [
+        'review_period_start' => 'date',
+        'review_period_end' => 'date',
+        'performance_score' => 'decimal:2',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

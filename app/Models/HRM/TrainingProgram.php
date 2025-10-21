@@ -4,21 +4,13 @@ namespace App\Models\HRM;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TrainingPrograms extends Model
+class TrainingProgram extends Model
 {
-    /**
-     * The table associated with the model.
-     */
+    //
     protected $table = 'training_programs';
-    
-    /**
-     * The primary key associated with the table.
-     */
     protected $primaryKey = 'training_id';
+    public $timestamps = false;
 
-    /**
-     * The attributes that are mass assignable.
-     */
     protected $fillable = [
         'training_name',
         'training_code',
@@ -30,10 +22,9 @@ class TrainingPrograms extends Model
         'max_participants',
     ];
 
-    /**
-     * The attributes that should be cast.
-     */
     protected $casts = [
+        'start_date' => 'date',
+        'end_date' => 'date',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

@@ -6,19 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Payroll extends Model
 {
-    /**
-     * The table associated with the model.
-     */
+    //
     protected $table = 'payroll';
-    
-    /**
-     * The primary key associated with the table.
-     */
     protected $primaryKey = 'payroll_id';
+    public $timestamps = false;
 
-    /**
-     * The attributes that are mass assignable.
-     */
     protected $fillable = [
         'employee_id',
         'month',
@@ -33,10 +25,14 @@ class Payroll extends Model
         'status',
     ];
 
-    /**
-     * The attributes that should be cast.
-     */
     protected $casts = [
+        'base_salary' => 'decimal:2',
+        'overtime_pay' => 'decimal:2',
+        'allowances' => 'decimal:2',
+        'deductions' => 'decimal:2',
+        'gross_salary' => 'decimal:2',
+        'net_salary' => 'decimal:2',
+        'payment_date' => 'date',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

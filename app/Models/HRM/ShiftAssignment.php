@@ -4,21 +4,13 @@ namespace App\Models\HRM;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ShiftAssignments extends Model
+class ShiftAssignment extends Model
 {
-    /**
-     * The table associated with the model.
-     */
+    //
     protected $table = 'shift_assignments';
-    
-    /**
-     * The primary key associated with the table.
-     */
     protected $primaryKey = 'assignment_id';
+    public $timestamps = false;
 
-    /**
-     * The attributes that are mass assignable.
-     */
     protected $fillable = [
         'employee_id',
         'shift_id',
@@ -26,10 +18,9 @@ class ShiftAssignments extends Model
         'end_date',
     ];
 
-    /**
-     * The attributes that should be cast.
-     */
     protected $casts = [
+        'effective_date' => 'date',
+        'end_date' => 'date',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

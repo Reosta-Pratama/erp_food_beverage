@@ -6,19 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Attendance extends Model
 {
-    /**
-     * The table associated with the model.
-     */
+    //
     protected $table = 'attendance';
-    
-    /**
-     * The primary key associated with the table.
-     */
     protected $primaryKey = 'attendance_id';
+    public $timestamps = false;
 
-    /**
-     * The attributes that are mass assignable.
-     */
     protected $fillable = [
         'employee_id',
         'attendance_date',
@@ -30,10 +22,9 @@ class Attendance extends Model
         'notes',
     ];
 
-    /**
-     * The attributes that should be cast.
-     */
     protected $casts = [
+        'attendance_date' => 'date',
+        'overtime_hours' => 'decimal:2',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
