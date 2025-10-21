@@ -60,6 +60,7 @@ class AuthController extends Controller
 
     private function redirectToDashboard()
     {
+        /** @var \App\Models\UserManagement\User $user */
         $user = Auth::user();
 
         if ($user->isAdmin()) {

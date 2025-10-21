@@ -5,17 +5,11 @@ namespace App\Models\UserManagement;
 use App\Models\HRM\Employee;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
-/**
- * @method bool isAdmin()
- * @method bool isOperator()
- * @method bool isFinanceHr()
- */
 class User extends Authenticatable
 {
     //
-    use HasApiTokens, Notifiable;
+    use Notifiable;
 
     protected $table = 'users';
     protected $primaryKey = 'user_id';
