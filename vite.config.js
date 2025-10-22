@@ -5,9 +5,50 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
     plugins: [
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.js'],
+            input: [
+                // CSS files to be processed
+                'resources/css/app.css', 
+
+                // SCSS files to be processed
+                'resources/sass/app.scss', 
+
+                // JavaScript files to be processed
+                'resources/js/app.js'
+            ],
             refresh: true,
         }),
         tailwindcss(),
     ],
+    css: {
+        preprocessorOptions: {
+            scss: {
+                quietDeps: true,
+            },
+        },
+    },
+    build: {
+        rollupOptions: {
+            output: {
+                entryFileNames: 'js/[name].[hash].js',
+                chunkFileNames: 'js/[name].[hash].js',
+                assetFileNames: assetInfo => {
+                    let ext = assetInfo.name.split('.').pop();
+
+                    if (ext === 'css') {
+                        return 'css/[name].[hash].[ext]';
+                    }
+
+                    if (['woff', 'woff2', 'ttf', 'otf', 'eot'].includes(ext)) {
+                        return 'fonts/[name].[hash].[ext]';
+                    }
+
+                    if (['png', 'jpg', 'jpeg', 'gif', 'svg'].includes(ext)) {
+                        return 'images/[name].[hash].[ext]';
+                    }
+
+                    return 'assets/[name].[hash].[ext]';
+                }
+            }
+        }
+    }
 });

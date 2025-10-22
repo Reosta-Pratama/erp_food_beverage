@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TemplateController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -53,7 +54,10 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+// Design Web
+Route::prefix('template')
+    ->name('template.')
+    ->group(function () {
+        // Basic
+        Route::get('/alerts', [TemplateController::class, 'alerts'])->name('alerts');
+});
