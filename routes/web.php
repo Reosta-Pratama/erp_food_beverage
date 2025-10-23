@@ -6,10 +6,14 @@ use App\Http\Controllers\TemplateController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
-    Route::get('/', [AuthController::class, 'showLogin'])->name('showLogin');
+    // Show login form
+    Route::get('/', [AuthController::class, 'showLogin'])->name('login.show');
     Route::get('/login', [AuthController::class, 'showLogin']);
-    Route::post('/login', [AuthController::class, 'login'])->name('login');
+
+    // Handle login submission
+    Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 });
+
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -60,4 +64,14 @@ Route::prefix('template')
     ->group(function () {
         // Basic
         Route::get('/alerts', [TemplateController::class, 'alerts'])->name('alerts');
+
+        // Advanced
+
+        // Authtentication
+
+        // Errors
+
+        // Forms
+
+        // Pages
 });

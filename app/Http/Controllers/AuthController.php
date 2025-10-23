@@ -70,7 +70,7 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()
-            ->route('login')
+            ->route('login.show')
             ->with('success', 'You have successfully logged out.');
     }
 
@@ -101,7 +101,7 @@ class AuthController extends Controller
         request()->session()->regenerateToken();
 
         return redirect()
-            ->route('showLogin')
+            ->route('login.show')
             ->with('error', 'Access denied — your role does not have a dashboard assigned.');
     }
 }

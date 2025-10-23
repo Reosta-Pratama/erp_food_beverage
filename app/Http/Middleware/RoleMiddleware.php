@@ -19,7 +19,7 @@ class RoleMiddleware
         // Redirect unauthenticated users to the login page
         if (!Auth::check()) {
             return redirect()
-                ->route('login')
+                ->route('login.show')
                 ->with('error', 'Please log in to continue.');
         }
 

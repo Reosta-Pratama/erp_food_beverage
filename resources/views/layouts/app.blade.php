@@ -76,9 +76,9 @@
         <!-- Main Scripts -->
         @vite([
             'resources/js/app.js', 
-            'resources/js/main.js', 
-            'resources/assets/js/layouts/sidebar.js',
-            'resources/assets/js/layouts/header.js'
+            // 'resources/js/main.js', 
+            // 'resources/assets/js/layouts/sidebar.js',
+            // 'resources/assets/js/layouts/header.js'
         ])
 
         <!-- Additional Script -->
