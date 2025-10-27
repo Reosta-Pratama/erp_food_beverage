@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-        <meta name="Description" content="{{ config('app.name') }} - A modern web panel template">
+        <meta name="Description" content="{{ config('app.name') }} - ERP Manufacture F&B">
         <meta name="Author" content="REOSTA BAYU PRATAMA PANE">
         <meta name="keywords" content="{{ config('app.name') }}, ERP, Manufacture, Laravel, Dashboard, Admin, Admin Panel">
 
@@ -28,7 +28,7 @@
             rel="stylesheet">
 
         <!-- Icon -->
-        {{-- @vite(['resources/assets/icon-fonts/icons.css']) --}}
+        @vite(['resources/assets/icon-fonts/icons.css'])
 
         <!-- Main Styles -->
         @include('layouts.components.style')
