@@ -1,0 +1,72 @@
+@use '../_variables-map' as *;
+
+.page-header-breadcrumb {
+    margin-top: 1rem;
+    margin-bottom: 1.75rem;
+
+    .breadcrumb-item+.breadcrumb-item::before {
+        content: var(--bs-breadcrumb-divider, "\f2e5");
+        font-family: "remixicon" !important;
+    }
+
+    .breadcrumb-icon svg {
+        width: 1rem;
+        height: 1rem;
+    }
+}
+
+.breadcrumb {
+    .breadcrumb-item {
+        a {
+            color: $primary;
+        }
+
+        &.active {
+            color: $default-text-color;
+            font-weight: 500;
+        }
+    }
+}
+
+.breadcrumb-item+.breadcrumb-item::before {
+    color: $text-muted;
+}
+
+.breadcrumb-style-1 {
+    .breadcrumb-item+.breadcrumb-item::before {
+        color: $text-muted;
+        content: var(--bs-breadcrumb-divider, "\ea65");
+        font-family: "tabler-icons" !important;
+    }
+}
+
+.breadcrumb-style-2 {
+    .breadcrumb-item+.breadcrumb-item::before {
+        color: $text-muted;
+        content: var(--bs-breadcrumb-divider, "\ea1c");
+        font-family: "tabler-icons" !important;
+    }
+}
+
+.breadcrumb-style-3 {
+    .breadcrumb-item+.breadcrumb-item::before {
+        color: $text-muted;
+        content: var(--bs-breadcrumb-divider, "\ea61");
+        font-family: "tabler-icons" !important;
+    }
+}
+
+.embedded-breadcrumb:before {
+    opacity: 0.7;
+}
+
+.page-header-breadcrumb input.breadcrumb-input {
+    min-width: 13.5rem;
+    max-width: 13.5rem;
+    border: 1px solid $default-border;
+    
+    &:focus {
+        border: 1px solid $default-border;
+        box-shadow: none;
+    }
+}

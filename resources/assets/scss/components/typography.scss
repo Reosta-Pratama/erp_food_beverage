@@ -1,0 +1,194 @@
+@use '../variables-map' as *;
+
+/* === Blockquote === */
+.blockquote-container {
+    padding: 1.25rem;
+    border: 1px solid $default-border;
+    border-block-start: 4px solid $default-border;
+    border-radius: $default-radius;
+    position: relative;
+    &:before {
+        position: absolute;
+        content: "\f6b0";
+        font-family: bootstrap-icons !important;
+        width: 1.5rem;
+        height: 1.5rem;
+        font-size: 0.813rem;
+        font-weight: 400;
+        border: 1px solid $default-border;
+        background-color: $white;
+        top: -0.875rem;
+        align-items: center;
+        display: flex;
+        padding: 0;
+        justify-content: center;
+        border-radius: 3.125rem;
+        inset-inline-start: 50%;
+        box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.1);
+    }
+}
+.blockquote.custom-blockquote {
+    font-size: 0.85rem;
+    font-weight: 400;
+    padding: 1rem;
+    border-radius: $default-radius;
+    position: relative;
+    &:before {
+        content: "\ec52";
+        font-family: "remixicon" !important;
+        z-index: 0;
+        font-size: 4rem;
+        position: absolute;
+        inset-block-end: -1.5rem;
+        inset-inline-end: -0.25rem;
+    }
+    .quote-icon {
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 3.125rem;
+        position: absolute;
+        inset-block-start: 0;
+        inset-inline-start: -1rem;
+        background-color: $info;
+        i {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+    }
+    &.primary {
+        background-color: $primary-01;
+        border-inline-start: 2px solid $primary;
+        .quote-icon i {
+            color: $white;
+        }
+        &:before {
+            color: $primary-03;
+        }
+    }
+    &.secondary {
+        background-color: rgba(var(--secondary-rgb), 0.1);
+        border-inline-start: 2px solid $secondary;
+        .quote-icon i {
+            color: $white;
+        }
+        &:before {
+            color: rgba(var(--secondary-rgb), 0.1);
+        }
+    }
+    &.info {
+        background-color: rgba(var(--info-rgb), 0.1);
+        border-inline-start: 2px solid $info;
+        .quote-icon i {
+            color: $white;
+        }
+        &:before {
+            color: rgba(var(--info-rgb), 0.1);
+        }
+    }
+    &.warning {
+        background-color: rgba(var(--warning-rgb), 0.1);
+        border-inline-start: 2px solid $warning;
+        .quote-icon i {
+            color: $white;
+        }
+        &:before {
+            color: rgba(var(--warning-rgb), 0.1);
+        }
+    }
+    &.success {
+        background-color: rgba(var(--success-rgb), 0.1);
+        border-inline-start: 2px solid $success;
+        .quote-icon i {
+            color: $white;
+        }
+        &:before {
+            color: rgba(var(--success-rgb), 0.1);
+        }
+    }
+    &.danger {
+        background-color: rgba(var(--danger-rgb), 0.1);
+        border-inline-start: 2px solid $danger;
+        .quote-icon i {
+            color: $white;
+        }
+        &:before {
+            color: rgba(var(--danger-rgb), 0.1);
+        }
+    }
+}
+/* === Blockquote === */
+
+@media screen and (min-width: 576px) {
+    .w-sm-auto {
+        width: auto;
+    }
+    .w-sm-75 {
+        width: 75%;
+    }
+}
+@media (min-width: 576px) {
+    .w-sm-50 {
+        width: 50% !important;
+    }
+}
+.w-auto {
+    width: auto;
+}
+.w-95 {
+    width: 95%;
+}
+
+.transform-none {
+    transform: none !important;
+}
+
+.text-gradient {
+    background: $primary-gradient;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: rgba(255, 255, 255, 0.001);
+}
+
+.focus-ring {
+    &:focus {
+        --bs-focus-ring-color: rgba(var(--primary-rgb), var(--bs-focus-ring-opacity));
+    }
+    &.focus-ring-secondary {
+        &:focus {
+            --bs-focus-ring-color: rgba(var(--secondary-rgb), var(--bs-focus-ring-opacity));
+        }
+    }
+    &.focus-ring-success {
+        &:focus {
+            --bs-focus-ring-color: rgba(var(--success-rgb), var(--bs-focus-ring-opacity));
+        }
+    }
+    &.focus-ring-danger {
+        &:focus {
+            --bs-focus-ring-color: rgba(var(--danger-rgb), var(--bs-focus-ring-opacity));
+        }
+    }
+    &.focus-ring-warning {
+        &:focus {
+            --bs-focus-ring-color: rgba(var(--warning-rgb), var(--bs-focus-ring-opacity));
+        }
+    }
+    &.focus-ring-info {
+        &:focus {
+            --bs-focus-ring-color: rgba(var(--info-rgb), var(--bs-focus-ring-opacity));
+        }
+    }
+    &.focus-ring-light {
+        &:focus {
+            --bs-focus-ring-color: rgba(var(--light-rgb), var(--bs-focus-ring-opacity));
+        }
+    }
+    &.focus-ring-dark {
+        &:focus {
+            --bs-focus-ring-color: rgba(var(--dark-rgb), var(--bs-focus-ring-opacity));
+        }
+    }
+}

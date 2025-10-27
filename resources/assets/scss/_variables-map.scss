@@ -1,0 +1,354 @@
+/* === Base RGB Color Variables (SCSS) === */
+$body-bg-rgb: var(--body-bg-rgb);
+$primary-rgb: var(--primary-rgb);
+$secondary-rgb: var(--secondary-rgb);
+
+$success-rgb: var(--success-rgb);
+$danger-rgb: var(--danger-rgb);
+$warning-rgb: var(--warning-rgb);
+$info-rgb: var(--info-rgb);
+$light-rgb: var(--light-rgb);
+$dark-rgb: var(--dark-rgb);
+$orange-rgb: var(--orange-rgb);
+$pink-rgb: var(--pink-rgb);
+$teal-rgb: var(--teal-rgb);
+$purple-rgb: var(--purple-rgb);
+$green-rgb: var(--green-rgb);
+
+/* === Solid Color Variables (SCSS) === */
+$body-bg: var(--body-bg);
+$primary: var(--primary);
+$secondary: var(--secondary);
+
+$success: var(--success);
+$danger: var(--danger);
+$warning: var(--warning);
+$info: var(--info);
+$light: var(--light);
+$dark: var(--dark);
+$orange: var(--orange);
+$pink: var(--pink);
+$teal: var(--teal);
+$purple: var(--purple);
+$green: var(--green);
+
+$default-body-bg-color: var(--default-body-bg-color);
+$primary-color: var(--primary-color);
+$primary-border: var(--primary-border);
+
+/* === Transparent Primary (RGBA) === */
+$primary-005: var(--primary-005);
+$primary-01:  var(--primary-01);
+$primary-02:  var(--primary-02);
+$primary-03:  var(--primary-03);
+$primary-04:  var(--primary-04);
+$primary-05:  var(--primary-05);
+$primary-06:  var(--primary-06);
+$primary-07:  var(--primary-07);
+$primary-08:  var(--primary-08);
+$primary-09:  var(--primary-09);
+
+/* === Transparent Secondary (RGBA) === */
+$secondary-005: var(--secondary-005);
+$secondary-01:  var(--secondary-01);
+$secondary-02:  var(--secondary-02);
+$secondary-03:  var(--secondary-03);
+$secondary-04:  var(--secondary-04);
+$secondary-05:  var(--secondary-05);
+$secondary-06:  var(--secondary-06);
+$secondary-07:  var(--secondary-07);
+$secondary-08:  var(--secondary-08);
+$secondary-09:  var(--secondary-09);
+
+/* === Transparent Success (RGBA) === */
+$success-005: var(--success-005);
+$success-01:  var(--success-01);
+$success-02:  var(--success-02);
+$success-03:  var(--success-03);
+$success-04:  var(--success-04);
+$success-05:  var(--success-05);
+$success-06:  var(--success-06);
+$success-07:  var(--success-07);
+$success-08:  var(--success-08);
+$success-09:  var(--success-09);
+
+/* === Transparent Danger (RGBA) === */
+$danger-005: var(--danger-005);
+$danger-01:  var(--danger-01);
+$danger-02:  var(--danger-02);
+$danger-03:  var(--danger-03);
+$danger-04:  var(--danger-04);
+$danger-05:  var(--danger-05);
+$danger-06:  var(--danger-06);
+$danger-07:  var(--danger-07);
+$danger-08:  var(--danger-08);
+$danger-09:  var(--danger-09);
+
+/* === Transparent Warning (RGBA) === */
+$warning-005: var(--warning-005);
+$warning-01:  var(--warning-01);
+$warning-02:  var(--warning-02);
+$warning-03:  var(--warning-03);
+$warning-04:  var(--warning-04);
+$warning-05:  var(--warning-05);
+$warning-06:  var(--warning-06);
+$warning-07:  var(--warning-07);
+$warning-08:  var(--warning-08);
+$warning-09:  var(--warning-09);
+
+/* === Transparent Info (RGBA) === */
+$info-005: var(--info-005);
+$info-01:  var(--info-01);
+$info-02:  var(--info-02);
+$info-03:  var(--info-03);
+$info-04:  var(--info-04);
+$info-05:  var(--info-05);
+$info-06:  var(--info-06);
+$info-07:  var(--info-07);
+$info-08:  var(--info-08);
+$info-09:  var(--info-09);
+
+/* === Transparent Light (RGBA) === */
+$light-005: var(--light-005);
+$light-01:  var(--light-01);
+$light-02:  var(--light-02);
+$light-03:  var(--light-03);
+$light-04:  var(--light-04);
+$light-05:  var(--light-05);
+$light-06:  var(--light-06);
+$light-07:  var(--light-07);
+$light-08:  var(--light-08);
+$light-09:  var(--light-09);
+
+/* === Transparent Dark (RGBA) === */
+$dark-005: var(--dark-005);
+$dark-01:  var(--dark-01);
+$dark-02:  var(--dark-02);
+$dark-03:  var(--dark-03);
+$dark-04:  var(--dark-04);
+$dark-05:  var(--dark-05);
+$dark-06:  var(--dark-06);
+$dark-07:  var(--dark-07);
+$dark-08:  var(--dark-08);
+$dark-09:  var(--dark-09);
+
+/* === Transparent Orange (RGBA) === */
+$orange-005: var(--orange-005);
+$orange-01:  var(--orange-01);
+$orange-02:  var(--orange-02);
+$orange-03:  var(--orange-03);
+$orange-04:  var(--orange-04);
+$orange-05:  var(--orange-05);
+$orange-06:  var(--orange-06);
+$orange-07:  var(--orange-07);
+$orange-08:  var(--orange-08);
+$orange-09:  var(--orange-09);
+
+/* === Transparent Pink (RGBA) === */
+$pink-005: var(--pink-005);
+$pink-01:  var(--pink-01);
+$pink-02:  var(--pink-02);
+$pink-03:  var(--pink-03);
+$pink-04:  var(--pink-04);
+$pink-05:  var(--pink-05);
+$pink-06:  var(--pink-06);
+$pink-07:  var(--pink-07);
+$pink-08:  var(--pink-08);
+$pink-09:  var(--pink-09);
+
+/* === Transparent Teal (RGBA) === */
+$teal-005: var(--teal-005);
+$teal-01:  var(--teal-01);
+$teal-02:  var(--teal-02);
+$teal-03:  var(--teal-03);
+$teal-04:  var(--teal-04);
+$teal-05:  var(--teal-05);
+$teal-06:  var(--teal-06);
+$teal-07:  var(--teal-07);
+$teal-08:  var(--teal-08);
+$teal-09:  var(--teal-09);
+
+/* === Transparent Purple (RGBA) === */
+$purple-005: var(--purple-005);
+$purple-01:  var(--purple-01);
+$purple-02:  var(--purple-02);
+$purple-03:  var(--purple-03);
+$purple-04:  var(--purple-04);
+$purple-05:  var(--purple-05);
+$purple-06:  var(--purple-06);
+$purple-07:  var(--purple-07);
+$purple-08:  var(--purple-08);
+$purple-09:  var(--purple-09);
+
+/* === Transparent Green (RGBA) === */
+$green-005: var(--green-005);
+$green-01:  var(--green-01);
+$green-02:  var(--green-02);
+$green-03:  var(--green-03);
+$green-04:  var(--green-04);
+$green-05:  var(--green-05);
+$green-06:  var(--green-06);
+$green-07:  var(--green-07);
+$green-08:  var(--green-08);
+$green-09:  var(--green-09);
+
+/* === UI Styling (SCSS) === */
+$default-border: var(--default-border);
+$default-background: var(--default-background);
+$default-radius: var(--default-radius);
+$box-shadow: var(--box-shadow);
+
+$menu-bg: var(--menu-bg);
+$menu-prime-color: var(--menu-prime-color);
+$menu-border-color: var(--menu-border-color);
+
+$header-bg: var(--header-bg);
+$header-prime-color: var(--header-prime-color);
+$header-border-color: var(--header-border-color);
+
+$bootstrap-card-border: var(--bootstrap-card-border);
+$list-hover-focus-bg: var(--list-hover-focus-bg);
+$text-muted: var(--text-muted);
+$input-border: var(--input-border);
+$form-control-bg: var(--form-control-bg);
+
+$white-rgb: var(--white-rgb);
+$black-rgb: var(--black-rgb);
+
+$white: var(--white);
+$black: var(--black);
+
+// === Text ===
+$default-text-color: var(--black);
+$bs-link-color-rgb: var(--bs-link-color-rgb);
+
+/* === Transparent White (RGBA) === */
+$white-005: var(--white-005);
+$white-01:  var(--white-01);
+$white-02:  var(--white-02);
+$white-03:  var(--white-03);
+$white-04:  var(--white-04);
+$white-05:  var(--white-05);
+$white-06:  var(--white-06);
+$white-07:  var(--white-07);
+$white-08:  var(--white-08);
+$white-09:  var(--white-09);
+
+/* === Transparent Black (RGBA) === */
+$black-005: var(--black-005);
+$black-01:  var(--black-01);
+$black-02:  var(--black-02);
+$black-03:  var(--black-03);
+$black-04:  var(--black-04);
+$black-05:  var(--black-05);
+$black-06:  var(--black-06);
+$black-07:  var(--black-07);
+$black-08:  var(--black-08);
+$black-09:  var(--black-09);
+
+// === Social Media Colors ===
+$facebook: var(--facebook);
+$twitter: var(--twitter);
+$github: var(--github);
+$google: var(--google);
+$youtube: var(--youtube);
+
+/* === Gradients === */
+$primary-gradient: var(--primary-gradient);
+$secondary-gradient: var(--secondary-gradient);
+$success-gradient: var(--success-gradient);
+$warning-gradient: var(--warning-gradient);
+$danger-gradient: var(--danger-gradient);
+$info-gradient: var(--info-gradient);
+$teal-gradient: var(--teal-gradient);
+$orange-gradient: var(--orange-gradient);
+$purple-gradient: var(--purple-gradient);
+$light-gradient: var(--light-gradient);
+$dark-gradient: var(--dark-gradient);
+
+/* === Typography === */
+$default-font-family: var(--default-font-family);
+$heading-font-family: var(--heading-font-family);
+$default-font-weight: var(--default-font-weight);
+$default-font-size: var(--default-font-size);
+$default-line-height: var(--default-line-height);
+
+/* === Additional Color  === */
+$blue: rgb(66, 133, 244);   // #4285f4  
+$indigo: rgb(88, 86, 214);  // #5856d6  
+$red: rgb(240, 66, 66);     // #f04242  
+$yellow: rgb(255, 193, 7);  // #ffc107  
+$cyan: rgb(0, 188, 212);    // #00bcd4  
+$gray: rgb(08, 117, 125);   // #6c757d   
+
+// === Transparent Blue (RGBA) ===
+$blue-005: rgba(66, 133, 244, 0.05);     /* #4285f4 → bright clean blue */
+$blue-01:  rgba(66, 133, 244, 0.1);
+$blue-02:  rgba(66, 133, 244, 0.2);
+$blue-03:  rgba(66, 133, 244, 0.3);
+$blue-04:  rgba(66, 133, 244, 0.4);
+$blue-05:  rgba(66, 133, 244, 0.5);
+$blue-06:  rgba(66, 133, 244, 0.6);
+$blue-07:  rgba(66, 133, 244, 0.7);
+$blue-08:  rgba(66, 133, 244, 0.8);
+$blue-09:  rgba(66, 133, 244, 0.9);
+
+// === Transparent Indigo (RGBA) ===
+$indigo-005: rgba(88, 86, 214, 0.05);   /* #5856d6 → iOS-style indigo, serasi dengan primary */
+$indigo-01:  rgba(88, 86, 214, 0.1);
+$indigo-02:  rgba(88, 86, 214, 0.2);
+$indigo-03:  rgba(88, 86, 214, 0.3);
+$indigo-04:  rgba(88, 86, 214, 0.4);
+$indigo-05:  rgba(88, 86, 214, 0.5);
+$indigo-06:  rgba(88, 86, 214, 0.6);
+$indigo-07:  rgba(88, 86, 214, 0.7);
+$indigo-08:  rgba(88, 86, 214, 0.8);
+$indigo-09:  rgba(88, 86, 214, 0.9);
+
+// === Transparent Red (RGBA) ===
+$red-005: rgba(240, 66, 66, 0.05);      /* #f04242 → soft but vibrant red, senada dengan secondary */
+$red-01:  rgba(240, 66, 66, 0.1);
+$red-02:  rgba(240, 66, 66, 0.2);
+$red-03:  rgba(240, 66, 66, 0.3);
+$red-04:  rgba(240, 66, 66, 0.4);
+$red-05:  rgba(240, 66, 66, 0.5);
+$red-06:  rgba(240, 66, 66, 0.6);
+$red-07:  rgba(240, 66, 66, 0.7);
+$red-08:  rgba(240, 66, 66, 0.8);
+$red-09:  rgba(240, 66, 66, 0.9);
+
+// === Transparent Yellow (RGBA) ===
+$yellow-005: rgba(255, 193, 7, 0.05);  /* #ffc107 → friendly, energetic */
+$yellow-01:  rgba(255, 193, 7, 0.1);
+$yellow-02:  rgba(255, 193, 7, 0.2);
+$yellow-03:  rgba(255, 193, 7, 0.3);
+$yellow-04:  rgba(255, 193, 7, 0.4);
+$yellow-05:  rgba(255, 193, 7, 0.5);
+$yellow-06:  rgba(255, 193, 7, 0.6);
+$yellow-07:  rgba(255, 193, 7, 0.7);
+$yellow-08:  rgba(255, 193, 7, 0.8);
+$yellow-09:  rgba(255, 193, 7, 0.9);
+
+// === Transparent Cyan (RGBA) ===
+$cyan-005: rgba(0, 188, 212, 0.05);     /* #00bcd4 → clean, modern cyan */
+$cyan-01:  rgba(0, 188, 212, 0.1);
+$cyan-02:  rgba(0, 188, 212, 0.2);
+$cyan-03:  rgba(0, 188, 212, 0.3);
+$cyan-04:  rgba(0, 188, 212, 0.4);
+$cyan-05:  rgba(0, 188, 212, 0.5);
+$cyan-06:  rgba(0, 188, 212, 0.6);
+$cyan-07:  rgba(0, 188, 212, 0.7);
+$cyan-08:  rgba(0, 188, 212, 0.8);
+$cyan-09:  rgba(0, 188, 212, 0.9);
+
+/* === Transparent Gray (RGBA) === */
+$gray-005: var(--gray-005);
+$gray-01:  var(--gray-01);
+$gray-02:  var(--gray-02);
+$gray-03:  var(--gray-03);
+$gray-04:  var(--gray-04);
+$gray-05:  var(--gray-05);
+$gray-06:  var(--gray-06);
+$gray-07:  var(--gray-07);
+$gray-08:  var(--gray-08);
+$gray-09:  var(--gray-09);

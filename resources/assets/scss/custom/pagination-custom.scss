@@ -1,0 +1,198 @@
+@use '../_variables-map' as *;
+
+/* === Pagination Set === */
+.page-link {
+    background-color: $white;
+    border: 1px solid $default-border;
+    color: $default-text-color;
+    user-select: none;
+    cursor: pointer;
+
+    &:focus {
+        background-color: $light;
+        box-shadow: none;
+    }
+    &:hover {
+        background-color: $light;
+        border-color: $default-border;
+        color: $primary;
+    }
+}
+
+.page-item.active .page-link {
+    background-color: $primary;
+    border-color: $primary;
+    color: $white;
+}
+
+.pagination .page-item.disabled {
+    cursor: not-allowed;
+}
+
+.disabled > .page-link,
+.page-link.disabled {
+    background-color: $white;
+    opacity: 0.7;
+    border-color: $default-border;
+    color: $default-text-color;
+}
+/* === Pagination Set === */
+
+/* === Style 1 === */
+.pagination-style-1 .pagination {
+    .page-item {
+        margin: 0 0.25rem;
+
+        .page-link {
+            border: 0;
+            border-radius: $default-radius;
+            font-size: 0.8125rem;
+
+            i {
+                font-weight: 400;
+            }
+        }
+
+        &.active {
+            .page-link {
+                border-radius: $default-radius;
+                background-color: $primary;
+                color: $white;
+            }
+
+            &:hover {
+                .page-link {
+                    border-radius: $default-radius;
+                    background-color: $primary;
+                    color: $white;
+                }
+            }
+        }
+
+        &:hover {
+            .page-link {
+                background-color: $light;
+                color: $default-text-color;
+            }
+        }
+    }
+}
+/* === Style 1 === */
+
+/* === Style 2 === */
+.pagination-style-2 .pagination {
+    border-radius: $default-radius;
+
+    .page-item {
+        margin: 0 0.25rem;
+
+        .page-link {
+            border: 0 !important;
+            font-size: 0.8125rem;
+        }
+
+        &.active {
+            .page-link {
+                background-color: $white;
+                color: $primary;
+                position: relative;
+                font-weight: bold;
+
+                &:before {
+                    position: absolute;
+                    content: "";
+                    inset-block-end: 0;
+                    inset-inline-start: 0;
+                    width: 100%;
+                    height: 0.1rem;
+                    background-color: $primary;
+                }
+            }
+        }
+
+        &:hover {
+            .page-link {
+                background-color: transparent;
+            }
+        }
+    }
+}
+/* === Style 2 === */
+
+/* === Style 3 === */
+.pagination-style-3 .pagination {
+    border-radius: 50px;
+    padding: 0.25rem;
+    align-items: center;
+
+    .page-item {
+        margin: 0 0.25rem;
+
+        .page-link {
+            border: 0;
+            border-radius: 50px;
+            font-size: 0.8125rem;
+
+            i {
+                font-weight: 400;
+            }
+        }
+
+        &.active {
+            .page-link {
+                background-color: $primary;
+                color: $white;
+            }
+
+            &:hover {
+                .page-link {
+                    background-color: $primary;
+                }
+            }
+        }
+
+        &:hover {
+            .page-link {
+                background-color: $light;
+            }
+        }
+    }
+}
+/* === Style 3 === */
+
+/* === Style 4 === */
+.pagination-style-4 .pagination {
+    .page-item {
+        .page-link {
+            border: 0 !important;
+            font-size: 0.8125rem;
+            border-radius: $default-radius;
+
+            i {
+                font-weight: 400;
+            }
+        }
+
+        &.active {
+            .page-link {
+                border: 0;
+                border-radius: $default-radius;
+                background-color: $primary;
+                color: $white;
+            }
+
+            &:hover {
+                .page-link {
+                    background-color: $primary;
+                }
+            }
+        }
+
+        &:hover {
+            .page-link {
+                background-color: transparent;
+            }
+        }
+    }
+}
+/* === Style 4 === */

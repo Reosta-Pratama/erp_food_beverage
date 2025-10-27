@@ -13,7 +13,13 @@ export default defineConfig({
                 'resources/sass/app.scss', 
 
                 // JavaScript files to be processed
-                'resources/js/app.js'
+                'resources/js/app.js',
+                'resources/js/main.js',
+
+                    'resources/assets/js/layouts/header.js',
+                    'resources/assets/js/layouts/sidebar.js',
+
+                        'resources/assets/js/custom/alert-custom.js',
             ],
             refresh: true,
         }),

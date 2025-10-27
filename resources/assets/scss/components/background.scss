@@ -1,0 +1,505 @@
+@use '../variables-map' as *;
+
+.color-container {
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    box-shadow: $box-shadow;
+    line-height: 3rem;
+}
+
+.text-container {
+    border-radius: $default-radius;
+    box-shadow: $box-shadow;
+    padding: 0.25rem 0.5rem;
+}
+
+/* === Default === */
+.bg-body {
+    background-color: $default-body-bg-color !important;
+}
+
+.bg-primary {
+    background-color: $primary !important;
+    &.bg-opacity-10 {
+        background-color: $primary-01 !important;
+    }
+    &.bg-opacity-25 {
+        background-color: $primary-03 !important;
+    }
+    &.bg-opacity-50 {
+        background-color: $primary-05 !important;
+    }
+    &.bg-opacity-75 {
+        background-color: $primary-08 !important;
+    }
+    &.bg-opacity-100 {
+        background-color: $primary !important;
+    }
+}
+
+.bg-secondary {
+    background-color: $secondary !important;
+    &.bg-opacity-10 {
+        background-color: $secondary-01 !important;
+    }
+    &.bg-opacity-25 {
+        background-color: $secondary-03 !important;
+    }
+    &.bg-opacity-50 {
+        background-color: $secondary-05 !important;
+    }
+    &.bg-opacity-75 {
+        background-color: $secondary-08 !important;
+    }
+    &.bg-opacity-100 {
+        background-color: $secondary !important;
+    }
+}
+
+.bg-info {
+    background-color: $info !important;
+    &.bg-opacity-10 {
+        background-color: $info !important;
+    }
+    &.bg-opacity-25 {
+        background-color: $info-03 !important;
+    }
+    &.bg-opacity-50 {
+        background-color: $info-05 !important;
+    }
+    &.bg-opacity-75 {
+        background-color: $info-08 !important;
+    }
+    &.bg-opacity-100 {
+        background-color: $info !important;
+    }
+}
+
+.bg-success {
+    background-color: $success !important;
+    &.bg-opacity-10 {
+        background-color: $success-01 !important;
+    }
+    &.bg-opacity-25 {
+        background-color: $success-03 !important;
+    }
+    &.bg-opacity-50 {
+        background-color: $success-05 !important;
+    }
+    &.bg-opacity-75 {
+        background-color: $success-08 !important;
+    }
+    &.bg-opacity-100 {
+        background-color: $success !important;
+    }
+}
+
+.bg-warning {
+    background-color: $warning !important;
+    &.bg-opacity-10 {
+        background-color: $warning-01 !important;
+    }
+    &.bg-opacity-25 {
+        background-color: $warning-03 !important;
+    }
+    &.bg-opacity-50 {
+        background-color: $warning-05 !important;
+    }
+    &.bg-opacity-75 {
+        background-color: $warning-08 !important;
+    }
+    &.bg-opacity-100 {
+        background-color: $warning !important;
+    }
+}
+
+.bg-danger {
+    background-color: $danger !important;
+    &.bg-opacity-10 {
+        background-color: $danger-01 !important;
+    }
+    &.bg-opacity-25 {
+        background-color: $danger-03 !important;
+    }
+    &.bg-opacity-50 {
+        background-color: $danger-05 !important;
+    }
+    &.bg-opacity-75 {
+        background-color: $danger-08 !important;
+    }
+    &.bg-opacity-100 {
+        background-color: $danger !important;
+    }
+}
+
+.bg-dark {
+    background-color: $dark !important;
+    &.bg-opacity-10 {
+        background-color: $dark-01 !important;
+    }
+    &.bg-opacity-25 {
+        background-color: $dark-03 !important;
+    }
+    &.bg-opacity-50 {
+        background-color: $dark-05 !important;
+    }
+    &.bg-opacity-75 {
+        background-color: $dark-08 !important;
+    }
+    &.bg-opacity-100 {
+        background-color: $dark !important;
+    }
+}
+
+.bg-light {
+    background-color: $light !important;
+    &.bg-opacity-10 {
+        background-color: $light-01 !important;
+    }
+    &.bg-opacity-25 {
+        background-color: $light-03 !important;
+    }
+    &.bg-opacity-50 {
+        background-color: $light-05 !important;
+    }
+    &.bg-opacity-75 {
+        background-color: $light-08 !important;
+    }
+    &.bg-opacity-100 {
+        background-color: $light !important;
+    }
+}
+
+.bg-white {
+    background-color: $white !important;
+}
+
+.bg-pink {
+    background-color: $pink !important;
+}
+
+.bg-orange {
+    background-color: $orange !important;
+}
+
+.bg-purple {
+    background-color: $purple !important;
+}
+
+.bg-green {
+    background-color: $green !important;
+}
+
+.bg-teal {
+    background-color: $teal !important;
+}
+
+.bg-blue {
+    background-color: $blue !important;
+}
+
+.bg-indigo {
+    background-color: $indigo !important;
+}
+
+.bg-yellow {
+    background-color: $yellow !important;
+}
+/* === Default === */
+
+/* === Gradient === */
+.bg-primary-gradient {
+    background: $primary-gradient !important;
+    color: $white;
+}
+.bg-secondary-gradient {
+    background: $secondary-gradient !important;
+    color: $white;
+}
+.bg-warning-gradient {
+    background: $warning-gradient !important;
+    color: $white;
+}
+.bg-info-gradient {
+    background: $info-gradient !important;
+    color: $white;
+}
+.bg-success-gradient {
+    background: $success-gradient !important;
+    color: $white;
+}
+.bg-danger-gradient {
+    background: $danger-gradient !important;
+    color: $white;
+}
+.bg-orange-gradient {
+    background: $orange-gradient !important;
+    color: $white;
+}
+.bg-purple-gradient {
+    background: $purple-gradient !important;
+    color: $white;
+}
+.bg-teal-gradient {
+    background: $teal-gradient !important;
+    color: $white;
+}
+.bg-light-gradient {
+    background: $light-gradient !important;
+    color: $black;
+}
+.bg-dark-gradient {
+    background: $dark-gradient !important;
+    color: $white;
+}
+/* === Gradient === */
+
+/* === Outline === */
+.bg-outline-primary {
+    background-color: $white;
+    border: 1px solid $primary;
+    color: $primary;
+}
+.bg-outline-secondary {
+    background-color: $white;
+    border: 1px solid $secondary;
+    color: $secondary;
+}
+.bg-outline-warning {
+    background-color: $white;
+    border: 1px solid $warning;
+    color: $warning;
+}
+.bg-outline-info {
+    background-color: $white;
+    border: 1px solid $info;
+    color: $info;
+}
+.bg-outline-success {
+    background-color: $white;
+    border: 1px solid $success;
+    color: $success;
+}
+.bg-outline-danger {
+    background-color: $white;
+    border: 1px solid $danger;
+    color: $danger;
+}
+.bg-outline-dark {
+    background-color: $white;
+    border: 1px solid $dark;
+    color: $dark;
+}
+.bg-outline-light {
+    background-color: $white;
+    border: 1px solid $light;
+    color: $black;
+}
+/* === Outline === */
+
+/* === Gray === */
+.bg-gray-100 {
+    background-color: $gray-01;
+}
+.bg-gray-200 {
+    background-color: $gray-02;
+}
+.bg-gray-300 {
+    background-color: $gray-03;
+}
+.bg-gray-400 {
+    background-color: $gray-04;
+}
+.bg-gray-500 {
+    background-color: $gray-05;
+}
+.bg-gray-600 {
+    background-color: $gray-06;
+}
+.bg-gray-700 {
+    background-color: $gray-07;
+}
+.bg-gray-800 {
+    background-color: $gray-08;
+}
+.bg-gray-900 {
+    background-color: $gray-09;
+}
+/* === Gray === */
+
+/* === Transparent === */
+.bg-primary-transparent {
+    background-color: $primary-01 !important;
+    color: $primary !important;
+    &:hover {
+        background-color: $primary-01 !important;
+        color: $primary !important;
+    }
+}
+.bg-secondary-transparent {
+    background-color: $secondary-01 !important;
+    color: $secondary !important;
+    &:hover {
+        background-color: $secondary-01 !important;
+        color: $secondary !important;
+    }
+}
+.bg-info-transparent {
+    background-color: $info-01 !important;
+    color: $info !important;
+    &:hover {
+        background-color: $info-01 !important;
+        color: $info !important;
+    }
+}
+.bg-success-transparent {
+    background-color: $success-01 !important;
+    color: $success !important;
+    &:hover {
+        background-color: $success-01 !important;
+        color: $success !important;
+    }
+}
+.bg-warning-transparent {
+    background-color: $warning-01 !important;
+    color: $warning !important;
+    &:hover {
+        background-color: $warning-01 !important;
+        color: $warning !important;
+    }
+}
+.bg-danger-transparent {
+    background-color: $danger-01 !important;
+    color: $danger !important;
+    &:hover {
+        background-color: $danger-01 !important;
+        color: $danger !important;
+    }
+}
+.bg-light-transparent {
+    background-color: $light-01 !important;
+    color: $default-text-color !important;
+    &:hover {
+        background-color: $light-01 !important;
+        color: $default-text-color !important;
+    }
+}
+.bg-dark-transparent {
+    background-color: $dark-01 !important;
+    color: $dark !important;
+    &:hover {
+        background-color: $dark-01 !important;
+        color: $dark !important;
+    }
+}
+.bg-pink-transparent {
+    background-color: $pink-01 !important;
+    color: $pink !important;
+    &:hover {
+        background-color: $pink-01 !important;
+        color: $pink !important;
+    }
+}
+.bg-orange-transparent {
+    background-color: $orange-01 !important;
+    color: $orange !important;
+    &:hover {
+        background-color: $orange-01 !important;
+        color: $orange !important;
+    }
+}
+.bg-purple-transparent {
+    background-color: $purple-01 !important;
+    color: $purple !important;
+    &:hover {
+        background-color: $purple-01 !important;
+        color: $purple !important;
+    }
+}
+.bg-teal-transparent {
+    background-color: $teal-01 !important;
+    color: $teal !important;
+    &:hover {
+        background-color: $teal-01 !important;
+        color: $teal !important;
+    }
+}
+.bg-green-transparent {
+    background-color: $green-01 !important;
+    color: $green !important;
+    &:hover {
+        background-color: $green-01 !important;
+        color: $green !important;
+    }
+}
+.bg-indigo-transparent {
+    background-color: $indigo-01 !important;
+    color: $indigo !important;
+    &:hover {
+        background-color: $indigo-01 !important;
+        color: $indigo !important;
+    }
+}
+.bg-yellow-transparent {
+    background-color: $yellow-01 !important;
+    color: $yellow !important;
+    &:hover {
+        background-color: $yellow-01 !important;
+        color: $yellow !important;
+    }
+}
+.bg-blue-transparent {
+    background-color: $blue-01 !important;
+    color: $blue !important;
+    &:hover {
+        background-color: $blue-01 !important;
+        color: $blue !important;
+    }
+}
+.bg-white-transparent {
+    background-color: $white-01 !important;
+    color: $white !important;
+    &:hover {
+        background-color: $white-01 !important;
+        color: $white !important;
+    }
+}
+.bg-black-transparent {
+    background-color: $black-01 !important;
+    color: $black !important;
+    &:hover {
+        background-color: $black-01 !important;
+        color: $black !important;
+    }
+}
+/* === Transparent === */
+
+/* === Primary Shadow === */
+.primary-shadow {
+  box-shadow: 0px 5.04px 14.96px 0px $primary-03 inset;
+}
+
+.secondary-shadow {
+  box-shadow: 0px 5.04px 14.96px 0px $secondary-03 inset;
+}
+
+.success-shadow {
+  box-shadow: 0px 5.04px 14.96px 0px $success-03 inset;
+}
+
+.danger-shadow {
+  box-shadow: 0px 5.04px 14.96px 0px $danger-03 inset;
+}
+
+.warning-shadow {
+  box-shadow: 0px 5.04px 14.96px 0px $warning-03 inset;
+}
+
+.info-shadow {
+  box-shadow: 0px 5.04px 14.96px 0px $info-03 inset;
+}
+/* === Primary Shadow === */

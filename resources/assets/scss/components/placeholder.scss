@@ -1,0 +1,9 @@
+@use '../variables-map' as *;
+
+.placeholder-xl {
+    min-height: 1.5em;
+}
+
+.placeholder {
+    background-color: $gray-07;
+}

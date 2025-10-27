@@ -1,0 +1,42 @@
+@use '../_variables-map' as *;
+
+.app-footer {
+    padding: 16px 0 16px 260px;
+    background-color: transparent;
+
+    > .footer-container {
+        padding: 0;
+
+        > .footer-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            // background-color: $white;
+            // border-radius: $default-radius;
+            // box-shadow: $box-shadow;
+            padding: 20px;
+
+            .copyright {
+                color: $text-muted;
+
+                .app-name {
+                    font-weight: 500;
+                    text-decoration: none;
+                    color: $default-text-color;
+                    transition: 150ms ease;
+
+                    &:hover {
+                        color: $primary;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media(max-width: 992px) {
+    .app-footer {
+        padding-left: 0;
+    }
+}

@@ -1,0 +1,288 @@
+@use '../_variables-map' as *;
+
+.alert {
+    padding: 0.625rem 0.85rem;
+    border-radius: 0.5rem;
+    font-size: 0.8125rem;
+    user-select: none;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    &.alert-dismissible {
+        padding: 0.625rem 3rem 0.625rem 0.85rem;
+    }
+
+    > .btn-close {
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-image: none;
+        padding: 0.8rem;
+        transition: 150ms ease;
+        transform-origin: center center;
+        
+        i {
+            font-size: 1.25rem;
+            line-height: 1.5rem;
+        }
+
+        &:hover {
+            transform: translateY(-50%) rotate(90deg); 
+        }
+
+        &:focus {
+            box-shadow: none;
+        }
+    }
+}
+
+/* === Basic === */
+@mixin custom-close($color) {
+    background-color: $color;
+    padding: 0.85rem;
+    opacity: 1;
+    border-radius: 50px;
+    box-shadow: $box-shadow;
+    color: $white;
+}
+.alert-primary {
+    background-color: $primary-01;
+    border-color: $primary-01;
+    color: $primary;
+    .alert-link {
+        color: $primary;
+    }
+    .btn-close {
+        color: $primary;
+        &.custom-close {
+            @include custom-close($primary);
+        }
+    }
+}
+.alert-secondary {
+    background-color: $secondary-01;
+    border-color: $secondary-01;
+    color: $secondary;
+    .alert-link {
+        color: $secondary;
+    }
+    .btn-close {
+        color: $secondary;
+        &.custom-close {
+            @include custom-close($secondary);
+        }
+    }
+}
+.alert-success {
+    background-color: $success-01;
+    border-color: $success-01;
+    color: $success;
+    .alert-link {
+        color: $success;
+    }
+    .btn-close {
+        color: $success;
+        &.custom-close {
+            @include custom-close($success);
+        }
+    }
+}
+.alert-danger {
+    background-color: $danger-01;
+    border-color: $danger-01;
+    color: $danger;
+    .alert-link {
+        color: $danger;
+    }
+    .btn-close {
+        color: $danger;
+        &.custom-close {
+            @include custom-close($danger);
+        }
+    }
+}
+.alert-warning {
+    background-color: $warning-01;
+    border-color: $warning-01;
+    color: $warning;
+    .alert-link {
+        color: $warning;
+    }
+    .btn-close {
+        color: $warning;
+        &.custom-close {
+            @include custom-close($warning);
+        }
+    }
+}
+.alert-info {
+    background-color: $info-01;
+    border-color: $info-01;
+    color: $info;
+    .alert-link {
+        color: $info;
+    }
+    .btn-close {
+        color: $info;
+        &.custom-close {
+            @include custom-close($info);
+        }
+    }
+}
+.alert-light {
+    background-color: $light;
+    border-color: $light;
+    color: $default-text-color;
+    .alert-link {
+        color: $default-text-color;
+    }
+    .btn-close {
+        color: $default-text-color;
+        &.custom-close {
+            @include custom-close($light);
+        }
+    }
+}
+.alert-dark {
+    background-color: $dark-01;
+    border-color: $dark-01;
+    color: $default-text-color;
+    .alert-link {
+        color: $default-text-color;
+    }
+    .btn-close {
+        color: $white;
+        &.custom-close {
+            @include custom-close($dark);
+        }
+    }
+}
+/* === Basic === */
+
+/* === Solid Colored === */
+@mixin alert-solid-color($color) {
+    background-color: $color;
+    color: $white;
+    border-color: $color;
+    .btn-close {
+        color: $white;
+    }
+}
+.alert-solid-primary {
+    @include alert-solid-color($primary);
+}
+.alert-solid-secondary {
+    @include alert-solid-color($secondary);
+}
+.alert-solid-warning {
+    @include alert-solid-color($warning);
+}
+.alert-solid-info {
+    @include alert-solid-color($info);
+}
+.alert-solid-success {
+    @include alert-solid-color($success);
+}
+.alert-solid-danger {
+    @include alert-solid-color($danger);
+}
+.alert-solid-light {
+    background-color: $light;
+    color: $default-text-color;
+    border-color: $default-border;
+}
+.alert-solid-dark {
+    background-color: $dark;
+    color: $default-text-color;
+    border-color: $default-border;
+}
+/* === Solid Colored === */
+
+/* === Outline Colored === */
+@mixin outline-alert($color) {
+    background-color: $white;
+    color: $color;
+    border-color: $color;
+    .btn-close {
+        color: $color;
+    }
+}
+    .alert-outline-primary {
+        @include outline-alert($primary);
+    }
+    .alert-outline-secondary {
+        @include outline-alert($secondary);
+    }
+    .alert-outline-info {
+        @include outline-alert($info);
+    }
+    .alert-outline-warning {
+        @include outline-alert($warning);
+    }
+    .alert-outline-success {
+        @include outline-alert($success);
+    }
+    .alert-outline-danger {
+        @include outline-alert($danger);
+    }
+    .alert-outline-light {
+        background-color: $white;
+        color: $default-text-color;
+        border-color: $light;
+    }
+    .alert-outline-dark {
+        @include outline-alert($dark);
+    }
+/* === Outline Colored === */
+
+/* === Customized === */
+@mixin custom-alert($color) {
+    background-color: $white;
+    border: 1px solid $default-border;
+    border-inline-start: 0.313rem solid $color !important;
+    font-size: 0.813rem;
+    color: $text-muted;
+    .btn-close {
+        color: $default-text-color;
+    }
+}
+    .alert-primary.custom-alert-icon {
+        @include custom-alert($primary);
+    }
+    .alert-secondary.custom-alert-icon {
+        @include custom-alert($secondary);
+    }
+    .alert-warning.custom-alert-icon {
+        @include custom-alert($warning);
+    }
+    .alert-danger.custom-alert-icon {
+        @include custom-alert($danger);
+    }
+    .alert-success.custom-alert-icon {
+        @include custom-alert($success);
+    }
+    .alert-info.custom-alert-icon {
+        @include custom-alert($info);
+    }
+    .alert-light.custom-alert-icon {
+        @include custom-alert($light);
+    }
+    .alert-dark.custom-alert-icon {
+        @include custom-alert($dark);
+    }
+/* === Customized === */
+
+/* === Image === */
+.alert-img {
+    display: flex;
+    align-items: center;
+    .avatar {
+        border: 1px solid $black-01;
+    }
+}
+/* === Image === */
+

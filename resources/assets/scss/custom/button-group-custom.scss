@@ -1,0 +1,61 @@
+@use '../_variables-map' as *;
+
+/* === Button Set === */
+.btn-group,
+.btn-group-vertical {
+    position: relative;
+    display: inline-flex;
+    vertical-align: middle;
+
+    > .btn {
+        position: relative;
+        flex: 1 1 auto;
+    }
+
+    > .btn-check:checked + .btn,
+     > .btn.active,
+     > .btn:active,
+     > .btn:focus,
+     > .btn:hover,
+    > .btn-check:focus + .btn {
+        z-index: 1;
+    }
+}
+
+.btn-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+
+    .input-group {
+        width: auto;
+    }
+}
+/* === Button Set === */
+
+/* === Split === */
+.dropdown-toggle-split {
+    &::after,
+    .dropend &::after,
+    .dropup &::after {
+        margin-left: 0;
+    }
+
+    .dropstart &::before {
+        margin-right: 0;
+    }
+}
+/* === Split === */
+
+/* === Vertical === */
+.btn-group-vertical {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    > .btn-group,
+    > .btn {
+        width: 100%;
+    }
+}
+/* === Vertical === */

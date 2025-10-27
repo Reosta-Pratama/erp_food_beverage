@@ -1,0 +1,15 @@
+@use '../_variables-map' as *;
+
+/* === Object Fit Set === */
+.object-fit-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img,
+    video {
+        width: 250px;
+        height: 250px;
+    }
+}
+/* === Object Fit Set === */

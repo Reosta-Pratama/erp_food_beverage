@@ -1,0 +1,449 @@
+@use '../variables-map' as *;
+
+/* === Background Text Color === */
+.text-bg-primary {
+    background-color: $primary !important;
+    color: $white !important;
+}
+.text-bg-secondary {
+    background-color: $secondary !important;
+    color: $white !important;
+}
+.text-bg-warning {
+    background-color: $warning !important;
+    color: $white !important;
+}
+.text-bg-info {
+    background-color: $info !important;
+    color: $white !important;
+}
+.text-bg-success {
+    background-color: $success !important;
+    color: $white !important;
+}
+.text-bg-danger {
+    background-color: $danger !important;
+    color: $white !important;
+}
+.text-bg-light {
+    background-color: $light !important;
+    color: $black !important;
+}
+.text-bg-dark {
+    background-color: $dark !important;
+    color: $white !important;
+}
+/* === Background Text Color === */
+
+/* === Basic Sized === */
+.fs-sm {
+    font-size: 0.6875rem; //11px
+}
+.fs-base {
+    font-size: 0.875rem; //14px
+}
+.fs-lg {
+    font-size: 1.125rem; //18px
+}
+/* === Basic Sized === */
+
+/* === Font Sized === */
+.fs-1 {
+    font-size: 0.0625rem; //1px
+}
+.fs-2 {
+    font-size: 0.125rem; //2px
+}
+.fs-3 {
+    font-size: 0.1875rem; //3px
+}
+.fs-4 {
+    font-size: 0.25rem; //4px
+}
+.fs-5 {
+    font-size: 0.3125rem; //5px
+}
+.fs-6 {
+    font-size: 0.375rem; //6px
+}
+.fs-7 {
+    font-size: 0.4375rem; //7px
+}
+.fs-8 {
+    font-size: 0.5rem; //8px
+}
+.fs-9 {
+    font-size: 0.5625rem; //9px
+}
+.fs-10 {
+    font-size: 0.625rem; //10px
+}
+.fs-11 {
+    font-size: 0.6875rem; //11px
+}
+.fs-12 {
+    font-size: 0.75rem; //12px
+}
+.fs-13 {
+    font-size: 0.8125rem; //13px
+}
+.fs-14 {
+    font-size: 0.875rem; //14px
+}
+.fs-15 {
+    font-size: 0.9375rem; //15px
+}
+.fs-16 {
+    font-size: 1rem; //16px
+}
+.fs-17 {
+    font-size: 1.0625rem; //17px
+}
+.fs-18 {
+    font-size: 1.125rem; //18px
+}
+.fs-19 {
+    font-size: 1.1875rem; //19px
+}
+.fs-20 {
+    font-size: 1.25rem; //20px
+}
+.fs-21 {
+    font-size: 1.3125rem; //21px
+}
+.fs-22 {
+    font-size: 1.375rem; //22px
+}
+.fs-23 {
+    font-size: 1.4375rem; //23px
+}
+.fs-24 {
+    font-size: 1.5rem; //24px
+}
+.fs-25 {
+    font-size: 1.5625rem; //25px
+}
+.fs-26 {
+    font-size: 1.625rem; //26px
+}
+.fs-27 {
+    font-size: 1.6875rem; //27px
+}
+.fs-28 {
+    font-size: 1.75rem; //28px
+}
+.fs-29 {
+    font-size: 1.8125rem; //29px
+}
+.fs-30 {
+    font-size: 1.875rem; //30px
+}
+.fs-32 {
+    font-size: 2rem; //32px
+}
+.fs-34 {
+    font-size: 2.125rem; //34px
+}
+.fs-36 {
+    font-size: 2.25rem; //36px
+}
+.fs-38 {
+    font-size: 2.375rem; //38px
+}
+.fs-40 {
+    font-size: 2.5rem; //40px
+}
+/* === Font Sized === */
+
+/* === Text Color === */
+.text-default {
+    color: $default-text-color !important;
+}
+.text-muted {
+    color: $text-muted !important;
+}
+.text-primary {
+    color: $primary !important;
+    opacity: 1;
+    &.text-opacity-75 {
+        color: $primary-08 !important;
+    }
+    &.text-opacity-25 {
+        color: $primary-03 !important;
+    }
+    &.text-opacity-50 {
+        color: $primary-05 !important;
+    }
+}
+.text-secondary {
+    color: $secondary !important;
+    opacity: 1;
+    &.text-opacity-75 {
+        color: $secondary-08 !important;
+    }
+    &.text-opacity-25 {
+        color: $secondary-03 !important;
+    }
+    &.text-opacity-50 {
+        color: $secondary-05 !important;
+    }
+}
+.text-info {
+    color: $info !important;
+    opacity: 1;
+    &.text-opacity-75 {
+        color: $info-08 !important;
+    }
+    &.text-opacity-25 {
+        color: $info-03 !important;
+    }
+    &.text-opacity-50 {
+        color: $info-05 !important;
+    }
+}
+.text-success {
+    color: $success !important;
+    opacity: 1;
+    &.text-opacity-75 {
+        color: $success-08 !important;
+    }
+    &.text-opacity-25 {
+        color: $success-03 !important;
+    }
+    &.text-opacity-50 {
+        color: $success-05 !important;
+    }
+}
+.text-warning {
+    color: $warning !important;
+    opacity: 1;
+    &.text-opacity-75 {
+        color: $warning-08 !important;
+    }
+    &.text-opacity-25 {
+        color: $warning-03 !important;
+    }
+    &.text-opacity-50 {
+        color: $warning-05 !important;
+    }
+}
+.text-danger {
+    color: $danger !important;
+    opacity: 1;
+    &.text-opacity-75 {
+        color: $danger-08 !important;
+    }
+    &.text-opacity-25 {
+        color: $danger-03 !important;
+    }
+    &.text-opacity-50 {
+        color: $danger-05 !important;
+    }
+}
+.text-blue {
+    color: $blue !important;
+}
+.text-green {
+    color: $green !important;
+}
+.text-pink {
+    color: $pink !important;
+}
+.text-teal {
+    color: $teal !important;
+}
+.text-orange {
+    color: $orange !important;
+}
+.text-indigo {
+    color: $indigo !important;
+}
+.text-purple {
+    color: $purple !important;
+}
+.text-dark {
+    color: $dark !important;
+}
+.text-light {
+    color: $light !important;
+}
+.text-gray {
+    color: $gray-05 !important;
+}
+.text-yellow {
+    color: $yellow !important;
+}
+.text-black {
+    color: $black !important;
+}
+.text-white {
+    color: $white !important;
+}
+.text-fixed-white {
+    color: $white !important;
+}
+.text-fixed-black {
+    color: $black !important;
+}
+/* === Text Color === */
+
+/* === Gray Color === */
+.text-gray-1 {
+    color: $gray-01;
+}
+.text-gray-2 {
+    color: $gray-02;
+}
+.text-gray-3 {
+    color: $gray-03;
+}
+.text-gray-4 {
+    color: $gray-04;
+}
+.text-gray-5 {
+    color: $gray-05;
+}
+.text-gray-6 {
+    color: $gray-06;
+}
+.text-gray-7 {
+    color: $gray-07;
+}
+.text-gray-8 {
+    color: $gray-08;
+}
+.text-gray-9 {
+    color: $gray-09;
+}
+/* === Gray Color === */
+
+/* === Links === */
+a {
+    text-decoration: none;
+    color: rgba(var(--dark-rgb),var(--bs-link-opacity, 1));
+    &:hover {
+        opacity: 1;
+        color: rgba(var(--dark-rgb),var(--bs-link-opacity, 1));
+    }
+    &.link-underline {
+        text-decoration-color: rgba(var(--dark-rgb),var(--bs-link-underline-opacity))!important;
+    }
+    &.link-underline-primary {
+        text-decoration-color: rgba(var(--primary-rgb),var(--bs-link-underline-opacity))!important;
+    }
+    &.link-underline-secondary {
+        text-decoration-color: rgba(var(--secondary-rgb),var(--bs-link-underline-opacity))!important;
+    }
+    &.link-underline-warning {
+        text-decoration-color: rgba(var(--warning-rgb),var(--bs-link-underline-opacity))!important;
+    }
+    &.link-underline-info {
+        text-decoration-color: rgba(var(--info-rgb),var(--bs-link-underline-opacity))!important;
+    }
+    &.link-underline-success {
+        text-decoration-color: rgba(var(--success-rgb),var(--bs-link-underline-opacity))!important;
+    }
+    &.link-underline-danger {
+        text-decoration-color: rgba(var(--danger-rgb),var(--bs-link-underline-opacity))!important;
+    }
+    &.link-underline-light {
+        text-decoration-color: rgba(var(--light-rgb),var(--bs-link-underline-opacity))!important;
+    }
+    &.link-underline-dark {
+        text-decoration-color: rgba(var(--dark-rgb),var(--bs-link-underline-opacity))!important;
+    }
+}
+/* === Links === */
+
+/* === Link Colored === */
+.link-primary {
+    color: $primary !important;
+    text-decoration-color: rgba(var(--primary-rgb),var(--bs-link-underline-opacity, 1))!important;
+    &:active,
+    &:focus,
+    &:hover {
+        text-decoration-color: rgba(var(--primary-rgb),var(--bs-link-underline-opacity, 1))!important;
+        color: $primary !important;
+    }
+}
+.link-secondary {
+    color: $secondary !important;
+    text-decoration-color: rgba(var(--secondary-rgb),var(--bs-link-underline-opacity, 1))!important;
+    &:active,
+    &:focus,
+    &:hover {
+        text-decoration-color: rgba(var(--secondary-rgb),var(--bs-link-underline-opacity, 1))!important;
+        color: $secondary !important;
+    }
+}
+.link-success {
+    color: $success !important;
+    text-decoration-color: rgba(var(--success-rgb),var(--bs-link-underline-opacity, 1))!important;
+    &:active,
+    &:focus,
+    &:hover {
+        text-decoration-color: rgba(var(--success-rgb),var(--bs-link-underline-opacity, 1))!important;
+        color: $success !important;
+    }
+}
+.link-danger {
+    color: $danger !important;
+    text-decoration-color: rgba(var(--danger-rgb),var(--bs-link-underline-opacity, 1))!important;
+    &:active,
+    &:focus,
+    &:hover {
+        text-decoration-color: rgba(var(--danger-rgb),var(--bs-link-underline-opacity, 1))!important;
+        color: $danger !important;
+    }
+}
+.link-warning {
+    color: $warning !important;
+    text-decoration-color: rgba(var(--warning-rgb),var(--bs-link-underline-opacity, 1))!important;
+    &:active,
+    &:focus,
+    &:hover {
+        text-decoration-color: rgba(var(--warning-rgb),var(--bs-link-underline-opacity, 1))!important;
+        color: $warning !important;
+    }
+}
+.link-info {
+    color: $info !important;
+    text-decoration-color: rgba(var(--info-rgb),var(--bs-link-underline-opacity, 1))!important;
+    &:active,
+    &:focus,
+    &:hover {
+        text-decoration-color: rgba(var(--info-rgb),var(--bs-link-underline-opacity, 1))!important;
+        color: $info !important;
+    }
+}
+.link-light {
+    color: $light !important;
+    text-decoration-color: rgba(var(--light-rgb),var(--bs-link-underline-opacity, 1))!important;
+    &:active,
+    &:focus,
+    &:hover {
+        text-decoration-color: rgba(var(--light-rgb),var(--bs-link-underline-opacity, 1))!important;
+        color: $light !important;
+    }
+}
+.link-dark {
+    color: $dark !important;
+    text-decoration-color: rgba(var(--dark-rgb),var(--bs-link-underline-opacity, 1))!important;
+    &:active,
+    &:focus,
+    &:hover {
+        text-decoration-color: rgba(var(--dark-rgb),var(--bs-link-underline-opacity, 1))!important;
+        color: $dark !important;
+    }
+}
+.link-body-emphasis {
+    color: $dark !important;
+    text-decoration-color: rgba(#{var(--default-text-color)},var(--bs-link-underline-opacity, 1))!important;
+    &:active,
+    &:focus,
+    &:hover {
+        text-decoration-color: rgba(#{var(--default-text-color)},var(--bs-link-underline-opacity, 1))!important;
+        color: $dark !important;
+    }
+}
+/* === Link Colored === */

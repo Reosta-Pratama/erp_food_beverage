@@ -1,0 +1,23 @@
+@use '../variables-map' as *;
+
+#responsive-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    background-color: $black-03;
+    opacity: 0;
+    visibility: hidden;
+    backdrop-filter: blur(0px);
+    transition: opacity 300ms ease-in-out, backdrop-filter 300ms ease-in-out, visibility 300ms;
+}
+
+[data-mobile="open"] {
+    #responsive-backdrop {
+        opacity: 1;
+        visibility: visible;
+        backdrop-filter: blur(4px);
+    }
+}

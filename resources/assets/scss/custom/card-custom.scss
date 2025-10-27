@@ -1,0 +1,334 @@
+@use '../_variables-map' as *;
+
+/* === Card Set === */
+.card {
+    margin-block-end: 1.5rem;
+
+    .card-footer,
+    .card-header {
+        background-color: $white !important;
+        color: $default-text-color;
+    }
+
+    .card-body.with-dashed-border {
+        margin: 0 8px 8px;
+        border: 1px dashed $default-border !important;
+        border-radius: 0.5rem;
+    }
+
+    &.custom {
+        position: relative;
+        width: 100%;
+        background-color: $white;
+        box-shadow: $box-shadow;
+        border: 0;
+        border-radius: $default-radius;
+        margin-block-end: 1.5rem;
+
+        .card-header {
+            position: relative;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            background-color: transparent !important;
+            gap: 0.25rem;
+            padding: 1.25rem;
+            border-block-end: 1px solid $default-border;
+
+            &:first-child {
+                border-radius: 0.625rem 0.625rem 0 0;
+            }
+
+            .card-title {
+                position: relative;
+                margin-block-end: 0;
+                font-size: 0.95rem;
+                font-weight: 600;
+
+                .subtitle {
+                    margin-block-end: 0;
+                    text-transform: initial;
+                }
+            }
+        }
+
+        .card-footer {
+            background-color: transparent !important;
+            border-block-start: 1px solid $default-border;
+            padding: 1.25rem;
+            font-size: $default-font-size;
+        }
+
+        .card-body {
+            padding: 1.25rem;
+            color: $default-text-color;
+        }
+
+        .card-link {
+            font-size: 0.75rem;
+        }
+
+        .card-text {
+            font-size: 0.813rem;
+        }
+
+        .footer-card-icon {
+            width: 60px;
+            height: 60px;
+        }
+
+        &.overlay-card {
+            position: relative;
+            overflow: hidden;
+            color: rgba(255, 255, 255, 0.9);
+
+            .card-header {
+                border-block-end: 1px solid $white-01;
+            }
+
+            .card-footer {
+                border-block-start: 1px solid $white-01;
+            }
+
+            .over-content-bottom {
+                top: auto;
+            }
+
+            &:before {
+                content: "";
+                inset-inline-start: 0;
+                inset-inline-end: 0;
+                inset-block-start: 0;
+                inset-block-end: 0;
+                background-color: $black-03;
+                position: absolute;
+                border-radius: $default-radius;
+            }
+        }
+
+        /* === Background Color === */
+        &.card-bg-primary {
+            background-color: $primary;
+            color: $white;
+
+            .card-header {
+                color: $white;
+                border-block-end: 1px solid $white-01;
+
+                &:before {
+                    background-color: $white;
+                }
+            }
+
+            .card-body {
+                color: $white;
+            }
+
+            .card-footer {
+                color: $white;
+                border-block-start: 1px solid $white-01;
+            }
+        }
+
+        &.card-bg-secondary {
+            background-color: $secondary;
+            color: $white;
+
+            .card-header {
+                color: $white;
+                border-block-end: 1px solid $white-01;
+
+                &:before {
+                    background-color: $white;
+                }
+            }
+
+            .card-body {
+                color: $white;
+            }
+
+            .card-footer {
+                color: $white;
+                border-block-start: 1px solid $white-01;
+            }
+        }
+
+        &.card-bg-warning {
+            background-color: $warning;
+            color: $white;
+
+            .card-header {
+                color: $white;
+                border-block-end: 1px solid $white-01;
+
+                &:before {
+                    background-color: $white;
+                }
+            }
+
+            .card-body {
+                color: $white;
+            }
+
+            .card-footer {
+                color: $white;
+                border-block-start: 1px solid $white-01;
+            }
+        }
+
+        &.card-bg-info {
+            background-color: $info;
+            color: $white;
+
+            .card-header {
+                color: $white;
+                border-block-end: 1px solid $white-01;
+
+                &:before {
+                    background-color: $white;
+                }
+            }
+
+            .card-body {
+                color: $white;
+            }
+
+            .card-footer {
+                color: $white;
+                border-block-start: 1px solid $white-01;
+            }
+        }
+
+        &.card-bg-success {
+            background-color: $success;
+            color: $white;
+
+            .card-header {
+                color: $white;
+                border-block-end: 1px solid $white-01;
+
+                &:before {
+                    background-color: $white;
+                }
+            }
+
+            .card-body {
+                color: $white;
+            }
+
+            .card-footer {
+                color: $white;
+                border-block-start: 1px solid $white-01;
+            }
+        }
+
+        &.card-bg-danger {
+            background-color: $danger;
+            color: $white;
+
+            .card-header {
+                color: $white;
+                border-block-end: 1px solid $white-01;
+
+                &:before {
+                    background-color: $white;
+                }
+            }
+
+            .card-body {
+                color: $white;
+            }
+
+            .card-footer {
+                color: $white;
+                border-block-start: 1px solid $white-01;
+            }
+        }
+
+        &.card-bg-light {
+            background-color: $light;
+            color: $default-text-color;
+
+            .card-header {
+                color: $default-text-color;
+                border-block-end: $default-border;
+            }
+
+            .card-body {
+                color: $default-text-color;
+            }
+
+            .card-footer {
+                color: $default-text-color;
+                border-block-start: $default-border;
+            }
+        }
+
+        &.card-bg-dark {
+            background-color: $dark;
+            color: $white;
+
+            .card-header {
+                color: $white;
+                border-block-end: 1px solid $white-02;
+
+                &:before {
+                    background-color: $white;
+                }
+            }
+
+            .card-body {
+                color: $white;
+            }
+
+            .card-footer {
+                color: $white;
+                border-block-start: 1px solid $white-02;
+            }
+        }
+        /* === Background Color === */
+
+        /* === Collapse === */
+        .collapse-close {
+            display: none;
+        }
+
+        &.card .collapsed {
+            .collapse-close {
+                display: block;
+            }
+
+            .collapse-open {
+                display: none;
+            }
+        }
+        /* === Collapse === */
+
+        /* === Fullscreen === */
+        &.card-fullscreen {
+            position: fixed;
+            top: 0;
+            inset-inline-start: 0;
+            inset-inline-start: 0;
+            bottom: 0;
+            z-index: 9999;
+            margin: 0;
+        }
+        /* === Fullscreen === */
+    }
+
+    .card-img,
+    .card-img-top {
+        border-top-left-radius: $default-radius;
+        border-top-right-radius: $default-radius;
+    }
+}
+
+@media (max-width: 575px) {
+    .overlay-card {
+        .card-text {
+            font-size: 0.613rem !important;
+        }
+    }
+}
+/* === Card Set === */

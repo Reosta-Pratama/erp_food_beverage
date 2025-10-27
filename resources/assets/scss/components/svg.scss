@@ -1,0 +1,55 @@
+@use '../variables-map' as *;
+
+/* === SVG Color === */
+.svg-primary svg {
+    color: $primary;
+}
+.svg-secondary svg {
+    color: $secondary;
+}
+.svg-success svg {
+    color: $success;
+}
+.svg-danger svg {
+    color: $danger;
+}
+.svg-warning svg {
+    color: $warning;
+}
+.svg-white svg {
+    color: $white;
+}
+.svg-black svg {
+    color: $black;
+}
+.svg-pink svg {
+    color: $pink;
+}
+.svg-orange svg {
+    color: $orange;
+}
+.svg-purple svg {
+    color: $purple;
+}
+.svg-indigo svg {
+    color: $indigo;
+}
+.svg-info svg {
+    color: $info;
+}
+.svg-yellow svg {
+    color: $yellow;
+}
+.svg-light svg {
+    color: $light;
+}
+.svg-dark svg {
+    color: $dark;
+}
+.svg-teal svg {
+    color: $teal;
+}
+.svg-default svg {
+    color: $default-text-color;
+}
+/* === SVG Color === */

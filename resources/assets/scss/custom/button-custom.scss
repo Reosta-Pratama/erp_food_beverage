@@ -1,0 +1,1310 @@
+@use '../_variables-map' as *;
+
+/* === Button Set === */
+button:focus {
+  box-shadow: none !important;
+}
+
+.btn {
+    box-shadow: none;
+    border-radius: 0.25rem;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    &.btn-sm {
+        padding: 0.26rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.75rem;
+    }
+    &.btn-lg {
+        padding: 0.65rem 1rem;
+        border-radius: $default-radius;
+        font-size: 0.95rem;
+    }
+}
+
+.btn-check:active + .btn,
+.btn-check:checked + .btn,
+.btn.active,
+.btn.show,
+.btn:active {
+    color: $white;
+}
+.btn-check:focus + .btn,
+.btn:focus {
+    box-shadow: none;
+}
+
+/* === Button List === */
+.btn-list {
+    margin-block-end: -0.5rem;
+
+    a,
+    button,
+    div,
+    input {
+        margin: 0 0.375rem 0.375rem 0;
+    }
+}
+
+.btn-bd-primary {
+    --bs-btn-font-weight: 400;
+    --bs-btn-color: $white;
+    --bs-btn-bg: $primary;
+    --bs-btn-border-color: $primary;
+    --bs-btn-border-radius: 0.5rem;
+    --bs-btn-hover-color: $primary;
+    --bs-btn-hover-bg: $primary-09;
+    --bs-btn-hover-border-color: $primary-09;
+    --bs-btn-active-color: $primary;
+    --bs-btn-active-bg: $primary-09;
+    --bs-btn-active-border-color: $primary-09;
+}
+/* === Button List === */
+
+/* === Button Group === */
+.btn-group {
+    .btn {
+        padding: 0.45rem 0.75rem;
+    }
+}
+.btn-group-lg {
+    .btn {
+        padding: 0.65rem 1rem;
+    }
+}
+.btn-group-sm {
+    .btn {
+        padding: 0.25rem 0.5rem;
+    }
+}
+/* === Button Group === */
+
+.btn-group-sm > .btn,
+.btn-sm {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.8rem;
+}
+/* === Button Set === */
+
+/* === Color === */
+@mixin btn-primary($btn-color) {
+    background-color: rgb(#{$btn-color}) !important;
+    border-color: rgb(#{$btn-color}) !important;
+    color: $white !important;
+    &:hover {
+        background-color: rgba(#{$btn-color}, 0.9) !important;
+        border-color: rgb(#{$btn-color}) !important;
+        color: $white;
+    }
+    &:focus {
+        background-color: rgb(#{$btn-color});
+        border-color: rgb(#{$btn-color});
+        color: $white;
+    }
+}
+
+@mixin btn-check-focus($btn-color) {
+    background-color: rgb(#{$btn-color});
+    border-color: rgb(#{$btn-color});
+    box-shadow: none;
+    outline: 0;
+}
+
+/* === Primary Color === */
+.btn-primary {
+    @include btn-primary(var(--primary-rgb));
+}
+.btn-check:focus + .btn-primary,
+.btn-primary:focus {
+    @include btn-check-focus(var(--primary-rgb));
+}
+.btn-check:active + .btn-primary:focus,
+.btn-check:checked + .btn-primary:focus,
+.btn-primary.active:focus,
+.btn-primary.show:focus,
+.btn-primary:active:focus {
+    box-shadow: 0 0.25rem 1rem $primary-05;
+}
+.btn-check:active + .btn-primary,
+.btn-check:checked + .btn-primary,
+.btn-primary.active,
+.btn-primary.show,
+.btn-primary:active {
+    background-color: $primary !important;
+    border-color: $primary-border !important;
+}
+/* === Primary Color === */
+
+/* === Secondary Color === */
+.btn-secondary {
+    @include btn-primary(var(--secondary-rgb));
+}
+.btn-check:focus + .btn-secondary,
+.btn-secondary:focus {
+    @include btn-check-focus(var(--secondary-rgb));
+}
+.btn-check:active + .btn-secondary:focus,
+.btn-check:checked + .btn-secondary:focus,
+.btn-secondary.active:focus,
+.btn-secondary.show:focus,
+.btn-secondary:active:focus {
+    box-shadow: 0 0.25rem 1rem rgba(var(--secondary-rgb), 0.5);
+}
+.btn-check:active + .btn-secondary,
+.btn-check:checked + .btn-secondary,
+.btn-secondary.active,
+.btn-secondary.show,
+.btn-secondary:active {
+    background-color: $secondary !important;
+    border-color: $secondary !important;
+}
+/* === Secondary Color === */
+
+/* === Warning Color === */
+.btn-warning {
+    @include btn-primary(var(--warning-rgb));
+}
+.btn-check:focus + .btn-warning,
+.btn-warning:focus {
+    @include btn-check-focus(var(--warning-rgb));
+}
+.btn-check:active + .btn-warning:focus,
+.btn-check:checked + .btn-warning:focus,
+.btn-warning.active:focus,
+.btn-warning.show:focus,
+.btn-warning:active:focus {
+    box-shadow: 0 0.25rem 1rem rgba(var(--warning-rgb), 0.5);
+}
+.btn-check:active + .btn-warning,
+.btn-check:checked + .btn-warning,
+.btn-warning.active,
+.btn-warning.show,
+.btn-warning:active {
+    background-color: $warning !important;
+    border-color: $warning !important;
+}
+/* === Warning Color === */
+
+/* === Info Color === */
+.btn-info {
+    @include btn-primary(var(--info-rgb));
+}
+.btn-check:focus + .btn-info,
+.btn-info:focus {
+    @include btn-check-focus(var(--info-rgb));
+}
+.btn-check:active + .btn-info:focus,
+.btn-check:checked + .btn-info:focus,
+.btn-info.active:focus,
+.btn-info.show:focus,
+.btn-info:active:focus {
+    box-shadow: 0 0.25rem 1rem rgba(var(--info-rgb), 0.5);
+}
+.btn-check:active + .btn-info,
+.btn-check:checked + .btn-info,
+.btn-info.active,
+.btn-info.show,
+.btn-info:active {
+    background-color: $info !important;
+    border-color: $info !important;
+}
+/* === Info Color === */
+
+/* === Danger Color === */
+.btn-danger {
+    @include btn-primary(var(--danger-rgb));
+}
+.btn-check:focus + .btn-danger,
+.btn-danger:focus {
+    @include btn-check-focus(var(--danger-rgb));
+}
+.btn-check:active + .btn-danger:focus,
+.btn-check:checked + .btn-danger:focus,
+.btn-danger.active:focus,
+.btn-danger.show:focus,
+.btn-danger:active:focus {
+    box-shadow: 0 0.25rem 1rem rgba(var(--danger-rgb), 0.5);
+}
+.btn-check:active + .btn-danger,
+.btn-check:checked + .btn-danger,
+.btn-danger.active,
+.btn-danger.show,
+.btn-danger:active {
+    background-color: $danger !important;
+    border-color: $danger !important;
+}
+/* === Danger Color === */
+
+/* === Success Color === */
+.btn-success {
+    @include btn-primary(var(--success-rgb));
+}
+.btn-check:focus + .btn-success,
+.btn-success:focus {
+    @include btn-check-focus(var(--success-rgb));
+}
+.btn-check:active + .btn-success:focus,
+.btn-check:checked + .btn-success:focus,
+.btn-success.active:focus,
+.btn-success.show:focus,
+.btn-success:active:focus {
+    box-shadow: 0 0.25rem 1rem rgba(var(--success-rgb), 0.5);
+}
+.btn-check:active + .btn-success,
+.btn-check:checked + .btn-success,
+.btn-success.active,
+.btn-success.show,
+.btn-success:active {
+    background-color: $success !important;
+    border-color: $success !important;
+}
+/* === Success Color === */
+
+/* === Dark Color === */
+.btn-dark {
+    background-color: $dark;
+    border-color: $dark;
+    color: $white;
+    &:active,
+    &:focus,
+    &:hover {
+        background-color: $dark;
+        border-color: $dark;
+        color: $white !important;
+    }
+    svg {
+        fill: $black;
+    }
+}
+.btn-check:focus + .btn-dark,
+.btn-dark:focus {
+    @include btn-check-focus(var(--dark-rgb));
+}
+.btn-check:active + .btn-dark:focus,
+.btn-check:checked + .btn-dark:focus,
+.btn-dark.active:focus,
+.btn-dark.show:focus,
+.btn-dark:active:focus {
+    box-shadow: 0 0.25rem 1rem rgba(var(--dark-rgb), 0.5);
+}
+.btn-check:active + .btn-dark,
+.btn-check:checked + .btn-dark,
+.btn-dark.active,
+.btn-dark.show,
+.btn-dark:active {
+    background-color: $dark !important;
+    border-color: $dark !important;
+    color: $white;
+}
+/* === Dark Color === */
+
+/* === Light Color === */
+.btn-light {
+    background-color: $light;
+    border-color: $light;
+    color: $default-text-color;
+    &:hover {
+        background-color: #f4f4f4;
+        border-color: $light;
+        color: $default-text-color;
+    }
+    &:focus {
+        background-color: $light;
+        border-color: $light;
+        box-shadow: none;
+        color: $default-text-color;
+    }
+    &.btn.disabled,
+    &.btn:disabled,
+    fieldset:disabled &.btn {
+        background-color: $light;
+        border-color: $light;
+        color: $default-text-color;
+    }
+}
+.btn-check:focus + .btn-light,
+.btn-light:focus {
+    @include btn-check-focus(var(--light-rgb));
+}
+.btn-check:active + .btn-light:focus,
+.btn-check:checked + .btn-light:focus,
+.btn-light.active:focus,
+.btn-light.show:focus,
+.btn-light:active:focus {
+    box-shadow: 0 0.25rem 1rem rgba(var(--light-rgb), 0.5);
+}
+.btn-check:active + .btn-light,
+.btn-check:checked + .btn-light,
+.btn-light.active,
+.btn-light.show,
+.btn-light:active {
+    background-color: $light !important;
+    border-color: $light !important;
+    color: $default-text-color !important;
+}
+/* === Light Color === */
+/* === Color === */
+
+/* === Outline Color === */
+@mixin btn-outline($btn-outline-color) {
+    border-color: rgb(#{$btn-outline-color});
+    color: rgb(#{$btn-outline-color});
+    &:active,
+    &:hover {
+        background-color: rgb(#{$btn-outline-color});
+        border-color: rgb(#{$btn-outline-color});
+        color: $white;
+    }
+    &:focus {
+        background-color: rgb(#{$btn-outline-color});
+        border-color: rgb(#{$btn-outline-color});
+        box-shadow: none;
+        color: $white;
+        &:active {
+            box-shadow: none;
+        }
+    }
+}
+
+/* === Outline Primary Color === */
+.btn-outline-primary {
+    @include btn-outline(var(--primary-rgb));
+}
+/* === Outline Primary Color === */
+
+/* === Outline Secondary Color === */
+.btn-outline-secondary {
+    @include btn-outline(var(--secondary-rgb));
+}
+/* === Outline Secondary Color === */
+
+/* === Outline Warning Color === */
+.btn-outline-warning {
+    @include btn-outline(var(--warning-rgb));
+}
+/* === Outline Warning Color === */
+
+/* === Outline Danger Color === */
+.btn-outline-danger {
+    @include btn-outline(var(--danger-rgb));
+}
+/* === Outline Danger Color === */
+
+/* === Outline Success Color === */
+.btn-outline-success {
+    @include btn-outline(var(--success-rgb));
+}
+/* === Outline Success Color === */
+
+/* === Outline Info Color === */
+.btn-outline-info {
+    @include btn-outline(var(--info-rgb));
+}
+/* === Outline Info Color === */
+
+/* === Outline Light Color === */
+.btn-outline-light {
+    border-color: $light;
+    color: $default-text-color !important;
+    &:active,
+    &:hover {
+        background-color: $light;
+        border-color: $light;
+        color: $default-text-color;
+    }
+    &:focus {
+        background-color: $light;
+        border-color: $light;
+        box-shadow: none;
+        color: $default-text-color;
+        &:active {
+            box-shadow: none;
+        }
+    }
+}
+/* === Outline Light Color === */
+
+/* === Outline Dark Color === */
+
+.btn-outline-dark {
+    border-color: $dark;
+    color: $dark;
+    &:active,
+    &:hover {
+        background-color: $black;
+        border-color: $black;
+        color: $white;
+    }
+    &:focus {
+        background-color: $dark;
+        border-color: $dark;
+        box-shadow: none;
+        color: $white;
+        &:active {
+            box-shadow: none;
+        }
+    }
+}
+/* === Outline Dark Color === */
+/* === Outline Color === */
+
+/* === Transparent === */
+@mixin btn-transparent($btn-transparent) {
+    background-color: rgba(#{$btn-transparent}, 0.1);
+    border-color: rgba(#{$btn-transparent}, 0.1);
+    color: rgb(#{$btn-transparent});
+    &:focus:hover,
+    &:hover {
+        background-color: rgb(#{$btn-transparent});
+        border-color: rgb(#{$btn-transparent});
+        color: $white;
+    }
+}
+
+@mixin btn-transparent-focus($btn-transparent) {
+    background-color: rgba(#{$btn-transparent}, 0.1);
+    border-color: rgba(#{$btn-transparent}, 0.1);
+    outline: 0;
+    box-shadow: 0 0.25rem 1rem rgba(#{$btn-transparent}, 0.3);
+    color: rgb(#{$btn-transparent});
+}
+
+/* === Transparent Primary Color === */
+.btn-primary-transparent {
+    @include btn-transparent(var(--primary-rgb));
+}
+.btn-check:focus + .btn-primary-transparent,
+.btn-primary-transparent:focus {
+    @include btn-transparent-focus(var(--primary-rgb));
+}
+.btn-check:active + .btn-primary-transparent:focus,
+.btn-check:checked + .btn-primary-transparent:focus,
+.btn-primary-transparent.active:focus,
+.btn-primary-transparent.show:focus,
+.btn-primary-transparent:active:focus {
+    box-shadow: 0 0.25rem 1rem $primary-05;
+}
+.btn-check:active + .btn-primary-transparent,
+.btn-check:checked + .btn-primary-transparent,
+.btn-primary-transparent.active,
+.btn-primary-transparent.show,
+.btn-primary-transparent:active {
+    background-color: $primary;
+    border-color: $primary-01;
+    color: $white;
+}
+/* === Transparent Primary Color === */
+
+/* === Transparent Secondary Color === */
+.btn-secondary-transparent {
+    @include btn-transparent(var(--secondary-rgb));
+}
+.btn-check:focus + .btn-secondary-transparent,
+.btn-secondary-transparent:focus {
+    @include btn-transparent-focus(var(--secondary-rgb));
+}
+.btn-check:active + .btn-secondary-transparent:focus,
+.btn-check:checked + .btn-secondary-transparent:focus,
+.btn-secondary-transparent.active:focus,
+.btn-secondary-transparent.show:focus,
+.btn-secondary-transparent:active:focus {
+    box-shadow: 0 0.25rem 1rem rgba(var(--secondary-rgb), 0.5);
+}
+.btn-check:active + .btn-secondary-transparent,
+.btn-check:checked + .btn-secondary-transparent,
+.btn-secondary-transparent.active,
+.btn-secondary-transparent.show,
+.btn-secondary-transparent:active {
+    background-color: $secondary;
+    border-color: rgba(var(--secondary-rgb), 0.1);
+    color: $white;
+}
+/* === Transparent Secondary Color === */
+
+/* === Transparent Warning Color === */
+.btn-warning-transparent {
+    @include btn-transparent(var(--warning-rgb));
+}
+.btn-check:focus + .btn-warning-transparent,
+.btn-warning-transparent:focus {
+    @include btn-transparent-focus(var(--warning-rgb));
+}
+.btn-check:active + .btn-warning-transparent:focus,
+.btn-check:checked + .btn-warning-transparent:focus,
+.btn-warning-transparent.active:focus,
+.btn-warning-transparent.show:focus,
+.btn-warning-transparent:active:focus {
+    box-shadow: 0 0.25rem 1rem rgba(var(--warning-rgb), 0.5);
+}
+.btn-check:active + .btn-warning-transparent,
+.btn-check:checked + .btn-warning-transparent,
+.btn-warning-transparent.active,
+.btn-warning-transparent.show,
+.btn-warning-transparent:active {
+    background-color: $warning;
+    border-color: rgba(var(--warning-rgb), 0.1);
+    color: $white;
+}
+/* === Transparent Warning Color === */
+
+/* === Transparent Info Color === */
+.btn-info-transparent {
+    @include btn-transparent(var(--info-rgb));
+}
+.btn-check:focus + .btn-info-transparent,
+.btn-info-transparent:focus {
+    @include btn-transparent-focus(var(--info-rgb));
+}
+.btn-check:active + .btn-info-transparent:focus,
+.btn-check:checked + .btn-info-transparent:focus,
+.btn-info-transparent.active:focus,
+.btn-info-transparent.show:focus,
+.btn-info-transparent:active:focus {
+    box-shadow: 0 0.25rem 1rem rgba(var(--info-rgb), 0.5);
+}
+.btn-check:active + .btn-info-transparent,
+.btn-check:checked + .btn-info-transparent,
+.btn-info-transparent.active,
+.btn-info-transparent.show,
+.btn-info-transparent:active {
+    background-color: $info;
+    border-color: rgba(var(--info-rgb), 0.1);
+    color: $white;
+}
+/* === Transparent Info Color === */
+
+/* === Transparent Success Color === */
+.btn-success-transparent {
+    @include btn-transparent(var(--success-rgb));
+}
+.btn-check:focus + .btn-success-transparent,
+.btn-success-transparent:focus {
+    @include btn-transparent-focus(var(--success-rgb));
+}
+.btn-check:active + .btn-success-transparent:focus,
+.btn-check:checked + .btn-success-transparent:focus,
+.btn-success-transparent.active:focus,
+.btn-success-transparent.show:focus,
+.btn-success-transparent:active:focus {
+    box-shadow: 0 0.25rem 1rem rgba(var(--success-rgb), 0.5);
+}
+.btn-check:active + .btn-success-transparent,
+.btn-check:checked + .btn-success-transparent,
+.btn-success-transparent.active,
+.btn-success-transparent.show,
+.btn-success-transparent:active {
+    background-color: $success;
+    border-color: rgba(var(--success-rgb), 0.1);
+    color: $white;
+}
+/* === Transparent Success Color === */
+
+/* === Transparent Danger Color === */
+.btn-danger-transparent {
+    @include btn-transparent(var(--danger-rgb));
+}
+.btn-check:focus + .btn-danger-transparent,
+.btn-danger-transparent:focus {
+    @include btn-transparent-focus(var(--danger-rgb));
+}
+.btn-check:active + .btn-danger-transparent:focus,
+.btn-check:checked + .btn-danger-transparent:focus,
+.btn-danger-transparent.active:focus,
+.btn-danger-transparent.show:focus,
+.btn-danger-transparent:active:focus {
+    box-shadow: 0 0.25rem 1rem rgba(var(--danger-rgb), 0.5);
+}
+.btn-check:active + .btn-danger-transparent,
+.btn-check:checked + .btn-danger-transparent,
+.btn-danger-transparent.active,
+.btn-danger-transparent.show,
+.btn-danger-transparent:active {
+    background-color: $danger;
+    border-color: rgba(var(--danger-rgb), 0.1);
+    color: $white;
+}
+/* === Transparent Danger Color === */
+/* === Transparent === */
+
+/* === Outline Check Color === */
+@mixin btn-check-outline($btn-outline-color) {
+    background-color: rgb(#{$btn-outline-color}) !important;
+    border-color: rgb(#{$btn-outline-color}) !important;
+    color: $white !important;
+}
+
+.btn-check + .btn.btn-outline-primary:hover,
+.btn-check:active + .btn-outline-primary,
+.btn-check:checked + .btn-outline-primary,
+.btn-outline-primary.active,
+.btn-outline-primary.dropdown-toggle.show,
+.btn-outline-primary:active {
+    @include btn-check-outline(var(--primary-rgb));
+}
+.btn-check + .btn.btn-outline-secondary:hover,
+.btn-check:active + .btn-outline-secondary,
+.btn-check:checked + .btn-outline-secondary,
+.btn-outline-secondary.active,
+.btn-outline-secondary.dropdown-toggle.show,
+.btn-outline-secondary:active {
+    @include btn-check-outline(var(--secondary-rgb));
+}
+.btn-check + .btn.btn-outline-info:hover,
+.btn-check:active + .btn-outline-info,
+.btn-check:checked + .btn-outline-info,
+.btn-outline-info.active,
+.btn-outline-info.dropdown-toggle.show,
+.btn-outline-info:active {
+    @include btn-check-outline(var(--info-rgb));
+}
+.btn-check + .btn.btn-outline-warning:hover,
+.btn-check:active + .btn-outline-warning,
+.btn-check:checked + .btn-outline-warning,
+.btn-outline-warning.active,
+.btn-outline-warning.dropdown-toggle.show,
+.btn-outline-warning:active {
+    @include btn-check-outline(var(--warning-rgb));
+}
+.btn-check + .btn.btn-outline-danger:hover,
+.btn-check:active + .btn-outline-danger,
+.btn-check:checked + .btn-outline-danger,
+.btn-outline-danger.active,
+.btn-outline-danger.dropdown-toggle.show,
+.btn-outline-danger:active {
+    @include btn-check-outline(var(--danger-rgb));
+}
+.btn-check + .btn.btn-outline-success:hover,
+.btn-check:active + .btn-outline-success,
+.btn-check:checked + .btn-outline-success,
+.btn-outline-success.active,
+.btn-outline-success.dropdown-toggle.show,
+.btn-outline-success:active {
+    @include btn-check-outline(var(--success-rgb));
+}
+.btn-check + .btn.btn-outline-light:hover,
+.btn-check:active + .btn-outline-light,
+.btn-check:checked + .btn-outline-light,
+.btn-outline-light.active,
+.btn-outline-light.dropdown-toggle.show,
+.btn-outline-light:active,
+.btn-outline-light:hover {
+    color: $default-text-color !important;
+    border-color: rgb(var(--light-rgb)) !important;
+}
+.btn-check + .btn.btn-outline-dark:hover,
+.btn-check:active + .btn-outline-dark,
+.btn-check:checked + .btn-outline-dark,
+.btn-outline-dark.active,
+.btn-outline-dark.dropdown-toggle.show,
+.btn-outline-dark:active {
+    color: $white !important;
+    background-color: $black !important;
+    border-color: $black !important;
+}
+.btn-check + .btn.btn-outline-teal:hover,
+.btn-check:active + .btn-outline-teal,
+.btn-check:checked + .btn-outline-teal,
+.btn-outline-teal.active,
+.btn-outline-teal.dropdown-toggle.show,
+.btn-outline-teal:active {
+    @include btn-check-outline(var(--teal-rgb));
+}
+
+.btn-check:checked + .btn-outline-primary:focus {
+    box-shadow: 0 0.25rem 1rem rgba($primary, 0.5);
+}
+.btn-check:checked + .btn-outline-secondary:focus {
+    box-shadow: 0 0.25rem 1rem rgba(var(--secondary-rgb), 0.5);
+}
+.btn-check:checked + .btn-outline-success:focus {
+    box-shadow: 0 0.25rem 1rem rgba(var(--success-rgb), 0.5);
+}
+.btn-check:checked + .btn-outline-warning:focus {
+    box-shadow: 0 0.25rem 1rem rgba(var(--warning-rgb), 0.5);
+}
+.btn-check:checked + .btn-outline-info:focus {
+    box-shadow: 0 0.25rem 1rem rgba(var(--info-rgb), 0.5);
+}
+.btn-check:checked + .btn-outline-danger:focus {
+    box-shadow: 0 0.25rem 1rem rgba(var(--danger-rgb), 0.5);
+}
+.btn-check:checked + .btn-outline-light:focus {
+    box-shadow: 0 0.25rem 1rem rgba(var(--light-rgb), 0.5);
+}
+.btn-check:checked + .btn-outline-dark:focus {
+    box-shadow: 0 0.25rem 1rem rgba(var(--dark-rgb), 0.5);
+}
+.btn-check:checked + .btn-outline-teal:focus {
+    box-shadow: 0 0.25rem 1rem rgba(var(--teal-rgb), 0.5);
+}
+.btn-check:focus + .btn.btn-outline-primary {
+    color: $white;
+    background-color: $primary;
+    border-color: $primary;
+    box-shadow: none;
+}
+.btn-check:checked + .btn.btn-outline-secondary {
+    color: $white;
+    background-color: $secondary;
+    border-color: $secondary;
+    box-shadow: 0 0.25rem 1rem rgba(var(--secondary-rgb), 0.3);
+}
+.btn.show.btn-outline-secondary {
+    background-color: $secondary;
+    color: $white;
+    border-color: $secondary;
+}
+/* === Outline Check Color === */
+
+/* === Light Color === */
+.btn {
+    &.btn-primary-light {
+        background-color: rgba(var(--primary-rgb), 0.1);
+        color: $primary;
+        &:active,
+        &:focus,
+        &:hover {
+            background-color: $primary;
+            color: $white;
+            border-color: $primary;
+        }
+    }
+    &.btn-secondary-light {
+        background-color: rgba(var(--secondary-rgb), 0.1);
+        color: $secondary;
+        &:active,
+        &:focus,
+        &:hover {
+            background-color: $secondary;
+            color: $white;
+            border-color: $secondary;
+        }
+    }
+    &.btn-warning-light {
+        background-color: rgba(var(--warning-rgb), 0.1);
+        color: $warning;
+        &:active,
+        &:focus,
+        &:hover {
+            background-color: $warning;
+            color: $white;
+            border-color: $warning;
+        }
+    }
+    &.btn-info-light {
+        background-color: rgba(var(--info-rgb), 0.1);
+        color: $info;
+        &:active,
+        &:focus,
+        &:hover {
+            background-color: $info;
+            color: $white;
+            border-color: $info;
+        }
+    }
+    &.btn-success-light {
+        background-color: rgba(var(--success-rgb), 0.1);
+        color: $success;
+        &:active,
+        &:focus,
+        &:hover {
+            background-color: $success;
+            color: $white;
+            border-color: $success;
+        }
+    }
+    &.btn-danger-light {
+        background-color: rgba(var(--danger-rgb), 0.1);
+        color: $danger;
+        &:active,
+        &:focus,
+        &:hover {
+            background-color: $danger;
+            color: $white;
+            border-color: $danger;
+        }
+    }
+}
+/* === Light Color === */
+
+/* === Gradient Color === */
+.btn {
+    &.btn-primary-gradient {
+        background: $primary-gradient;
+        color: $white !important;
+        border: 0;
+        &:hover {
+            border: 0;
+        }
+    }
+    &.btn-secondary-gradient {
+        background: $secondary-gradient;
+        color: $white !important;
+        border: 0;
+        &:hover {
+            border: 0;
+        }
+    }
+    &.btn-warning-gradient {
+        background: $warning-gradient;
+        color: $white !important;
+        border: 0;
+        &:hover {
+            border: 0;
+        }
+    }
+    &.btn-info-gradient {
+        background: $info-gradient;
+        color: $white !important;
+        border: 0;
+        &:hover {
+            border: 0;
+        }
+    }
+    &.btn-success-gradient {
+        background: $success-gradient;
+        color: $white !important;
+        border: 0;
+        &:hover {
+            border: 0;
+        }
+    }
+    &.btn-danger-gradient {
+        background: $danger-gradient;
+        color: $white !important;
+        border: 0;
+        &:hover {
+            border: 0;
+        }
+    }
+}
+/* === Gradient Color === */
+
+/* === Width === */
+.btn {
+    &.btn-w-xs {
+        min-width: 5.625rem;
+    }
+    &.btn-w-sm {
+        min-width: 6.975rem;
+    }
+    &.btn-w-md {
+        min-width: 8.125rem;
+    }
+    &.btn-w-lg {
+        min-width: 9.375rem;
+    }
+}
+/* === Width === */
+
+/* === Loading === */
+.btn-loader {
+    pointer-events: none;
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    .loading {
+        margin-inline-end: 0.75rem;
+    }
+
+    i {
+        animation: loader 1000ms infinite linear;
+        position: absolute !important;
+        top: 50%;
+        transform: translate(0%, -50%);
+    }
+
+    @keyframes loader {
+        from {
+            transform: translate(0%, -50%) rotate(0deg);
+        }
+        to {
+            transform: translate(0%, -50%) rotate(360deg);
+        }
+    }
+}
+/* === Loading === */
+
+/* === Raised === */
+.btn-raised-shadow:hover {
+    box-shadow: 0 0.5rem 1rem 0.5rem $black-01;
+}
+/* === Raised === */
+
+/* === Label === */
+.label-btn {
+    position: relative;
+    padding-inline-start: 2.6rem;
+}
+.label-btn-icon {
+    position: absolute;
+    width: 2.25rem;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $white-02;
+    inset-inline-start: -1px;
+    inset-block-start: -1px;
+    inset-block-end: -1px;
+}
+.label-btn.label-end {
+    padding-inline-start: 1rem;
+    padding-inline-end: 2.6rem;
+    .label-btn-icon {
+        inset-inline-end: -1px;
+        inset-inline-start: auto;
+    }
+}
+/* === Label === */
+
+/* === Custom === */
+.custom-button {
+    position: relative;
+    padding-inline-start: 2.75rem;
+    .custom-btn-icons {
+        box-shadow: 0 0 1px 0.25rem rgba(0, 0, 0, 0.1);
+        position: absolute;
+        inset-inline-start: -0.125rem;
+        inset-block-start: 0;
+        background-color: $white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        padding: 0.375rem;
+        border-radius: 3.125rem;
+        font-size: 1rem;
+        width: 2.25rem;
+        height: 2.25rem;
+        i {
+            position: absolute;
+        }
+    }
+}
+.btn-hover {
+    position: relative;
+    &.btn-hover-animate {
+        transition: all 0.2s linear 0s;
+        &:before {
+            content: "\F417";
+            font-family: bootstrap-icons !important;
+            font-size: 0.8125rem;
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            inset-inline-end: 0;
+            inset-block-start: 0;
+            opacity: 0;
+            height: 100%;
+            width: 2rem;
+            transition: all 0.2s linear 0s;
+        }
+        &:hover {
+            padding-inline-end: 2rem;
+            &:before {
+                opacity: 1;
+                text-indent: 0;
+            }
+        }
+    }
+}
+.btn-glare {
+    border: 1px solid;
+    overflow: hidden;
+    position: relative;
+    span {
+        z-index: 20;
+    }
+    &:after {
+        background: $white;
+        content: "";
+        height: 4.6875rem;
+        inset-inline-start: -1.625rem;
+        opacity: 0.15;
+        position: absolute;
+        inset-block-start: -3.125rem;
+        transform: rotate(35deg);
+        transition: all 600ms cubic-bezier(0.2, 1, 0.25, 1);
+        width: 1.875rem;
+        z-index: 30;
+    }
+}
+.btn-glare:hover {
+    &:after {
+        inset-inline-start: 100%;
+        inset-block-start: 0;
+        transition: all 600ms cubic-bezier(0.2, 1, 0.25, 1);
+    }
+}
+.btn-darken-hover {
+    position: relative;
+    &:hover {
+        &:before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.25);
+            inset-block-start: 0;
+            inset-inline-start: 0;
+        }
+    }
+}
+.btn-custom-border {
+    border: 0;
+    box-shadow: inset 0 0 1.25rem rgba(var(--warning-rgb), 0);
+    outline: 1px solid;
+    outline-color: rgba(var(--warning-rgb), 0.5);
+    outline-offset: 0;
+    text-shadow: none;
+    transition: all 1250ms cubic-bezier(0.19, 1, 0.22, 1);
+    &:hover {
+        border: 0 solid;
+        box-shadow: inset 0 0 1.25rem rgba(var(--warning-rgb), 0.5), 0 0 1.25rem rgba(var(--warning-rgb), 0.2);
+        outline-color: rgba(var(--warning-rgb), 0);
+        outline-offset: 0.938rem;
+    }
+}
+/* === Custom === */
+
+/* === Border === */
+.btn-border-down {
+    &.btn-primary-light {
+        border-block-end: 0.1875rem solid $primary;
+    }
+    &.btn-secondary-light {
+        border-block-end: 0.1875rem solid $secondary;
+    }
+    &.btn-info-light {
+        border-block-end: 0.1875rem solid $info;
+    }
+    &.btn-warning-light {
+        border-block-end: 0.1875rem solid $warning;
+    }
+    &.btn-success-light {
+        border-block-end: 0.1875rem solid $success;
+    }
+    &.btn-danger-light {
+        border-block-end: 0.1875rem solid $danger;
+    }
+    &.btn-dark-light {
+        border-block-end: 0.1875rem solid $primary;
+    }
+}
+.btn-border-start {
+    &.btn-primary-light {
+        border-inline-start: 0.1875rem solid $primary;
+    }
+    &.btn-secondary-light {
+        border-inline-start: 0.1875rem solid $secondary;
+    }
+    &.btn-info-light {
+        border-inline-start: 0.1875rem solid $info;
+    }
+    &.btn-warning-light {
+        border-inline-start: 0.1875rem solid $warning;
+    }
+    &.btn-success-light {
+        border-inline-start: 0.1875rem solid $success;
+    }
+    &.btn-danger-light {
+        border-inline-start: 0.1875rem solid $danger;
+    }
+    &.btn-dark-light {
+        border-inline-start: 0.1875rem solid $primary;
+    }
+}
+.btn-border-end {
+    &.btn-primary-light {
+        border-inline-end: 0.1875rem solid $primary;
+    }
+    &.btn-secondary-light {
+        border-inline-end: 0.1875rem solid $secondary;
+    }
+    &.btn-info-light {
+        border-inline-end: 0.1875rem solid $info;
+    }
+    &.btn-warning-light {
+        border-inline-end: 0.1875rem solid $warning;
+    }
+    &.btn-success-light {
+        border-inline-end: 0.1875rem solid $success;
+    }
+    &.btn-danger-light {
+        border-inline-end: 0.1875rem solid $danger;
+    }
+    &.btn-dark-light {
+        border-inline-end: 0.1875rem solid $primary;
+    }
+}
+.btn-border-top {
+    &.btn-primary-light {
+        border-block-start: 0.1875rem solid $primary;
+    }
+    &.btn-secondary-light {
+        border-block-start: 0.1875rem solid $secondary;
+    }
+    &.btn-info-light {
+        border-block-start: 0.1875rem solid $info;
+    }
+    &.btn-warning-light {
+        border-block-start: 0.1875rem solid $warning;
+    }
+    &.btn-success-light {
+        border-block-start: 0.1875rem solid $success;
+    }
+    &.btn-danger-light {
+        border-block-start: 0.1875rem solid $danger;
+    }
+    &.btn-dark-light {
+        border-block-start: 0.1875rem solid $primary;
+    }
+}
+/* === Border === */
+
+/* === Social === */
+.btn-facebook {
+    background-color: $facebook;
+    color: $white;
+    border: 1px solid $facebook;
+    &:active,
+    &:focus,
+    &:hover {
+        background-color: $facebook !important;
+        color: $white !important;
+        border: 1px solid $facebook !important;
+    }
+}
+
+.btn-google {
+    background-color: $google;
+    color: $white;
+    border: 1px solid $google;
+    &:active,
+    &:focus,
+    &:hover {
+        background-color: $google !important;
+        color: $white !important;
+        border: 1px solid $google !important;
+    }
+}
+
+.btn-twitter {
+    background-color: $twitter;
+    color: $white;
+    border: 1px solid $twitter;
+    &:active,
+    &:focus,
+    &:hover {
+        background-color: $twitter !important;
+        color: $white !important;
+        border: 1px solid $twitter !important;
+    }
+}
+
+.btn-github {
+    background-color: $github;
+    color: $white;
+    border: 1px solid $github;
+    &:active,
+    &:focus,
+    &:hover {
+        background-color: $github !important;
+        color: $white !important;
+        border: 1px solid $github !important;
+    }
+}
+
+.btn-youtube {
+    background-color: $youtube;
+    color: $white;
+    border: 1px solid $youtube;
+    &:active,
+    &:focus,
+    &:hover {
+        background-color: $youtube !important;
+        color: $white !important;
+        border: 1px solid $youtube !important;
+    }
+}
+
+.btn-instagram {
+    background: #f09433;
+    background: -moz-linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    background: -webkit-linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f09433', endColorstr='#bc1888',GradientType=1 );
+    color: $white;
+    border: 1px solid transparent;
+    &:hover,
+    &:focus,
+    &:active {
+        color: $white;
+        border: 1px solid transparent;
+    }
+}
+/* === Social === */
+
+/* === Checkbox === */
+@media (max-width: "575.9808px") {
+    .checkbox-button-group,
+    .radio-button-group {
+        .btn-group {
+            label {
+                font-size: 0.563rem;
+            }
+        }
+    }
+}
+/* === Checkbox === */
+
+.btn-outline-secondary {
+    --bs-btn-hover-color: #{$secondary};
+    --bs-btn-hover-bg: #{$white};
+    --bs-btn-hover-border-color: #{$secondary};
+    --bs-btn-active-color: #{$secondary};
+}
+.btn-check:checked+.btn.btn-outline-light,
+.btn.btn-outline-light.active,
+.btn.btn-outline-light.show,
+.btn.btn-outline-light:first-child:active,
+:not(.btn-check)+.btn.btn-outline-light:active {
+    background-color: $light;
+    border-color: $light;
+}
+
+.btn-white-transparent {
+    background-color: rgba(255,255,255,0.2) !important;
+    color: $white !important;
+    border: 1px solid rgba(255,255,255,0.2) !important;
+    &:active,
+    &:focus,
+    &:hover {
+        background-color: rgba(255,255,255,0.3) !important;
+        color: $white !important;
+        border: 1px solid rgba(255,255,255,0.2) !important;
+    }
+}
+.btn-check:checked+.btn,
+.btn.active,
+.btn.show,
+.btn:first-child:active,
+:not(.btn-check)+.btn:active {
+    &.bg-white-transparent {
+        border: 1px solid rgba(255,255,255,0.1) !important;
+    }
+}
+
+.btn-white,
+.btn-white.active,
+.btn-white:active,
+.btn-white:focus,
+.btn-white:hover {
+    background-color: $white !important;
+    color: var(--default-text-color) !important;
+    border: 1px solid var(--default-border) !important;
+}

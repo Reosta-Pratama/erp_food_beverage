@@ -1,0 +1,360 @@
+@use '../_variables-map' as *;
+
+/* === Navbar Set === */
+.navbar {
+    border-radius: $default-radius;
+
+    .navbar-nav {
+        .nav-link {
+            line-height: 1;
+            padding: 0.4rem 1rem;
+            font-weight: 500;
+        }
+    }
+
+    .navbar-toggler {
+        padding: 0.4rem;
+        font-size: 1rem;
+        line-height: 1;
+        color: $black;
+        border: 1px solid $default-border;
+        border-radius: $default-radius;
+
+        .navbar-toggler-icon {
+            width: 1rem;
+            height: 1rem;
+            position: relative;
+            background-image: none;
+
+            &:before {
+                content: '\F479';
+                font-family: bootstrap-icons !important;
+                position: absolute;
+                font-size: 1rem;
+                color: $default-text-color;
+                inset-inline-start: 0;
+            }
+        }
+    }
+
+    .navbar-toggler:focus {
+        box-shadow: none;
+    }
+}
+
+.navbar-nav .nav-link.active,
+.navbar-nav .nav-link.show {
+    background-color: $primary-01;
+    color: $primary;
+}
+
+.navbar-brand {
+    margin-inline-end: 1.5rem;
+
+    img {
+        height: 1.5rem;
+        line-height: 1.5rem;
+    }
+
+    &:focus,
+    &:hover {
+        color: $default-text-color;
+    }
+}
+
+.navbar {
+    &.fixed-top {
+        position: static;
+        margin: -1rem -1rem 0;
+    }
+
+    &.fixed-bottom {
+        position: static;
+        margin: 1rem 0 -1rem -1rem;
+    }
+
+    &.sticky-top {
+        position: static;
+        margin: -1rem -1rem 0;
+    }
+}
+/* === Navbar Set === */
+
+/* === Light Color === */
+.navbar-primary-transparent {
+    background-color: $primary-01;
+    color: $default-text-color;
+    .nav-link {
+        &.active {
+            background-color: $primary;
+            color: $white !important;
+        }
+        &:hover {
+            color: $default-text-color;
+        }
+    }
+    .form-control:focus {
+        border-color: $primary;
+    }
+}
+.navbar-secondary-transparent {
+    background-color: rgba(var(--secondary-rgb), 0.1);
+    color: $default-text-color;
+    .nav-link {
+        &.active {
+            background-color: $secondary;
+            color: $white !important;
+        }
+        &:hover {
+            color: $default-text-color;
+        }
+    }
+    .form-control:focus {
+        border-color: $secondary;
+    }
+}
+.navbar-warning-transparent {
+    background-color: rgba(var(--warning-rgb), 0.1);
+    color: $default-text-color;
+    .nav-link {
+        &.active {
+            background-color: $warning;
+            color: $white !important;
+        }
+        &:hover {
+            color: $default-text-color;
+        }
+    }
+    .form-control:focus {
+        border-color: $warning;
+    }
+}
+.navbar-info-transparent {
+    background-color: rgba(var(--info-rgb), 0.1);
+    color: $default-text-color;
+    .nav-link {
+        &.active {
+            background-color: $info;
+            color: $white !important;
+        }
+        &:hover {
+            color: $default-text-color;
+        }
+    }
+    .form-control:focus {
+        border-color: $info;
+    }
+}
+.navbar-success-transparent {
+    background-color: rgba(var(--success-rgb), 0.1);
+    color: $default-text-color;
+    .nav-link {
+        &.active {
+            background-color: $success;
+            color: $white !important;
+        }
+        &:hover {
+            color: $default-text-color;
+        }
+    }
+    .form-control:focus {
+        border-color: $success;
+    }
+}
+.navbar-danger-transparent {
+    background-color: rgba(var(--danger-rgb), 0.1);
+    color: $default-text-color;
+    .nav-link {
+        &.active {
+            background-color: $danger;
+            color: $white !important;
+        }
+        &:hover {
+            color: $default-text-color;
+        }
+    }
+    .form-control:focus {
+        border-color: $danger;
+    }
+}
+.navbar-dark-transparent {
+    background-color: rgba(var(--dark-rgb), 0.1);
+    color: $default-text-color;
+    .nav-link {
+        &.active {
+            background-color: $black;
+            color: $white !important;
+        }
+        &:hover {
+            color: $default-text-color;
+        }
+    }
+    .form-control:focus {
+        border-color: $dark;
+    }
+}
+/* === Light Color === */
+
+/* === Solid Color === */
+.navbar-primary {
+    background-color: $primary;
+    color: $white;
+    .nav-link {
+        color: $white !important;
+        &.active {
+            background-color: $white-02;
+            color: $white !important;
+        }
+        &:hover {
+            color: $white !important;
+        }
+    }
+    .form-control:focus {
+        border-color: $white-02;
+    }
+    .navbar-toggler {
+        border: 1px solid $white-02;
+        .navbar-toggler-icon:before {
+            color: $white;
+        }
+    }
+}
+.navbar-secondary {
+    background-color: $secondary;
+    color: $white;
+    .nav-link {
+        color: $white !important;
+        &.active {
+            background-color: $white-02;
+            color: $white !important;
+        }
+        &:hover {
+            color: $white !important;
+        }
+    }
+    .form-control:focus {
+        border-color: $white-02;
+    }
+    .navbar-toggler {
+        border: 1px solid $white-02;
+        .navbar-toggler-icon:before {
+            color: $white;
+        }
+    }
+}
+.navbar-warning {
+    background-color: $warning;
+    color: $white;
+    .nav-link {
+        color: $white !important;
+        &.active {
+            background-color: $white-02;
+            color: $white !important;
+        }
+        &:hover {
+            color: $white !important;
+        }
+    }
+    .form-control:focus {
+        border-color: $white-02;
+    }
+    .navbar-toggler {
+        border: 1px solid $white-02;
+        .navbar-toggler-icon:before {
+            color: $white;
+        }
+    }
+}
+.navbar-info {
+    background-color: $info;
+    color: $white;
+    .nav-link {
+        color: $white !important;
+        &.active {
+            background-color: $white-02;
+            color: $white !important;
+        }
+        &:hover {
+            color: $white !important;
+        }
+    }
+    .form-control:focus {
+        border-color: $white-02;
+    }
+    .navbar-toggler {
+        border: 1px solid $white-02;
+        .navbar-toggler-icon:before {
+            color: $white;
+        }
+    }
+}
+.navbar-success {
+    background-color: $success;
+    color: $white;
+    .nav-link {
+        color: $white !important;
+        &.active {
+            background-color: $white-02;
+            color: $white !important;
+        }
+        &:hover {
+            color: $white !important;
+        }
+    }
+    .form-control:focus {
+        border-color: $white-02;
+    }
+    .navbar-toggler {
+        border: 1px solid $white-02;
+        .navbar-toggler-icon:before {
+            color: $white;
+        }
+    }
+}
+.navbar-danger {
+    background-color: $danger;
+    color: $white;
+    .nav-link {
+        color: $white !important;
+        &.active {
+            background-color: $white-02;
+            color: $white !important;
+        }
+        &:hover {
+            color: $white !important;
+        }
+    }
+    .form-control:focus {
+        border-color: $white-02;
+    }
+    .navbar-toggler {
+        border: 1px solid $white-02;
+        .navbar-toggler-icon:before {
+            color: $white;
+        }
+    }
+}
+.navbar-dark {
+    background-color: $dark;
+    color: $white;
+    .nav-link {
+        color: $white !important;
+        &.active {
+            background-color: $white-02;
+            color: $white !important;
+        }
+        &:hover {
+            color: $white !important;
+        }
+    }
+    .form-control:focus {
+        border-color: $white-02;
+    }
+    .navbar-toggler {
+        border: 1px solid $white-01;
+        .navbar-toggler-icon:before {
+            color: $white;
+        }
+    }
+}
+/* === Solid Color === */

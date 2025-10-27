@@ -1,0 +1,39 @@
+@use '../variables-map' as *;
+
+body {
+    background-color: $default-body-bg-color;
+    font-family: $default-font-family;
+    font-weight: $default-font-weight;
+    font-size: $default-font-size;
+    line-height: $default-line-height;
+    color: $black;
+    ::-webkit-scrollbar {
+        width: 0;
+        height: 0.25rem;
+        transition: all ease 0.05s;
+        background: $light;
+    }
+
+    :hover::-webkit-scrollbar-thumb {
+        background: $input-border;
+    }
+
+    > .page {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 100vh;
+
+        &::before {
+            content: "";
+            position: fixed;
+            inline-size: 100%;
+            inset-block-start: 0;
+            z-index: 99;
+            block-size: 4.75rem;
+            background: linear-gradient(180deg, rgba($body-bg-rgb, 70%) 44%, rgba($body-bg-rgb, 43%) 73%, rgba($body-bg-rgb, 0%));
+            backdrop-filter: saturate(200%) blur(10px);
+            mask: linear-gradient($body-bg, $body-bg 18%, transparent 100%);
+        }
+    }
+}
