@@ -1,20 +1,22 @@
 @use '../_variables-map' as *;
 
 .app-footer {
-    padding: 16px 0 16px 260px;
-    background-color: transparent;
+    padding: 0 0 6px 265px;
+    border-radius: 0 0 15px 15px;
+    overflow: hidden;
 
     > .footer-container {
         padding: 0;
+        background-color: $default-body-bg-color;
+        border-top: 1px solid $default-border;
+        border-radius: 0 0 15px 15px;
 
         > .footer-content {
             display: flex;
             justify-content: center;
             align-items: center;
             text-align: center;
-            // background-color: $white;
-            // border-radius: $default-radius;
-            // box-shadow: $box-shadow;
+            font-size: 14px;
             padding: 20px;
 
             .copyright {
@@ -23,7 +25,7 @@
                 .app-name {
                     font-weight: 500;
                     text-decoration: none;
-                    color: $default-text-color;
+                    color: $primary;
                     transition: 150ms ease;
 
                     &:hover {

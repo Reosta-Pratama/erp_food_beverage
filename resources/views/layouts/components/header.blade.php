@@ -4,7 +4,7 @@
         id="header"
         class="app-header">
         <!-- Header Container -->
-        <div class="header-container container-fluid px-4">
+        <div class="header-container container-fluid">
             <div class="header-content">
                 <div class="header-left">
                     <div class="header-logo">
