@@ -33,7 +33,7 @@
                 <li class="menu-item has-sub">
                     <a href="javascript:void(0);" class="menu-link">
                         <span class="menu-svg">
-                            <i class="ti ti-shield-check"></i>
+                            <i class="ti ti-carousel-horizontal"></i>
                         </span>
                         <span class="menu-label">Basic UI</span>
                         <i class="ri-arrow-right-s-line menu-icon"></i>

@@ -28,11 +28,11 @@
             gap: 8px;
 
             > img {
-                width: 30px;
+                width: 28px;
             }
             > h1 {
                 color: $white;
-                font-size: 22px;
+                font-size: 20px;
                 font-weight: 600;
                 text-transform: capitalize;
                 margin-bottom: 0;
@@ -41,8 +41,8 @@
 
         .img-sidebar-close {
             display: none;
-            width: 30px;
-            height: 30px;
+            width: 28px;
+            height: 28px;
         }
 
         @media(min-width: 992px) {
@@ -80,7 +80,7 @@
 
         .menu {
             padding: 0;
-            margin-inline: 20.6px;
+            margin-inline: 1.1rem;
         }
 
         .menu-list {
