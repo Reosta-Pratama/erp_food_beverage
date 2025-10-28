@@ -42,7 +42,9 @@
         <div class="page">
 
             <!-- Header --> 
-            @include('layouts.components.header')
+            @include('layouts.components.header', [
+                'title' => $title ?? 'Default'
+            ])
 
             <!-- Sidebar -->
             @include('layouts.components.sidebar')

@@ -1,4 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.app', [
+    'title' => 'Basic UI - Alerts'
+])
 
 @section('styles')
 @endsection

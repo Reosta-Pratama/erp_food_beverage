@@ -13,7 +13,7 @@
 
         <div class="sidebar-toggle">
             <button data-bs-toggle="sidebar" class="btn btn-icon btn-wave">
-                <i class="ti ti-caret-left"></i>
+                <i class="ti ti-chevrons-left"></i>
             </button>
         </div>
     </div>
@@ -46,58 +46,58 @@
                             <a href="{{ route('template.alerts') }}" class="menu-link">Alert</a>
                         </li>
                         <li class="menu-item">
-                            <a href="" class="menu-link">Bagde</a>
+                            <a href="{{ route('template.badge') }}" class="menu-link">Bagde</a>
                         </li> 
                         <li class="menu-item">
-                            <a href="" class="menu-link">Breadcrumb</a>
+                            <a href="{{ route('template.breadcrumb') }}" class="menu-link">Breadcrumb</a>
                         </li> 
                         <li class="menu-item">
-                            <a href="" class="menu-link">Button Group</a>
+                            <a href="{{ route('template.buttonGroup') }}" class="menu-link">Button Group</a>
                         </li> 
                         <li class="menu-item">
-                            <a href="" class="menu-link">Buttons</a>
+                            <a href="{{ route('template.buttons') }}" class="menu-link">Buttons</a>
                         </li> 
                         <li class="menu-item">
-                            <a href="" class="menu-link">Cards</a>
+                            <a href="{{ route('template.cards') }}" class="menu-link">Cards</a>
                         </li> 
                         <li class="menu-item">
-                            <a href="" class="menu-link">Dropdowns</a>
+                            <a href="{{ route('template.dropdowns') }}" class="menu-link">Dropdowns</a>
                         </li> 
                         <li class="menu-item">
-                            <a href="" class="menu-link">Image Figures</a>
+                            <a href="{{ route('template.imageFigures') }}" class="menu-link">Image Figures</a>
                         </li> 
                         <li class="menu-item">
-                            <a href="" class="menu-link">Link Interactions</a>
+                            <a href="{{ route('template.linkInteraction') }}" class="menu-link">Link Interactions</a>
                         </li> 
                         <li class="menu-item">
-                            <a href="" class="menu-link">List Group</a>
+                            <a href="{{ route('template.listGroup') }}" class="menu-link">List Group</a>
                         </li> 
                         <li class="menu-item">
-                            <a href="" class="menu-link">Navs</a>
+                            <a href="{{ route('template.navs') }}" class="menu-link">Navs</a>
                         </li> 
                         <li class="menu-item">
-                            <a href="" class="menu-link">Object Fit</a>
+                            <a href="{{ route('template.objectFit') }}" class="menu-link">Object Fit</a>
                         </li> 
                         <li class="menu-item">
-                            <a href="" class="menu-link">Pagination</a>
+                            <a href="{{ route('template.pagination') }}" class="menu-link">Pagination</a>
                         </li> 
                         <li class="menu-item">
-                            <a href="" class="menu-link">Popovers</a>
+                            <a href="{{ route('template.popovers') }}" class="menu-link">Popovers</a>
                         </li> 
                         <li class="menu-item">
-                            <a href="" class="menu-link">Progress</a>
+                            <a href="{{ route('template.progress') }}" class="menu-link">Progress</a>
                         </li> 
                         <li class="menu-item">
-                            <a href="" class="menu-link">Spinner</a>
+                            <a href="{{ route('template.spinners') }}" class="menu-link">Spinner</a>
                         </li> 
                         <li class="menu-item">
-                            <a href="" class="menu-link">Toasts</a>
+                            <a href="{{ route('template.toasts') }}" class="menu-link">Toasts</a>
                         </li> 
                         <li class="menu-item">
-                            <a href="" class="menu-link">Tooltips</a>
+                            <a href="{{ route('template.tooltips') }}" class="menu-link">Tooltips</a>
                         </li> 
                         <li class="menu-item">
-                            <a href="" class="menu-link">Typography</a>
+                            <a href="{{ route('template.typography') }}" class="menu-link">Typography</a>
                         </li> 
                     </ul>
                 </li>

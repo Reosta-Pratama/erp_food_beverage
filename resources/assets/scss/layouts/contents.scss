@@ -1,15 +1,16 @@
 @use '../_variables-map' as *;
 
 .app-content {
-    padding-top: 94px;
+    padding-top: 74px;
     padding-left: 260px;
+    padding-right: 6px;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    background-color: $default-body-bg-color;
-    transition: 500ms ease-in-out;
+    transition: 300ms ease-in-out;
 
     .main-content {
+        background-color: $default-body-bg-color;
         padding: 24px 24px 0;
         flex-grow: 1;
     }
