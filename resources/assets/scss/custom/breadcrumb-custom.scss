@@ -1,12 +1,32 @@
 @use '../_variables-map' as *;
 
 .page-header-breadcrumb {
-    margin-top: 1rem;
-    margin-bottom: 1.75rem;
+    margin-top: 8px;
+    margin-bottom: 16px;
+
+    .breadcrumb {
+        font-size: 0.8125rem;
+
+        > .breadcrumb-item {
+            display: flex;
+            align-items: center;
+
+            a {
+                color: #b4baca;
+            }
+
+            &.active {
+                color: #b4baca;
+            }
+        }
+    }
 
     .breadcrumb-item+.breadcrumb-item::before {
         content: var(--bs-breadcrumb-divider, "\f2e5");
         font-family: "remixicon" !important;
+        font-size: 18px;
+        font-weight: 600;
+        color: #b4baca;
     }
 
     .breadcrumb-icon svg {
@@ -64,7 +84,7 @@
     min-width: 13.5rem;
     max-width: 13.5rem;
     border: 1px solid $default-border;
-    
+
     &:focus {
         border: 1px solid $default-border;
         box-shadow: none;

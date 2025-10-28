@@ -1,5 +1,5 @@
 @extends('layouts.app', [
-    'title' => 'Basic UI - Cards'
+    'title' => 'Cards'
 ])
 
 @section('styles')
@@ -11,25 +11,14 @@
     <div
         class="d-flex align-items-center justify-content-between page-header-breadcrumb flex-wrap gap-2">
         <div>
-            <h1 class="page-title fw-medium fs-18 mb-1">Cards</h1>
             <nav>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item">
-                        <a href="javascript:void(0);">UI Elements</a>
+                        <a href="javascript:void(0);">Basic UI</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">Cards</li>
                 </ol>
             </nav>
-        </div>
-        <div class="btn-list">
-            <button class="btn btn-primary-light btn-wave">
-                <i class="bi bi-file-earmark-pdf-fill align-middle me-1"></i>
-                Export Report
-            </button>
-            <button class="btn btn-secondary-light btn-wave me-0">
-                <i class="bi bi-file-earmark-excel-fill align-middle me-1"></i>
-                Export Data
-            </button>
         </div>
     </div>
     <!-- Page Header -->
