@@ -24,16 +24,16 @@ body {
         justify-content: center;
         min-height: 100vh;
 
-        &::before {
-            content: "";
-            position: fixed;
-            inline-size: 100%;
-            inset-block-start: 0;
-            z-index: 99;
-            block-size: 4.75rem;
-            background: linear-gradient(180deg, rgba($body-bg-rgb, 70%) 44%, rgba($body-bg-rgb, 43%) 73%, rgba($body-bg-rgb, 0%));
-            backdrop-filter: saturate(200%) blur(10px);
-            mask: linear-gradient($body-bg, $body-bg 18%, transparent 100%);
-        }
+        // &::before {
+        //     content: "";
+        //     position: fixed;
+        //     inline-size: 100%;
+        //     inset-block-start: 0;
+        //     z-index: 99;
+        //     block-size: 4.75rem;
+        //     background: linear-gradient(180deg, rgba($body-bg-rgb, 70%) 44%, rgba($body-bg-rgb, 43%) 73%, rgba($body-bg-rgb, 0%));
+        //     backdrop-filter: saturate(200%) blur(10px);
+        //     mask: linear-gradient($body-bg, $body-bg 18%, transparent 100%);
+        // }
     }
 }
