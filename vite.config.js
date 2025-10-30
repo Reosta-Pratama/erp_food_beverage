@@ -20,7 +20,9 @@ export default defineConfig({
                     'resources/assets/js/layouts/sidebar.js',
 
                         'resources/assets/js/custom/alert-custom.js',
+                        'resources/assets/js/custom/modal-close-custom.js',
                         'resources/assets/js/custom/toast-custom.js',
+                        'resources/assets/js/custom/sweet-alert-custom.js',
             ],
             refresh: true,
         }),

@@ -1,0 +1,33 @@
+@use '../_variables-map' as *;
+
+/* === Scrollspy Set === */
+.scrollspy-example {
+    height: 12.5rem;
+    margin-block-start: 0.5rem;
+    overflow: auto;
+}
+
+.scrollspy-example-2 {
+    height: 21.875rem;
+    border: 1px solid $default-border;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    overflow: auto;
+}
+
+.scrollspy-example-3 {
+    height: 13.75rem;
+    overflow: auto;
+}
+
+.simple-list-example-scrollspy .active {
+    background-color: $primary;
+    color: $white;
+}
+
+.scrollspy-example-4 {
+    height: 12.5rem;
+    margin-block-start: 0.5rem;
+    overflow: auto;
+}
+/* === Scrollspy Set === */

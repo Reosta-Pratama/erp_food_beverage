@@ -82,4 +82,64 @@ class TemplateController extends Controller
     public function typography(){
         return view('template.basic-ui.typography');
     }
+
+    public function modals(){
+        return view('template.advanced-ui.modals');
+    }
+
+    public function offcanvas(){
+        return view('template.advanced-ui.offcanvas');
+    }
+
+    public function placeholder(){
+        return view('template.advanced-ui.placeholder');
+    }
+
+    public function scrollspy(){
+        return view('template.advanced-ui.scrollspy');
+    }
+
+    public function inputs(){
+        return view('template.form.elements.inputs');
+    }
+
+    public function checkRadios(){
+        return view('template.form.elements.check-radios');
+    }
+
+    public function inputGroup(){
+        return view('template.form.elements.input-group');
+    }
+
+    public function select(){
+        return view('template.form.elements.select');
+    }
+
+    public function rangeSlider(){
+        return view('template.form.elements.range-slider');
+    }
+
+    public function inputMask(){
+        return view('template.form.elements.input-masks');
+    }
+
+    public function fileUploads(){
+        return view('template.form.elements.file-uploads');
+    }
+
+    public function datetimePicker(){
+        return view('template.form.elements.date-time-picker');
+    }
+
+    public function colorPicker(){
+        return view('template.form.elements.color-picker');
+    }
+
+    public function formAdvanced(){
+        return view('template.form.form-advanced');
+    }
+
+    public function formLayout(){
+        return view('template.form.form-layout');
+    }
 }

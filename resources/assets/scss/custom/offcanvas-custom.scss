@@ -1,0 +1,51 @@
+@use '../_variables-map' as *;
+
+/* === Offcanvas Set === */
+.offcanvas {
+    overflow: hidden;
+
+    .offcanvas-header {
+        box-shadow: $box-shadow;
+    }
+
+    @media(min-width: 992px) {
+        border-radius: $default-radius;
+    }
+
+    @media(min-width: 992px) {
+        &.offcanvas-start {
+            top: calc(0.25rem * 5) !important;
+            bottom: calc(0.25rem * 5) !important;
+            left: calc(0.25rem * 5) !important;
+        }
+
+        &.offcanvas-end {
+            top: calc(0.25rem * 5) !important;
+            bottom: calc(0.25rem * 5) !important;
+            right: calc(0.25rem * 5) !important;
+        }
+
+        &.offcanvas-top {
+            top: calc(0.25rem * 5) !important;
+            left: calc(0.25rem * 5) !important;
+            right: calc(0.25rem * 5) !important;
+        }
+
+        &.offcanvas-bottom {
+            bottom: calc(0.25rem * 5) !important;
+            left: calc(0.25rem * 5) !important;
+            right: calc(0.25rem * 5) !important;
+        }
+    }
+}
+
+.offcanvas-backdrop {
+    transition: all 300ms cubic-bezier(.4, 0, .2, 1) !important;
+
+    &.show {
+        background-color: $black-06;
+        opacity: 1;
+        // backdrop-filter: blur(4px);
+    }
+}
+/* === Offcanvas Set === */

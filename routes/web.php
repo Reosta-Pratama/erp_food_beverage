@@ -84,12 +84,28 @@ Route::prefix('template')
         Route::get('/typography', [TemplateController::class, 'typography'])->name('typography');
 
         // Advanced
+        Route::get('/modals', [TemplateController::class, 'modals'])->name('modals');
+        Route::get('/offcanvas', [TemplateController::class, 'offcanvas'])->name('offcanvas');
+        Route::get('/placeholder', [TemplateController::class, 'placeholder'])->name('placeholder');
+        Route::get('/scrollspy', [TemplateController::class, 'scrollspy'])->name('scrollspy');
+        Route::get('/sweetAlert', [TemplateController::class, 'sweetAlert'])->name('sweetAlert');
 
         // Authtentication
 
         // Errors
 
         // Forms
+        Route::get('/inputs', [TemplateController::class, 'inputs'])->name('inputs');
+        Route::get('/checkRadios', [TemplateController::class, 'checkRadios'])->name('checkRadios');
+        Route::get('/inputGroup', [TemplateController::class, 'inputGroup'])->name('inputGroup');
+        Route::get('/select', [TemplateController::class, 'select'])->name('select');
+        Route::get('/rangeSlider', [TemplateController::class, 'rangeSlider'])->name('rangeSlider');
+        Route::get('/inputMask', [TemplateController::class, 'inputMask'])->name('inputMask');
+        Route::get('/fileUploads', [TemplateController::class, 'fileUploads'])->name('fileUploads');
+        Route::get('/datetimePicker', [TemplateController::class, 'datetimePicker'])->name('datetimePicker');
+        Route::get('/colorPicker', [TemplateController::class, 'colorPicker'])->name('colorPicker');
+        Route::get('/formAdvanced', [TemplateController::class, 'formAdvanced'])->name('formAdvanced');
+        Route::get('/formLayout', [TemplateController::class, 'formLayout'])->name('formLayout');
 
         // Pages
 });

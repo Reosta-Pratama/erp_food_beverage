@@ -102,6 +102,94 @@
                     </ul>
                 </li>
 
+                <!-- Menu item -->
+                <li class="menu-item has-sub">
+                    <a href="javascript:void(0);" class="menu-link">
+                        <span class="menu-svg">
+                            <i class="ti ti-layers-intersect"></i>
+                        </span>
+                        <span class="menu-label">Advanced UI</span>
+                        <i class="ri-arrow-right-s-line menu-icon"></i>
+                    </a>
+                    <ul class="menu-item-child child1">
+                        <li class="menu-item menu-label1">
+                            <a href="javascript:void(0)">Advanced UI</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="{{ route('template.modals') }}" class="menu-link">Modals</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="{{ route('template.offcanvas') }}" class="menu-link">Offcanvas</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="{{ route('template.placeholder') }}" class="menu-link">Placeholder</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="{{ route('template.scrollspy') }}" class="menu-link">Scrollspy</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="{{ route('template.sweetAlert') }}" class="menu-link">Sweet Alert</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Menu item -->
+                <li class="menu-item has-sub">
+                    <a href="javascript:void(0);" class="menu-link">
+                        <span class="menu-svg">
+                            <i class="ti ti-file-text"></i>
+                        </span>
+                        <span class="menu-label">Forms</span>
+                        <i class="ri-arrow-right-s-line menu-icon"></i>
+                    </a>
+                    <ul class="menu-item-child child1">
+                        <li class="menu-item menu-label1">
+                            <a href="javascript:void(0)">Forms</a>
+                        </li>
+                        <li class="menu-item has-sub">
+                            <a href="javascript:void(0);" class="menu-link">
+                                Form Elements
+                                <i class="ri-arrow-right-s-line menu-icon"></i>
+                            </a>
+                            <ul class="menu-item-child child2">
+                                <li class="menu-item">
+                                    <a href="" class="menu-link">Inputs</a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="" class="menu-link">Check & Radios</a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="" class="menu-link">Input Group</a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="" class="menu-link">Form Select</a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="" class="menu-link">Range Slider</a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="" class="menu-link">Input Masks</a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="" class="menu-link">File Uploads</a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="" class="menu-link">Date & Time Picker</a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="" class="menu-link">Color Pickers</a>
+                                </li>
+                            </ul>
+                        </li>  
+                        <li class="menu-item">
+                            <a href="" class="menu-link">Form Advanceds</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="" class="menu-link">Form Layouts</a>
+                        </li>
+                    </ul>
+                </li>
+
                 <!-- Menu category -->
                 <li class="menu-category">
                     <span class="category-name">main</span>
