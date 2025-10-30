@@ -153,39 +153,39 @@
                             </a>
                             <ul class="menu-item-child child2">
                                 <li class="menu-item">
-                                    <a href="" class="menu-link">Inputs</a>
+                                    <a href="{{ route('template.inputs') }}" class="menu-link">Inputs</a>
                                 </li>
                                 <li class="menu-item">
-                                    <a href="" class="menu-link">Check & Radios</a>
+                                    <a href="{{ route('template.checkRadios') }}" class="menu-link">Check & Radios</a>
                                 </li>
                                 <li class="menu-item">
-                                    <a href="" class="menu-link">Input Group</a>
+                                    <a href="{{ route('template.inputGroup') }}" class="menu-link">Input Group</a>
                                 </li>
                                 <li class="menu-item">
-                                    <a href="" class="menu-link">Form Select</a>
+                                    <a href="{{ route('template.select') }}" class="menu-link">Form Select</a>
                                 </li>
                                 <li class="menu-item">
-                                    <a href="" class="menu-link">Range Slider</a>
+                                    <a href="{{ route('template.rangeSlider') }}" class="menu-link">Range Slider</a>
                                 </li>
                                 <li class="menu-item">
-                                    <a href="" class="menu-link">Input Masks</a>
+                                    <a href="{{ route('template.inputMask') }}" class="menu-link">Input Masks</a>
                                 </li>
                                 <li class="menu-item">
-                                    <a href="" class="menu-link">File Uploads</a>
+                                    <a href="{{ route('template.fileUploads') }}" class="menu-link">File Uploads</a>
                                 </li>
                                 <li class="menu-item">
-                                    <a href="" class="menu-link">Date & Time Picker</a>
+                                    <a href="{{ route('template.datetimePicker') }}" class="menu-link">Date & Time Picker</a>
                                 </li>
                                 <li class="menu-item">
-                                    <a href="" class="menu-link">Color Pickers</a>
+                                    <a href="{{ route('template.colorPicker') }}" class="menu-link">Color Pickers</a>
                                 </li>
                             </ul>
                         </li>  
                         <li class="menu-item">
-                            <a href="" class="menu-link">Form Advanceds</a>
+                            <a href="{{ route('template.formAdvanced') }}" class="menu-link">Form Advanceds</a>
                         </li>
                         <li class="menu-item">
-                            <a href="" class="menu-link">Form Layouts</a>
+                            <a href="{{ route('template.formLayout') }}" class="menu-link">Form Layouts</a>
                         </li>
                     </ul>
                 </li>
