@@ -9,7 +9,7 @@
         <meta name="Author" content="REOSTA BAYU PRATAMA PANE">
         <meta name="keywords" content="{{ config('app.name') }}, ERP, Manufacture, Laravel, Dashboard, Admin, Admin Panel">
 
-        <title>{{ config('app.name') }}</title>
+        <title>{{ config('app.name') }} - {{ $title }}</title>
 
         <!-- Favicon -->
         <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/images/logo/favicon_io/apple-touch-icon.png') }}">
@@ -28,7 +28,7 @@
             rel="stylesheet">
 
         <!-- Icon -->
-        {{-- @vite(['resources/assets/icon-fonts/icons.css']) --}}
+        @vite(['resources/assets/icon-fonts/icons.css'])
 
         <!-- Main Styles -->
         @vite(['resources/sass/app.scss'])

@@ -26,7 +26,7 @@
 
                 <!-- Menu category -->
                 <li class="menu-category">
-                    <span class="category-name">General</span>
+                    <span class="category-name">Template</span>
                 </li>
 
                 <!-- Menu item -->
@@ -186,6 +186,40 @@
                         </li>
                         <li class="menu-item">
                             <a href="{{ route('template.formLayout') }}" class="menu-link">Form Layouts</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Menu item -->
+                <li class="menu-item has-sub">
+                    <a href="javascript:void(0);" class="menu-link">
+                        <span class="menu-svg">
+                            <i class="ti ti-shield-check"></i>
+                        </span>
+                        <span class="menu-label">Authentication</span>
+                        <i class="ri-arrow-right-s-line menu-icon"></i>
+                    </a>
+                    <ul class="menu-item-child child1">
+                        <li class="menu-item menu-label1">
+                            <a href="javascript:void(0)">Authentication</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="{{ route('template.createPassword') }}" class="menu-link">Create Password</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="{{ route('template.lockScreen') }}" class="menu-link">Lock Screen</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="{{ route('template.resetPassword') }}" class="menu-link">Reset Password</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="{{ route('template.signIn') }}" class="menu-link">Sign In</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="{{ route('template.signUp') }}" class="menu-link">Sign Up</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="{{ route('template.twoStepVerification') }}" class="menu-link">Two Step Verification</a>
                         </li>
                     </ul>
                 </li>

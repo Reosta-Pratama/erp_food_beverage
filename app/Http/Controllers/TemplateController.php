@@ -142,4 +142,28 @@ class TemplateController extends Controller
     public function formLayout(){
         return view('template.form.form-layout');
     }
+
+    public function createPassword(){
+        return view('template.authtentication.create-password');
+    }
+
+    public function lockScreen(){
+        return view('template.authtentication.lock-screen');
+    }
+
+    public function resetPassword(){
+        return view('template.authtentication.reset-password');
+    }
+
+    public function signIn(){
+        return view('template.authtentication.sign-in');
+    }
+
+    public function signUp(){
+        return view('template.authtentication.sign-up');
+    }
+
+    public function twoStepVerification(){
+        return view('template.authtentication.two-step-verification');
+    }
 }

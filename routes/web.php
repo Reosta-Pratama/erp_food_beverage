@@ -90,10 +90,6 @@ Route::prefix('template')
         Route::get('/scrollspy', [TemplateController::class, 'scrollspy'])->name('scrollspy');
         Route::get('/sweetAlert', [TemplateController::class, 'sweetAlert'])->name('sweetAlert');
 
-        // Authtentication
-
-        // Errors
-
         // Forms
         Route::get('/inputs', [TemplateController::class, 'inputs'])->name('inputs');
         Route::get('/checkRadios', [TemplateController::class, 'checkRadios'])->name('checkRadios');
@@ -108,4 +104,14 @@ Route::prefix('template')
         Route::get('/formLayout', [TemplateController::class, 'formLayout'])->name('formLayout');
 
         // Pages
+
+        // Authtentication
+        Route::get('/createPassword', [TemplateController::class, 'createPassword'])->name('createPassword');
+        Route::get('/lockScreen', [TemplateController::class, 'lockScreen'])->name('lockScreen');
+        Route::get('/resetPassword', [TemplateController::class, 'resetPassword'])->name('resetPassword');
+        Route::get('/signIn', [TemplateController::class, 'signIn'])->name('signIn');
+        Route::get('/signUp', [TemplateController::class, 'signUp'])->name('signUp');
+        Route::get('/twoStepVerification', [TemplateController::class, 'twoStepVerification'])->name('twoStepVerification');
+
+        // Errors
 });
