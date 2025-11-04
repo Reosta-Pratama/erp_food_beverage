@@ -1,0 +1,1329 @@
+@use '../_variables-map' as *;
+
+/* === Form Set === */
+.form-control {
+    background-color: $form-control-bg;
+    padding: 0.375rem 0.75rem;
+    border-color: $input-border;
+    border-radius: 0.25rem;
+    font-size: 0.8125rem;
+    font-weight: $default-font-weight;
+    line-height: 1.7;
+    color: $default-text-color;
+
+    &.flatpickr-cursor {
+        cursor: pointer;
+    }
+
+    &:focus {
+        background-color: $white;
+        border-color: $primary-05;
+        box-shadow: 0 0 4px $primary-05;
+        color: $default-text-color;
+    }
+
+    &.border-dotted {
+        border-style: dotted;
+    }
+
+    &.border-dashed {
+        border-style: dashed;
+    }
+}
+
+.form-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: $default-text-color;
+}
+
+.form-text {
+    color: $text-muted;
+}
+
+.form-control-light {
+    background-color: $light;
+    border: 0;
+
+    &:focus {
+        background-color: $light;
+    }
+}
+
+.form-control-primary {
+    background-color: $primary-01;
+    border: 0;
+    color: $primary;
+
+    &:focus {
+        background-color: $primary-01;
+        color: $primary;
+    }
+}
+
+.form-input-color {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: $default-radius;
+    overflow: hidden;
+    padding: 0;
+}
+
+.form-select {
+    background-color: $form-control-bg;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-size: 1.25rem;
+    border: 1px solid $input-border;
+    color: $default-text-color;
+    font-size: $default-font-size;
+
+    option {
+        background-color: transparent;
+        padding: 0.35rem 0.75rem;
+        border-radius: 0.25rem;
+    }
+
+    option:checked {
+        background-color: $primary-02;
+        color: $primary;
+    }
+}
+
+.form-select:focus {
+    border-color: $primary-05;
+    outline: 0;
+    box-shadow: none;
+}
+
+.form-check-input {
+    width: 1.1em;
+    height: 1.1em;
+    background-color: $white;
+    border: 1px solid $input-border;
+    margin-top: 0;
+
+    &:checked {
+        background-color: $primary;
+        border-color: $primary;
+    }
+
+    &.form-checked-outline {
+        &:checked {
+            background-color: transparent;
+            border-color: $primary;
+        }
+    }
+
+    &.form-checked-gray {
+        &:checked {
+            background-color: $gray-03;
+            border-color: $gray-03;
+        }
+    }
+    &.form-checked-secondary {
+        &:checked {
+            background-color: $secondary;
+            border-color: $secondary;
+        }
+    }
+
+    &.form-checked-warning {
+        &:checked {
+            background-color: $warning;
+            border-color: $warning;
+        }
+    }
+
+    &.form-checked-info {
+        &:checked {
+            background-color: $info;
+            border-color: $info;
+        }
+    }
+
+    &.form-checked-success {
+        &:checked {
+            background-color: $success;
+            border-color: $success;
+        }
+    }
+
+    &.form-checked-danger {
+        &:checked {
+            background-color: $danger;
+            border-color: $danger;
+        }
+    }
+
+    &.form-checked-light {
+        &:checked {
+            background-color: $light;
+            border-color: $light;
+        }
+    }
+
+    &.form-checked-dark {
+        &:checked {
+            background-color: $dark;
+            border-color: $dark;
+        }
+    }
+
+    &:focus {
+        box-shadow: none;
+    }
+}
+
+.form-checked-outline:checked[type="checkbox"] {
+    position: relative;
+    background-color: transparent;
+    background-image: none;
+
+    &:before {
+        content: "\F633";
+        font-family: bootstrap-icons !important;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        font-size: 0.688rem;
+        color: $primary;
+    }
+
+    &.form-checked-secondary {
+        &:before {
+            color: $secondary;
+        }
+    }
+
+    &.form-checked-warning {
+        &:before {
+            color: $warning;
+        }
+    }
+
+    &.form-checked-info {
+        &:before {
+            color: $info;
+        }
+    }
+
+    &.form-checked-success {
+        &:before {
+            color: $success;
+        }
+    }
+
+    &.form-checked-danger {
+        &:before {
+            color: $danger;
+        }
+    }
+
+    &.form-checked-light {
+        &:before {
+            color: $light;
+        }
+    }
+
+    &.form-checked-dark {
+        &:before {
+            color: $dark;
+        }
+    }
+}
+
+.form-checked-outline:checked[type="radio"] {
+    position: relative;
+    background-color: transparent;
+    background-image: none;
+
+    &:before {
+        content: "\F309";
+        font-family: bootstrap-icons !important;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        font-size: 1.5rem;
+        color: $primary;
+    }
+
+    &.form-checked-secondary {
+        &:before {
+            color: $secondary;
+        }
+    }
+
+    &.form-checked-warning {
+        &:before {
+            color: $warning;
+        }
+    }
+
+    &.form-checked-info {
+        &:before {
+            color: $info;
+        }
+    }
+
+    &.form-checked-success {
+        &:before {
+            color: $success;
+        }
+    }
+
+    &.form-checked-danger {
+        &:before {
+            color: $danger;
+        }
+    }
+
+    &.form-checked-light {
+        &:before {
+            color: $light;
+        }
+    }
+
+    &.form-checked-dark {
+        &:before {
+            color: $dark;
+        }
+    }
+}
+
+.payment-card-container {
+    position: relative;
+    padding: 0.625rem;
+    border: 1px solid var(--input-border);
+    border-radius: 0.3rem;
+
+    .form-check-input {
+        position: absolute;
+        inset-inline-end: 0.75rem;
+        inset-block-start: 1.2rem;
+    }
+}
+
+fieldset:disabled .btn {
+    background-color: $primary;
+    border-color: $primary;
+    color: $white;
+}
+
+.btn-check:focus + .btn,
+.btn:focus {
+    background-color: none;
+    border-color: none;
+    outline: 0;
+}
+
+.btn-check:active + .btn:focus,
+.btn-check:checked + .btn:focus,
+.btn.active:focus,
+.btn.show:focus,
+.btn:active:focus {
+    box-shadow: none;
+}
+
+.form-control,
+.form-select {
+    &:disabled {
+        background-color: $light;
+        color: $default-text-color;
+    }
+}
+
+.form-control-plaintext {
+    color: $default-text-color;
+}
+
+.form-control::-webkit-file-upload-button {
+    color: $default-text-color;
+    background-color: $default-background;
+}
+
+.form-control:hover:not(:disabled):not([readonly])::-webkit-file-upload-button {
+    background-color: $default-background;
+}
+
+.form-check-label,
+.form-label {
+    user-select: none;
+}
+/* === Form Set === */
+
+/* === Placeholder === */
+.form-control {
+    &::-webkit-input-placeholder {
+        font-size: 0.8rem;
+        font-weight: 400;
+        opacity: 0.6;
+        color: $default-text-color;
+        padding-inline-start: 0;
+        transition: padding-inline-start 0.1s ease-in;
+    }
+
+    &:-moz-placeholder {
+        /* Firefox 18- */
+        font-size: 0.8rem;
+        font-weight: 400;
+        opacity: 0.6;
+        color: $default-text-color;
+    }
+
+    &::-moz-placeholder {
+        /* Firefox 19+ */
+        font-size: 0.8rem;
+        font-weight: 400;
+        opacity: 0.6;
+        color: $default-text-color;
+    }
+
+    &:-ms-input-placeholder {
+        font-size: 0.8rem;
+        font-weight: 400;
+        opacity: 0.6;
+        color: $default-text-color;
+    }
+}
+/* === Placeholder === */
+
+/* === Sizing === */
+.form-control-sm {
+    padding: 0.25rem 0.8rem;
+    border-radius: 0.25rem;
+    font-size: 0.8rem;
+    line-height: inherit;
+}
+
+.form-control-lg {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+}
+
+.form-check-md {
+    .form-check-input {
+        width: 1.15rem;
+        height: 1.15rem;
+    }
+
+    &.form-switch {
+        .form-check-input {
+            width: 2.25rem;
+        }
+    }
+
+    label {
+        margin-inline-start: 0.5rem;
+        margin-block-start: 2px;
+        font-size: 0.95rem;
+    }
+}
+
+.form-check-lg {
+    .form-check-input {
+        width: 1.35rem;
+        height: 1.35rem;
+    }
+
+    &.form-switch {
+        .form-check-input {
+            width: 2.5rem;
+        }
+    }
+
+    label {
+        margin-inline-start: 0.5rem;
+        margin-block-start: 3px;
+        font-size: 1rem;
+    }
+}
+/* === Sizing === */
+
+/* === Toogle Switcher Style 1 === */
+.toggle {
+    position: relative;
+    overflow: hidden;
+    width: 3.75rem;
+    height: 1.563rem;
+    background-color: $light;
+    margin-inline-start: 0.625rem;
+    margin-block-end: 0.313rem;
+    padding: 0.125rem;
+    border-radius: 0.188rem;
+    transition: all 0.2s ease;
+
+    span {
+        position: absolute;
+        inset-block-start: 0.188rem;
+        inset-block-end: 0.25rem;
+        inset-inline-start: 0.2rem;
+        width: 1.25rem;
+        display: block;
+        background-color: $white;
+        border-radius: 0.125rem;
+        box-shadow: 0 0.125rem 0.125rem 0 rgba(0, 0, 0, 0.25);
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &::before {
+            content: "on";
+            inset-inline-start: -1.563rem;
+        }
+
+        &::after {
+            content: "off";
+            inset-inline-end: -1.813rem;
+            color: $text-muted;
+        }
+
+        &::after,
+        &::before {
+            position: absolute;
+            font-size: 0.625rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            inset-block-start: 0.188rem;
+            line-height: 1.38;
+            transition: all 0.2s ease;
+        }
+    }
+
+    &.on {
+        background-color: $primary-03;
+
+        span {
+            background-color: $primary;
+
+            &::before {
+                color: $primary;
+            }
+        }
+
+        &.toggle-secondary {
+            background-color: rgba(var(--secondary-rgb), 0.3);
+
+            span {
+                background-color: $secondary;
+
+                &::before {
+                    color: $secondary;
+                }
+            }
+        }
+
+        &.toggle-warning {
+            background-color: rgba(var(--warning-rgb), 0.3);
+
+            span {
+                background-color: $warning;
+
+                &::before {
+                    color: $warning;
+                }
+            }
+        }
+
+        &.toggle-info {
+            background-color: rgba(var(--info-rgb), 0.3);
+
+            span {
+                background-color: $info;
+
+                &::before {
+                    color: $info;
+                }
+            }
+        }
+
+        &.toggle-success {
+            background-color: rgba(var(--success-rgb), 0.3);
+
+            span {
+                background-color: $success;
+
+                &::before {
+                    color: $success;
+                }
+            }
+        }
+
+        &.toggle-danger {
+            background-color: rgba(var(--danger-rgb), 0.3);
+
+            span {
+                background-color: $danger;
+
+                &::before {
+                    color: $danger;
+                }
+            }
+        }
+
+        &.toggle-light {
+            background-color: rgba(var(--light-rgb), 0.3);
+
+            span {
+                background-color: $light;
+
+                &::after,
+                &::before {
+                    color: $text-muted;
+                }
+            }
+        }
+
+        &.toggle-dark {
+            background-color: rgba(var(--dark-rgb), 0.3);
+
+            span {
+                background-color: $dark;
+
+                &::before {
+                    color: $white;
+                }
+            }
+        }
+
+        span {
+            inset-inline-start: 2.313rem;
+        }
+
+        &.toggle-sm span {
+            inset-inline-start: 2.313rem;
+
+            &::before {
+                inset-block-start: -1px;
+                inset-inline-start: -1.563rem;
+            }
+        }
+
+        &.toggle-lg span {
+            inset-inline-start: 2.563rem;
+
+            &::before {
+                inset-block-start: 0.5rem;
+                inset-inline-start: -1.75rem;
+            }
+        }
+    }
+
+    &.toggle-sm {
+        height: 1.063rem;
+        width: 3.125rem;
+
+        span {
+            width: 0.625rem;
+            height: 0.625rem;
+
+            &::after {
+                inset-inline-end: -1.875rem;
+                inset-block-start: -1px;
+            }
+        }
+    }
+
+    &.toggle-lg {
+        height: 2.125rem;
+        width: 4.5rem;
+
+        span {
+            width: 1.75rem;
+
+            &::after {
+                inset-block-start: 0.5rem;
+                inset-inline-end: -1.938rem;
+            }
+        }
+    }
+}
+
+/* === Toogle Switcher Style 1 === */
+
+/* === Toogle Switcher Style 2 === */
+.custom-toggle-switch > input[type="checkbox"] {
+    display: none;
+}
+
+.custom-toggle-switch > label {
+    cursor: pointer;
+    height: 0;
+    position: relative;
+    width: 2.5rem;
+}
+
+.custom-toggle-switch > input[type="checkbox"]:checked + label::before {
+    background: inherit;
+    opacity: 0.5;
+}
+
+.custom-toggle-switch > label {
+    &::before {
+        background: $text-muted;
+        box-shadow: inset 0 0 0.625rem $white-05;
+        border-radius: 0.5rem;
+        content: "";
+        height: 1rem;
+        margin-block-start: -0.5rem;
+        position: absolute;
+        opacity: 0.3;
+        transition: all 0.4s ease-in-out;
+        width: 2.5rem;
+    }
+
+    &::after {
+        background: $white;
+        border-radius: 1rem;
+        box-shadow: 0 0 0.313rem rgba(228, 229, 237, 0.8);
+        content: "";
+        height: 1.5rem;
+        inset-inline-start: -0.25rem;
+        margin-block-start: -0.5rem;
+        position: absolute;
+        inset-block-start: -0.25rem;
+        transition: all 0.3s ease-in-out;
+        width: 1.5rem;
+    }
+}
+
+.custom-toggle-switch > input[type="checkbox"]:checked + label::after {
+    background: inherit;
+    inset-inline-start: 50%;
+}
+
+.custom-toggle-switch.toggle-sm > label::before {
+    height: 10px;
+    width: 27px;
+    border-radius: 10px;
+}
+
+.custom-toggle-switch.toggle-sm input[type="checkbox"]:checked + label::after {
+    inset-inline-start: 13px;
+}
+
+.custom-toggle-switch.toggle-sm > label::after {
+    height: 17px;
+    width: 17px;
+    border-radius: 50%;
+}
+
+.custom-toggle-switch.toggle-lg > label::before {
+    height: 27px;
+    width: 55px;
+    border-radius: 20px;
+}
+
+.custom-toggle-switch.toggle-lg input[type="checkbox"]:checked + label::after {
+    inset-inline-start: 77%;
+}
+
+.custom-toggle-switch.toggle-lg > label::after {
+    height: 35px;
+    width: 35px;
+    margin-block-start: -8px;
+    border-radius: 50%;
+}
+/* === Toogle Switcher Style 2 === */
+
+/* === Label === */
+.label-primary {
+    background: $primary;
+    color: $white;
+}
+
+.label-secondary {
+    background: $secondary;
+    color: $white;
+}
+
+.label-warning {
+    background: $warning;
+    color: $white;
+}
+
+.label-info {
+    background: $info;
+    color: $white;
+}
+
+.label-success {
+    background: $success;
+    color: $white;
+}
+
+.label-danger {
+    background: $danger;
+    color: $white;
+}
+
+.label-light {
+    background: $light;
+    color: $white;
+}
+
+.label-dark {
+    background: $dark;
+    color: $white;
+}
+/* === Label === */
+
+/* === Color Picker === */
+.form-control-color {
+    width: 1.75rem;
+    height: 1.75rem;
+    overflow: hidden;
+    padding: 0;
+}
+
+.example-picker {
+    .pcr-button {
+        border-radius: 0.35rem !important;
+        overflow: hidden;
+    }
+}
+/* === Color Picker === */
+
+/* === Input Group === */
+.input-group-text {
+    background-color: $light;
+    border-color: $input-border;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    letter-spacing: 0;
+    color: $default-text-color;
+
+    .form-control {
+        border: 0;
+        border-start-start-radius: 0;
+        border-end-start-radius: 0;
+    }
+}
+
+.invoice-quantity-container .input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+    margin-left: 0;
+}
+
+.input-group.input-btn-outline {
+    .form-control {
+        &:focus {
+            z-index: 2;
+        }
+    }
+}
+/* === Input Group === */
+
+/* === Range Slider === */
+input[type="range"]::-webkit-slider-runnable-track {
+    background-color: $light;
+}
+/* === Range Slider === */
+
+/* === Form Check === */
+.form-check {
+    min-height: inherit !important;
+}
+/* === Form Check === */
+
+/* === Column Label === */
+.col-form-label,
+.col-form-label-lg,
+.col-form-label-sm {
+    font-weight: 400;
+}
+/* === Column Label === */
+
+/* === Wizard Input === */
+.wizard-tab {
+    display: none;
+    transition: all 0.3s ease-in;
+
+    .wizard-nav {
+        display: flex;
+        flex-wrap: wrap;
+        margin-block-start: 60px;
+        padding-inline: 1.5rem;
+        transition: all 0.3s ease-in;
+
+        .wizard-step {
+            cursor: pointer;
+        }
+
+        .wizard-step.nav-buttons {
+            cursor: default;
+            span {
+                cursor: default;
+            }
+        }
+    }
+
+    .wizard-nav.tabs {
+        .wizard-step {
+            position: relative;
+            max-width: 100%;
+            flex-basis: 0;
+            flex-grow: 1;
+            text-align: center;
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid $gray-03;
+            font-size: 14px;
+        }
+
+        .wizard-step.active {
+            border: 1px solid $gray-03;
+            border-top-left-radius: 0.25rem;
+            border-top-right-radius: 0.25rem;
+            border-bottom: 0;
+        }
+    }
+
+    .wizard-nav.progress {
+        overflow: auto;
+        height: auto;
+        border-radius: 0.25rem;
+        font-size: 1rem;
+        line-height: 1.5;
+
+        .wizard-step {
+            position: relative;
+            max-width: 100%;
+            flex-basis: 0;
+            flex-grow: 1;
+            text-align: center;
+            background-color: $success;
+            border: 1px solid $gray-03;
+            padding: 0.5rem 1rem;
+            font-size: 14px;
+            color: $white;
+            transition: all 0.3s ease-in;
+        }
+
+        .wizard-step.active~.wizard-step {
+            background-color: $white;
+            color: #000;
+        }
+    }
+
+    .wizard-nav.dots {
+        .wizard-step {
+            position: relative;
+            text-align: center;
+            flex-basis: 0;
+            flex-grow: 1;
+            max-width: 100%;
+            font-size: 14px;
+            transition: all 0.3s ease-in;
+            &:last-child {
+                &:before {
+                    display: none;
+                }
+                &:after {
+                    display: none;
+                }
+            }
+            span {
+                cursor: pointer;
+                font-weight: 500;
+            }
+            &:nth-of-type(1).dot {
+                transition-property: all;
+                transition-duration: 0.2s;
+                transition-timing-function: ease-in;
+                transition-delay: 0.1s;
+            }
+            &:nth-of-type(2).dot {
+                transition-property: all;
+                transition-duration: 0.2s;
+                transition-timing-function: ease-in;
+                transition-delay: 0.2s;
+            }
+            &:nth-of-type(3).dot {
+                transition-property: all;
+                transition-duration: 0.2s;
+                transition-timing-function: ease-in;
+                transition-delay: 0.3s;
+            }
+            &:nth-of-type(4).dot {
+                transition-property: all;
+                transition-duration: 0.2s;
+                transition-timing-function: ease-in;
+                transition-delay: 0.4s;
+            }
+            &:nth-of-type(5).dot {
+                transition-property: all;
+                transition-duration: 0.2s;
+                transition-timing-function: ease-in;
+                transition-delay: 0.5s;
+            }
+            &:nth-of-type(6).dot {
+                transition-property: all;
+                transition-duration: 0.2s;
+                transition-timing-function: ease-in;
+                transition-delay: 0.6s;
+            }
+            &:nth-of-type(7).dot {
+                transition-property: all;
+                transition-duration: 0.2s;
+                transition-timing-function: ease-in;
+                transition-delay: 0.7s;
+            }
+            &:nth-of-type(8).dot {
+                transition-property: all;
+                transition-duration: 0.2s;
+                transition-timing-function: ease-in;
+                transition-delay: 0.8s;
+            }
+            &:nth-of-type(9).dot {
+                transition-property: all;
+                transition-duration: 0.2s;
+                transition-timing-function: ease-in;
+                transition-delay: 0.9s;
+            }
+            .dot {
+                content: "";
+                position: absolute;
+                top: -20px;
+                inset-inline-start: 50%;
+                z-index: 3;
+                height: 10px;
+                width: 10px;
+                background: $primary;
+                border-radius: 50%;
+                box-shadow: 0 0 0 2px $white;
+                transition: all 0.5s ease-in-out;
+            }
+            &:nth-of-type(1) {
+                &:before {
+                    transition-property: all;
+                    transition-duration: 0.2s;
+                    transition-timing-function: ease-in;
+                    transition-delay: 0.1s;
+                }
+            }
+            &:nth-of-type(2) {
+                &:before {
+                    transition-property: all;
+                    transition-duration: 0.2s;
+                    transition-timing-function: ease-in;
+                    transition-delay: 0.2s;
+                }
+            }
+            &:nth-of-type(3) {
+                &:before {
+                    transition-property: all;
+                    transition-duration: 0.2s;
+                    transition-timing-function: ease-in;
+                    transition-delay: 0.3s;
+                }
+            }
+            &:nth-of-type(4) {
+                &:before {
+                    transition-property: all;
+                    transition-duration: 0.2s;
+                    transition-timing-function: ease-in;
+                    transition-delay: 0.4s;
+                }
+            }
+            &:nth-of-type(5) {
+                &:before {
+                    transition-property: all;
+                    transition-duration: 0.2s;
+                    transition-timing-function: ease-in;
+                    transition-delay: 0.5s;
+                }
+            }
+            &:nth-of-type(6) {
+                &:before {
+                    transition-property: all;
+                    transition-duration: 0.2s;
+                    transition-timing-function: ease-in;
+                    transition-delay: 0.6s;
+                }
+            }
+            &:nth-of-type(7) {
+                &:before {
+                    transition-property: all;
+                    transition-duration: 0.2s;
+                    transition-timing-function: ease-in;
+                    transition-delay: 0.7s;
+                }
+            }
+            &:nth-of-type(8) {
+                &:before {
+                    transition-property: all;
+                    transition-duration: 0.2s;
+                    transition-timing-function: ease-in;
+                    transition-delay: 0.8s;
+                }
+            }
+            &:nth-of-type(9) {
+                &:before {
+                    transition-property: all;
+                    transition-duration: 0.2s;
+                    transition-timing-function: ease-in;
+                    transition-delay: 0.9s;
+                }
+            }
+            &:before {
+                content: "";
+                position: absolute;
+                top: -16px;
+                inset-inline-start: 50%;
+                width: 100%;
+                height: 2px;
+                z-index: 2;
+                background: $primary;
+            }
+            &:after {
+                content: "";
+                position: absolute;
+                top: -16px;
+                inset-inline-start: 50%;
+                width: 100%;
+                height: 2px;
+                background: $gray-03;
+                z-index: 1;
+            }
+        }
+        .wizard-step.active~.wizard-step {
+            .dot {
+                background: $gray-03;
+            }
+            &:before {
+                background: $gray-03;
+                width: 0;
+            }
+            &:after {
+                background: $gray-03;
+            }
+        }
+        .wizard-step.active {
+            .dot {
+                background-color: $primary;
+                box-shadow: 0 0 0 3px $primary-02;
+            }
+            &:before {
+                background: $gray-03;
+            }
+            &:after {
+                background: $gray-03;
+            }
+        }
+    }
+    .wizard-content {
+        transition: all 0.3s ease-in;
+        padding: 3rem;
+        .wizard-step {
+            transition: all 0.3s ease-in;
+            display: none;
+        }
+        .wizard-step.active {
+            display: block;
+        }
+    }
+    .wizard-buttons {
+        transition: all 0.3s ease-in;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        .wizard-btn {
+            display: inline-block;
+            font-weight: 400;
+            line-height: 1.5;
+            text-align: center;
+            text-decoration: none;
+            vertical-align: middle;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+            border: 1px solid transparent;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.15rem;
+            transition: all 0.3s ease-in;
+            margin: 0 10px;
+            background-color: $primary;
+            color: $white;
+            &:hover {
+                background-color: rgba(25,143,209,.8);
+            }
+            &:disabled {
+                cursor: not-allowed !important;
+                pointer-events: none;
+                opacity: 0.65;
+            }
+        }
+    }
+}
+.wizard.vertical {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    transition: all 0.3s ease-in;
+    .wizard-nav {
+        flex-direction: column;
+        flex: 1;
+        padding: 0 3rem;
+        transition: all 0.3s linear;
+        .wizard-step {
+            &:before {
+                top: 7px;
+                inset-inline-start: -12px;
+                width: 2px;
+                height: 100%;
+            }
+            &:after {
+                top: 7px;
+                inset-inline-start: -12px;
+                width: 2px;
+                height: 100%;
+            }
+            .dot {
+                top: 7px;
+                inset-inline-start: -15px;
+            }
+        }
+        .wizard-step.active~.wizard-step {
+            &:before {
+                height: 0;
+            }
+        }
+    }
+    .wizard-content {
+        width: 75%;
+        transition: all 0.3s ease-in;
+        padding: 0 0 3rem;
+    }
+    .wizard-buttons {
+        flex-basis: 100%;
+        transition: all 0.3s ease-in;
+    }
+}
+.highlight-error {
+    outline: 1px solid $danger;
+}
+@media screen and (min-width: 1024px) {
+    .wizard.vertical {
+        .wizard-nav {
+            max-width: 250px;
+        }
+    }
+}
+@media screen and (max-width: 767px) {
+    .wizard.vertical {
+        .wizard-nav {
+            .wizard-step {
+                text-align: left;
+                padding-inline-start: 1rem;
+            }
+        }
+        .wizard-content {
+            padding: 2rem 0;
+        }
+    }
+}
+.wizard.wizard-tab .wizard-nav.dots .wizard-step.active~.wizard-step:before {
+    width: 35%;
+    padding: 25px;
+    background: transparent;
+}
+
+.wizard.wizard-tab .wizard-nav.dots .wizard-step:before {
+    content: "";
+    position: absolute;
+    top: -16px;
+}
+
+.wizard.wizard-tab .wizard-nav.dots .wizard-step .dot {
+    top: -25px;
+    inset-inline-start: 46%;
+    height: 20px;
+    width: 20px;
+}
+
+.wizard.wizard-tab .wizard-nav.dots .wizard-step.active~.wizard-step .dot {
+    background: $white;
+    border: 2px solid $gray-03;
+}
+
+.wizard-btn.btn.finish {
+    display: none !important;
+}
+
+.wizard.wizard-tab .wizard-buttons {
+    border-top: 1px solid $default-border;
+    justify-content: space-between;
+    padding: 1rem;
+}
+
+.wizard.wizard-tab .wizard-buttons .wizard-btn {
+    margin: 0;
+    padding: 0.5rem 0.85rem;
+    min-width: 100px;
+    border-radius: 0.35rem;
+}
+
+.wizard.wizard-tab .wizard-buttons .wizard-btn:hover {
+    background-color: $primary;
+}
+
+.wizard.wizard-tab .wizard-buttons .wizard-btn:disabled {
+    opacity: 0;
+}
+
+.wizard-tab .wizard-buttons .wizard-btn.prev {
+    background-color: $light;
+    color: $default-text-color;
+    &:hover {
+        background-color: $light;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .wizard-tab .wizard-nav {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    .wizard.wizard-tab .wizard-nav.dots .wizard-step:before {
+        top: 1.5rem !important;
+        width: 2px !important;
+        height: 100%;
+        inset-inline-start: 2.55rem;
+    }
+    .wizard.wizard-tab .wizard-nav.dots .wizard-step:after {
+        top: 1.5rem !important;
+        width: 2px !important;
+        height: 100%;
+        inset-inline-start: 2.55rem;
+    }
+    .wizard.wizard-tab .wizard-nav.dots .wizard-step .dot {
+        top: 6px !important;
+        inset-inline-start: 2.25rem !important;
+        width: 12px !important;
+        height: 12px !important;
+    }
+    .wizard-tab .wizard-nav.dots .wizard-step {
+        text-align: start !important;
+        padding-inline-start: 4rem !important;
+    }
+}
+/* === Wizard Input === */
+
+/* === Custom Search === */
+.custom-form-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    > .custom-form-btn {
+        position: absolute;
+        inset-inline-end: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.3rem;
+    }
+}
+/* === Custom Search === */
