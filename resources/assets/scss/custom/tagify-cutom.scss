@@ -1,0 +1,193 @@
+@use '../_variables-map' as *;
+
+/* === Tagify Set === */
+.tagify {
+    --tag-inset-shadow-size: 0 !important;
+}
+
+.tagify__tag {
+    background-color: $light;
+}
+
+.tagify.tagify--mix.form-control {
+    padding: 0.5rem;
+}
+
+.tagify__tag > div::before {
+    box-shadow: 0 0 0 var(--tag-inset-shadow-size) var(--gray-3) inset !important;
+}
+
+.tagify:hover:not(.tagify--focus):not(.tagify--invalid) {
+    border-color: $input-border !important;
+}
+
+.tagify {
+    border-color: $input-border !important;
+
+    &.tagify--focus {
+        border-color: var(--primary05) !important;
+        box-shadow: 0 0 4px var(--primary05) !important;
+    }
+}
+
+.tagify__tag {
+    margin-inline: 7px 0 !important;
+    margin-block: 7px !important;
+}
+
+.tagify__tag > div {
+    font-size: 13px;
+}
+
+.tagify__input {
+    margin: 3px !important;
+    line-height: 1.85rem !important;
+}
+
+.tagify {
+    --tags-disabled-bg: var(--gray-3) !important;
+    --tag-bg: var(--gray-3) !important;
+    --tag-hover: rgba(var(--primary-rgb), 0.15) !important;
+    --tag-text-color: var(--default-text-color) !important;
+    --tag-text-color--edit: var(--default-text-color) !important;
+    --tag-invalid-color: rgba(var(--danger-rgb), 0.5) !important;
+    --tag-invalid-bg: rgba(var(--danger-rgb), 0.2) !important;
+    --tag-remove-bg: rgba(var(--danger-rgb), 0.1) !important;
+    --tag-remove-btn-color: var(--default-text-color) !important;
+    --tag-remove-btn-bg--hover: rgba(var(--danger-rgb), 0.3) !important;
+    --tag-pad: 0.2em 0.5em !important;
+}
+
+.tagify__tag__removeBtn {
+    margin: 0 0.25rem !important;
+}
+
+.tagify__tag:focus div::before,
+.tagify__tag:hover:not([readonly]) div::before {
+    --tag-bg-inset: 0 !important;
+}
+
+.tagify__tag-text {
+    padding: 3px;
+}
+
+.tags-look {
+    border: 1px solid $default-border !important;
+    background-color: $white !important;
+
+    .tagify__dropdown__item {
+        display: inline-block;
+        vertical-align: middle;
+        border-radius: 3px;
+        padding: 0.3em 0.5em;
+        border: 1px solid $default-border;
+        background: $white;
+        margin: 0.2em;
+        font-size: 0.85em;
+        color: $default-text-color;
+        transition: 0s;
+    }
+}
+
+.tags-look .tagify__dropdown__item--active {
+    color: $default-text-color;
+}
+
+.tags-look .tagify__dropdown__item:hover {
+    background: $primary;
+    border-color: $primary;
+    color: $white;
+}
+
+.tags-look .tagify__dropdown__item--hidden {
+    max-width: 0;
+    max-height: initial;
+    padding: 0.3em 0;
+    margin: 0.2em 0;
+    white-space: nowrap;
+    text-indent: -20px;
+    border: 0;
+}
+
+.tagify__dropdown {
+    border-top: 1px solid $primary !important;
+}
+
+.tagify__tag .tagify__tag__avatar-wrap {
+    width: 22px;
+    height: 22px;
+    white-space: normal;
+    border-radius: 50%;
+    margin-right: 5px;
+    transition: 0.12s ease-out;
+    vertical-align: middle;
+}
+
+.tagify__tag img {
+    width: 100%;
+    vertical-align: top;
+}
+
+.tagify__dropdown.users-list .tagify__dropdown__item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0 1em;
+    grid-template-areas: "avatar name" "avatar email";
+}
+
+.tagify__dropdown.users-list header.tagify__dropdown__item {
+    grid-template-areas: "add remove-tags" "remaning .";
+}
+
+.tagify__dropdown.users-list .tagify__dropdown__item:hover .tagify__dropdown__item__avatar-wrap {
+    transform: scale(1.2);
+}
+
+.tagify__dropdown.users-list .tagify__dropdown__item__avatar-wrap {
+    grid-area: avatar;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: $light;
+    transition: 0.1s ease-out;
+}
+
+.tagify__dropdown.users-list img {
+    width: 100%;
+    vertical-align: top;
+}
+
+.tagify__dropdown.users-list .tagify__dropdown__item strong,
+.tagify__dropdown.users-list header.tagify__dropdown__item > div {
+    grid-area: name;
+    width: 100%;
+    align-self: center;
+}
+
+.tagify__dropdown.users-list span {
+    grid-area: email;
+    width: 100%;
+    font-size: 0.9em;
+    opacity: 0.6;
+}
+
+.tagify__dropdown.users-list .tagify__dropdown__item__addAll {
+    border-bottom: 1px solid $default-border;
+    gap: 0;
+}
+
+.tagify__dropdown.users-list .remove-all-tags {
+    grid-area: remove-tags;
+    justify-self: self-end;
+    font-size: 0.8em;
+    padding: 0.2em 0.3em;
+    border-radius: 3px;
+    user-select: none;
+}
+
+.tagify__dropdown.users-list .remove-all-tags:hover {
+    color: $white;
+    background: $orange;
+}
+/* === Tagify Set === */
