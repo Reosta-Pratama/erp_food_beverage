@@ -218,9 +218,6 @@
                         <li class="menu-item">
                             <a href="{{ route('template.signUp') }}" class="menu-link">Sign Up</a>
                         </li>
-                        <li class="menu-item">
-                            <a href="{{ route('template.twoStepVerification') }}" class="menu-link">Two Step Verification</a>
-                        </li>
                     </ul>
                 </li>
 
