@@ -162,8 +162,4 @@ class TemplateController extends Controller
     public function signUp(){
         return view('template.authtentication.sign-up');
     }
-
-    public function twoStepVerification(){
-        return view('template.authtentication.two-step-verification');
-    }
 }

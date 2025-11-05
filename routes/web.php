@@ -111,7 +111,6 @@ Route::prefix('template')
         Route::get('/resetPassword', [TemplateController::class, 'resetPassword'])->name('resetPassword');
         Route::get('/signIn', [TemplateController::class, 'signIn'])->name('signIn');
         Route::get('/signUp', [TemplateController::class, 'signUp'])->name('signUp');
-        Route::get('/twoStepVerification', [TemplateController::class, 'twoStepVerification'])->name('twoStepVerification');
 
         // Errors
 });

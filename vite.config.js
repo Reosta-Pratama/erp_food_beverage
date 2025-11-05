@@ -8,6 +8,7 @@ export default defineConfig({
             input: [
                 // CSS files to be processed
                 'resources/css/app.css', 
+                'resources/assets/icon-fonts/icons.css', 
 
                 // SCSS files to be processed
                 'resources/sass/app.scss', 
@@ -21,6 +22,7 @@ export default defineConfig({
 
                         'resources/assets/js/custom/alert-custom.js',
                         'resources/assets/js/custom/auto-complete-custom.js',
+                        'resources/assets/js/custom/create-password-custom.js',
                         'resources/assets/js/custom/form-color-picker-custom.js',
                         'resources/assets/js/custom/form-date-time-picker-custom.js',
                         'resources/assets/js/custom/form-file-upload-custom.js',

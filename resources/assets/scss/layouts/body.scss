@@ -7,6 +7,7 @@ body {
     font-size: $default-font-size;
     line-height: $default-line-height;
     color: $black;
+
     ::-webkit-scrollbar {
         width: 0;
         height: 0.25rem;
@@ -16,6 +17,10 @@ body {
 
     :hover::-webkit-scrollbar-thumb {
         background: $input-border;
+    }
+
+    &.bg-guest {
+        background-color: rgb(248, 249, 253) !important;
     }
 
     > .page {
