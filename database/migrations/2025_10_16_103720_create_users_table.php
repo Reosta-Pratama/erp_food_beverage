@@ -22,6 +22,8 @@ return new class extends Migration
             $table->unsignedBigInteger('employee_id')->nullable()->comment('Bisa saja user non-employee');
             $table->boolean('is_active')->default(true);
             $table->timestamp('last_login')->nullable();
+            $table->string('remember_token', 100)->nullable();
+            $table->timestamp('email_verified_at')->nullable();
             $table->timestamps();
 
             $table->foreign('role_id')->references('role_id')->on('roles');

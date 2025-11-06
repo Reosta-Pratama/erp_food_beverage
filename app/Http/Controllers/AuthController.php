@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UserManagement\ActivityLog;
 use App\Models\UserManagement\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -81,6 +82,15 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
+        // Log activity before logout
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'activity_type' => 'LOGOUT',
+            'description' => 'User logged out',
+            'module_name' => 'Authentication',
+            'activity_timestamp' => now(),
+        ]);
+
         Auth::logout();
 
         // Invalidate and regenerate session for security

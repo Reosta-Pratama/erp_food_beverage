@@ -18,11 +18,6 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     
-    // General dashboard
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-
     // Admin routes
     Route::middleware('role:admin')
         ->prefix('admin')
@@ -56,6 +51,59 @@ Route::middleware('auth')->group(function () {
                 return view('finance_hr.dashboard');
             })->name('dashboard');
     });
+
+    // ====================================
+    // USER MANAGEMENT ROUTES
+    // ====================================
+    Route::middleware(['permission:users.manage'])->group(function () {
+        Route::resource('users', UserController::class);
+    });
+
+    // ====================================
+    // ROLE MANAGEMENT ROUTES
+    // ====================================
+    Route::middleware(['permission:roles.manage'])->group(function () {
+        // Route::resource('roles', RoleController::class);
+    });
+
+    // ====================================
+    // PERMISSION MANAGEMENT ROUTES
+    // ====================================
+    Route::middleware(['permission:permissions.manage'])->group(function () {
+        // Route::resource('permissions', PermissionController::class);
+    });
+
+    // ====================================
+    // ACTIVITY LOG ROUTES
+    // ====================================
+    Route::middleware(['permission:activity_logs.view'])->prefix('logs')->name('logs.')->group(function () {
+        // Route::get('/activity', [ActivityLogController::class, 'index'])->name('activity');
+        // Route::post('/activity/clear', [ActivityLogController::class, 'clear'])->name('activity.clear');
+    });
+
+    // ====================================
+    // AUDIT LOG ROUTES
+    // ====================================
+    Route::middleware(['permission:audit_logs.view'])->prefix('logs')->name('logs.')->group(function () {
+        // Route::get('/audit', [AuditLogController::class, 'index'])->name('audit');
+        // Route::get('/audit/{id}', [AuditLogController::class, 'show'])->name('audit.show');
+        // Route::post('/audit/clear', [AuditLogController::class, 'clear'])->name('audit.clear');
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // Design Web
     Route::prefix('template')

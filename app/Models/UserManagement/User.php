@@ -28,9 +28,12 @@ class User extends Authenticatable
 
     protected $hidden = [
         'password_hash',
+        'remember_token',
     ];
 
     protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password_hash' => 'hashed',
         'is_active' => 'boolean',
         'last_login' => 'datetime',
         'created_at' => 'datetime',
@@ -61,12 +64,85 @@ class User extends Authenticatable
         return $this->belongsTo(Employee::class, 'employee_id', 'employee_id');
     }
 
+    // ========================================
+    // PERMISSION HELPER METHODS
+    // ========================================
+
     /**
-     * Check if user has specific role
+     * Check if user has specific permission
      */
-    public function hasRole(string $roleCode): bool
+    public function hasPermission(string $permissionCode): bool
     {
-        return $this->role->role_code === $roleCode;
+        // Admin always has permission
+        if ($this->role->role_code === 'admin') {
+            return true;
+        }
+
+        return $this->role->hasPermission($permissionCode);
+    }
+
+    /**
+     * Check if user can create
+     */
+    public function canCreate(string $permissionCode): bool
+    {
+        if ($this->role->role_code === 'admin') {
+            return true;
+        }
+
+        $permission = $this->role->permissions()
+            ->where('permission_code', $permissionCode)
+            ->first();
+
+        return $permission && $permission->can_create;
+    }
+
+    /**
+     * Check if user can read
+     */
+    public function canRead(string $permissionCode): bool
+    {
+        if ($this->role->role_code === 'admin') {
+            return true;
+        }
+
+        $permission = $this->role->permissions()
+            ->where('permission_code', $permissionCode)
+            ->first();
+
+        return $permission && $permission->can_read;
+    }
+
+    /**
+     * Check if user can update
+     */
+    public function canUpdate(string $permissionCode): bool
+    {
+        if ($this->role->role_code === 'admin') {
+            return true;
+        }
+
+        $permission = $this->role->permissions()
+            ->where('permission_code', $permissionCode)
+            ->first();
+
+        return $permission && $permission->can_update;
+    }
+
+    /**
+     * Check if user can delete
+     */
+    public function canDelete(string $permissionCode): bool
+    {
+        if ($this->role->role_code === 'admin') {
+            return true;
+        }
+
+        $permission = $this->role->permissions()
+            ->where('permission_code', $permissionCode)
+            ->first();
+
+        return $permission && $permission->can_delete;
     }
 
     /**
@@ -74,7 +150,7 @@ class User extends Authenticatable
      */
     public function isAdmin(): bool
     {
-        return $this->hasRole('admin');
+        return $this->role->role_code === 'admin';
     }
 
     /**
@@ -82,14 +158,14 @@ class User extends Authenticatable
      */
     public function isOperator(): bool
     {
-        return $this->hasRole('operator');
+        return $this->role->role_code === 'operator';
     }
 
     /**
-     * Check if user is finance/hr
+     * Check if user is finance/HR staff
      */
-    public function isFinanceHr(): bool
+    public function isFinanceHR(): bool
     {
-        return $this->hasRole('finance_hr');
+        return $this->role->role_code === 'finance_hr';
     }
 }
