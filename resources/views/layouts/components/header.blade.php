@@ -114,10 +114,12 @@
                                     </li>
                                     
                                     <li class="sign-out-profile">
-                                        <button type="button" 
-                                            class="btn btn-danger btn-sm btn-wave w-100">
-                                            Sign Out
-                                        </button>
+                                        <form method="POST" action="{{ route('logout') }}">
+                                            @csrf
+                                            <button type="submit" class="btn btn-danger btn-sm btn-wave w-100">
+                                                Sign Out
+                                            </button>
+                                        </form>
                                     </li>
                                 </ul>
                             </li>

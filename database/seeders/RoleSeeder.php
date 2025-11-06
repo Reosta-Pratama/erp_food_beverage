@@ -34,10 +34,7 @@ class RoleSeeder extends Seeder
             ],
         ];
 
-        // Insert all default roles into the "roles" table
         DB::table('roles')->insert($defaultRoles);
-
-        // Show a clear, professional confirmation message
-        $this->command->info('✅ 3 default roles have been added successfully!');
+        $this->command->info('✅ default roles have been added successfully!');
     }
 }

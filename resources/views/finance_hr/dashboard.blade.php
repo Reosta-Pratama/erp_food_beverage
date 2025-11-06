@@ -1,4 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.app', [
+    'title' => 'Dashboard Finance & HR'
+])
 
 @section('title', 'Dashboard Finance & HR')
 @section('page-title', 'Dashboard Finance & HR')

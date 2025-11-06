@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('permission_id');
             $table->string('module_name', 100);
             $table->string('permission_name', 150);
-            $table->char('permission_code', 10)->unique();
+            $table->string('permission_code', 50)->unique();
             $table->boolean('can_create')->default(false);
             $table->boolean('can_read')->default(false);
             $table->boolean('can_update')->default(false);

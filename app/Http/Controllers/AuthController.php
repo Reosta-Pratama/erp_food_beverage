@@ -30,20 +30,38 @@ class AuthController extends Controller
     {
         // Validate login form input
         $validatedData = $request->validate([
-            'username' => 'required|string',
-            'password' => 'required|string',
+            'email' => 'required|string|email|min:5|max:150',
+            'password' => 'required|string|min:6|max:255',
+        ], [
+            'email.required' => 'Please enter your email address.',
+            'email.string' => 'Your email must be a valid text value.',
+            'email.email' => 'Please enter a valid email format (e.g., name@example.com).',
+            'email.min' => 'Your email must be at least 5 characters long.',
+            'email.max' => 'Your email may not be longer than 150 characters.',
+
+            'password.required' => 'Please enter your password.',
+            'password.string' => 'Your password must be a valid text value.',
+            'password.min' => 'Your password must be at least 6 characters long.',
+            'password.max' => 'Your password may not be longer than 255 characters.',
         ]);
 
-        // Attempt to find an active user by username
-        $user = User::where('username', $validatedData['username'])
+        // Attempt to find an active user by email
+        $user = User::where('email', $validatedData['email'])
             ->where('is_active', true)
             ->first();
 
-        // Verify user existence and password validity
-        if (!$user || !Hash::check($validatedData['password'], $user->password_hash)) {
+        // If user not found
+        if (!$user) {
             return back()
-                ->withErrors(['username' => 'Invalid username or password.'])
-                ->withInput($request->only('username'));
+                ->withErrors(['email' => 'No account found with that email address.'])
+                ->withInput($request->only('email'));
+        }
+
+        // If password does not match
+        if (!Hash::check($validatedData['password'], $user->password_hash)) {
+            return back()
+                ->withErrors(['password' => 'The password you entered is incorrect.'])
+                ->withInput($request->only('email'));
         }
 
         // Log in the user and optionally remember the session
