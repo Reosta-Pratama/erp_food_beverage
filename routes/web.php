@@ -1,10 +1,20 @@
 <?php
 
+use App\Http\Controllers\Admin\ActivityLogController;
+use App\Http\Controllers\Admin\AuditLogController;
+use App\Http\Controllers\admin\DashboardController;
+use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TemplateController;
 use Illuminate\Support\Facades\Route;
 
+/*
+|--------------------------------------------------------------------------
+| Guest Routes (Public)
+|--------------------------------------------------------------------------
+*/
 Route::middleware('guest')->group(function () {
     // Show login form
     Route::get('/', [AuthController::class, 'showLogin'])->name('login.show');
@@ -15,80 +25,105 @@ Route::middleware('guest')->group(function () {
 });
 
 
+/*
+|--------------------------------------------------------------------------
+| Authenticated Routes
+|--------------------------------------------------------------------------
+*/
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     
-    // Admin routes
+    // Redirect to appropriate dashboard based on role
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    
+    /*
+    |--------------------------------------------------------------------------
+    | ADMIN ROUTES
+    |--------------------------------------------------------------------------
+    */  
     Route::middleware('role:admin')
         ->prefix('admin')
         ->name('admin.')
         ->group(function () {
-            Route::get('/dashboard', function () {
-                return view('admin.dashboard');
-            })->name('dashboard');
             
+            // Dashboard
+            Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
+            
+            // User Management
             Route::resource('users', UserController::class);
-            Route::post('users/{id}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
-            Route::patch('users/{id}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
-    });
+            Route::post('users/{user}/reset-password', [UserController::class, 'resetPassword'])
+                ->name('users.reset-password');
+            Route::patch('users/{user}/toggle-status', [UserController::class, 'toggleStatus'])
+                ->name('users.toggle-status');
+            
+            // Role Management
+            Route::resource('roles', RoleController::class);
+            
+            // Permission Management
+            Route::resource('permissions', PermissionController::class);
+            
+            // Logs Management
+            Route::prefix('logs')->name('logs.')->group(function () {
+                // Activity Logs
+                Route::get('activity', [ActivityLogController::class, 'index'])
+                    ->name('activity');
+                Route::post('activity/clear', [ActivityLogController::class, 'clear'])
+                    ->name('activity.clear');
+                
+                // Audit Logs
+                Route::get('audit', [AuditLogController::class, 'index'])
+                    ->name('audit');
+                Route::get('audit/{auditLog}', [AuditLogController::class, 'show'])
+                    ->name('audit.show');
+                Route::post('audit/clear', [AuditLogController::class, 'clear'])
+                    ->name('audit.clear');
+            });
+        });
 
-    // Operator routes
+    /*
+    |--------------------------------------------------------------------------
+    | OPERATOR ROUTES
+    |--------------------------------------------------------------------------
+    */
     Route::middleware('role:operator')
         ->prefix('operator')
         ->name('operator.')
         ->group(function () {
-            Route::get('/dashboard', function () {
-                return view('operator.dashboard');
-            })->name('dashboard');
-    });
+            Route::get('/dashboard', [DashboardController::class, 'operator'])->name('dashboard');
+            
+            // Future operator routes here
+            // Route::resource('work-orders', WorkOrderController::class);
+            // Route::resource('inventory', InventoryController::class);
+        });
 
-    // Finance/HR routes
+    /*
+    |--------------------------------------------------------------------------
+    | FINANCE/HR ROUTES
+    |--------------------------------------------------------------------------
+    */
     Route::middleware('role:finance_hr')
         ->prefix('finance-hr')
         ->name('finance_hr.')
         ->group(function () {
-            Route::get('/dashboard', function () {
-                return view('finance_hr.dashboard');
-            })->name('dashboard');
-    });
+            Route::get('/dashboard', [DashboardController::class, 'financeHr'])->name('dashboard');
+            
+            // Future finance/HR routes here
+            // Route::resource('employees', EmployeeController::class);
+            // Route::resource('payroll', PayrollController::class);
+        });
 
-    // ====================================
-    // USER MANAGEMENT ROUTES
-    // ====================================
-    Route::middleware(['permission:users.manage'])->group(function () {
-        Route::resource('users', UserController::class);
-    });
 
-    // ====================================
-    // ROLE MANAGEMENT ROUTES
-    // ====================================
-    Route::middleware(['permission:roles.manage'])->group(function () {
-        // Route::resource('roles', RoleController::class);
-    });
 
-    // ====================================
-    // PERMISSION MANAGEMENT ROUTES
-    // ====================================
-    Route::middleware(['permission:permissions.manage'])->group(function () {
-        // Route::resource('permissions', PermissionController::class);
-    });
 
-    // ====================================
-    // ACTIVITY LOG ROUTES
-    // ====================================
-    Route::middleware(['permission:activity_logs.view'])->prefix('logs')->name('logs.')->group(function () {
-        // Route::get('/activity', [ActivityLogController::class, 'index'])->name('activity');
-        // Route::post('/activity/clear', [ActivityLogController::class, 'clear'])->name('activity.clear');
-    });
 
-    // ====================================
-    // AUDIT LOG ROUTES
-    // ====================================
-    Route::middleware(['permission:audit_logs.view'])->prefix('logs')->name('logs.')->group(function () {
-        // Route::get('/audit', [AuditLogController::class, 'index'])->name('audit');
-        // Route::get('/audit/{id}', [AuditLogController::class, 'show'])->name('audit.show');
-        // Route::post('/audit/clear', [AuditLogController::class, 'clear'])->name('audit.clear');
-    });
+
+
+
+
+
+
+
+
 
 
 
