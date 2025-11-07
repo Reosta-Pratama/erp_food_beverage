@@ -3,12 +3,8 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\UserManagement\ActivityLog;
-use App\Models\UserManagement\Permission;
-use App\Models\UserManagement\Role;
-use App\Models\UserManagement\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -33,21 +29,33 @@ class DashboardController extends Controller
      */
     public function admin()
     {
+        // Use DB::table for better performance on counts
         $stats = [
-            'total_users' => User::count(),
-            'active_users' => User::where('is_active', true)->count(),
-            'total_roles' => Role::count(),
-            'total_permissions' => Permission::count(),
-            'recent_activities' => ActivityLog::with('user')
-                ->latest('activity_timestamp')
-                ->take(10)
+            'total_users' => DB::table('users')->count(),
+            'active_users' => DB::table('users')->where('is_active', 1)->count(),
+            'total_roles' => DB::table('roles')->count(),
+            'total_permissions' => DB::table('permissions')->count(),
+            
+            // Optimized recent activities with JOIN
+            'recent_activities' => DB::table('activity_logs')
+                ->join('users', 'activity_logs.user_id', '=', 'users.user_id')
+                ->select(
+                    'activity_logs.activity_id',
+                    'activity_logs.activity_type',
+                    'activity_logs.description',
+                    'activity_logs.module_name',
+                    'activity_logs.activity_timestamp',
+                    'users.username',
+                    'users.full_name'
+                )
+                ->orderByDesc('activity_logs.activity_timestamp')
+                ->limit(10)
                 ->get(),
-            'pending_approvals' => 0, // TODO: Implement approval system
+            
+            'pending_approvals' => 0,
         ];
         
-        return view('admin.dashboard', [
-            'stats' => $stats
-        ]);
+        return view('admin.dashboard', compact('stats'));
     }
 
     /**
@@ -56,15 +64,21 @@ class DashboardController extends Controller
     public function operator()
     {
         $stats = [
-            'pending_work_orders' => 0, // TODO: Implement work orders
-            'active_batches' => 0,
-            'quality_inspections' => 0,
-            'maintenance_requests' => 0,
+            'pending_work_orders' => DB::table('work_orders')
+                ->where('status', 'PENDING')
+                ->count(),
+            'active_batches' => DB::table('batches')
+                ->where('status', 'IN_PROGRESS')
+                ->count(),
+            'quality_inspections' => DB::table('quality_control')
+                ->where('result', 'PENDING')
+                ->count(),
+            'maintenance_requests' => DB::table('maintenance_requests')
+                ->where('status', 'OPEN')
+                ->count(),
         ];
         
-        return view('operator.dashboard', [
-            'stats' => $stats
-        ]);
+        return view('operator.dashboard', compact('stats'));
     }
 
     /**
@@ -73,14 +87,20 @@ class DashboardController extends Controller
     public function financeHr()
     {
         $stats = [
-            'pending_payroll' => 0, // TODO: Implement payroll
-            'pending_invoices' => 0,
-            'total_employees' => 0,
-            'pending_leaves' => 0,
+            'pending_payroll' => DB::table('payroll')
+                ->where('status', 'PENDING')
+                ->count(),
+            'pending_invoices' => DB::table('accounts_receivable')
+                ->where('status', 'UNPAID')
+                ->count(),
+            'total_employees' => DB::table('employees')
+                ->where('employment_status', 'ACTIVE')
+                ->count(),
+            'pending_leaves' => DB::table('leaves')
+                ->where('status', 'PENDING')
+                ->count(),
         ];
         
-        return view('finance_hr.dashboard', [
-            'stats' => $stats
-        ]);
+        return view('finance_hr.dashboard', compact('stats'));
     }
 }

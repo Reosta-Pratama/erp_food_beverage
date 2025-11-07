@@ -31,9 +31,11 @@ Route::middleware('guest')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth')->group(function () {
+    
+    // Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     
-    // Redirect to appropriate dashboard based on role
+    // Auto redirect to role-based dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
     /*
@@ -49,34 +51,80 @@ Route::middleware('auth')->group(function () {
             // Dashboard
             Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
             
-            // User Management
-            Route::resource('users', UserController::class);
-            Route::post('users/{user}/reset-password', [UserController::class, 'resetPassword'])
-                ->name('users.reset-password');
-            Route::patch('users/{user}/toggle-status', [UserController::class, 'toggleStatus'])
-                ->name('users.toggle-status');
+            /*
+            |----------------------------------------------------------------------
+            | USER MANAGEMENT
+            |----------------------------------------------------------------------
+            */
+            Route::prefix('users')->name('users.')->group(function () {
+                Route::get('/', [UserController::class, 'index'])->name('index');
+                Route::get('/create', [UserController::class, 'create'])->name('create');
+                Route::post('/', [UserController::class, 'store'])->name('store');
+                Route::get('/{user}', [UserController::class, 'show'])->name('show');
+                Route::get('/{user}/edit', [UserController::class, 'edit'])->name('edit');
+                Route::put('/{user}', [UserController::class, 'update'])->name('update');
+                Route::delete('/{user}', [UserController::class, 'destroy'])->name('destroy');
+                
+                // Additional actions
+                Route::post('/{user}/reset-password', [UserController::class, 'resetPassword'])
+                    ->name('reset-password');
+                Route::patch('/{user}/toggle-status', [UserController::class, 'toggleStatus'])
+                    ->name('toggle-status');
+            });
             
-            // Role Management
-            Route::resource('roles', RoleController::class);
+            /*
+            |----------------------------------------------------------------------
+            | ROLE MANAGEMENT
+            |----------------------------------------------------------------------
+            */
+            Route::prefix('roles')->name('roles.')->group(function () {
+                Route::get('/', [RoleController::class, 'index'])->name('index');
+                Route::get('/create', [RoleController::class, 'create'])->name('create');
+                Route::post('/', [RoleController::class, 'store'])->name('store');
+                Route::get('/{role}', [RoleController::class, 'show'])->name('show');
+                Route::get('/{role}/edit', [RoleController::class, 'edit'])->name('edit');
+                Route::put('/{role}', [RoleController::class, 'update'])->name('update');
+                Route::delete('/{role}', [RoleController::class, 'destroy'])->name('destroy');
+            });
             
-            // Permission Management
-            Route::resource('permissions', PermissionController::class);
+            /*
+            |----------------------------------------------------------------------
+            | PERMISSION MANAGEMENT
+            |----------------------------------------------------------------------
+            */
+            Route::prefix('permissions')->name('permissions.')->group(function () {
+                Route::get('/', [PermissionController::class, 'index'])->name('index');
+                Route::get('/create', [PermissionController::class, 'create'])->name('create');
+                Route::post('/', [PermissionController::class, 'store'])->name('store');
+                Route::get('/{permission}', [PermissionController::class, 'show'])->name('show');
+                Route::get('/{permission}/edit', [PermissionController::class, 'edit'])->name('edit');
+                Route::put('/{permission}', [PermissionController::class, 'update'])->name('update');
+                Route::delete('/{permission}', [PermissionController::class, 'destroy'])->name('destroy');
+            });
             
-            // Logs Management
+            /*
+            |----------------------------------------------------------------------
+            | LOGS MANAGEMENT
+            |----------------------------------------------------------------------
+            */
             Route::prefix('logs')->name('logs.')->group(function () {
+                
                 // Activity Logs
-                Route::get('activity', [ActivityLogController::class, 'index'])
-                    ->name('activity');
-                Route::post('activity/clear', [ActivityLogController::class, 'clear'])
-                    ->name('activity.clear');
+                Route::prefix('activity')->name('activity.')->group(function () {
+                    Route::get('/', [ActivityLogController::class, 'index'])->name('index');
+                    Route::post('/clear', [ActivityLogController::class, 'clear'])->name('clear');
+                    Route::get('/export', [ActivityLogController::class, 'export'])->name('export');
+                });
                 
                 // Audit Logs
-                Route::get('audit', [AuditLogController::class, 'index'])
-                    ->name('audit');
-                Route::get('audit/{auditLog}', [AuditLogController::class, 'show'])
-                    ->name('audit.show');
-                Route::post('audit/clear', [AuditLogController::class, 'clear'])
-                    ->name('audit.clear');
+                Route::prefix('audit')->name('audit.')->group(function () {
+                    Route::get('/', [AuditLogController::class, 'index'])->name('index');
+                    Route::get('/trail', [AuditLogController::class, 'trail'])->name('trail');
+                    Route::get('/statistics', [AuditLogController::class, 'statistics'])->name('statistics');
+                    Route::get('/export', [AuditLogController::class, 'export'])->name('export');
+                    Route::get('/{auditLog}', [AuditLogController::class, 'show'])->name('show');
+                    Route::post('/clear', [AuditLogController::class, 'clear'])->name('clear');
+                });
             });
         });
 
