@@ -1,5 +1,5 @@
 @extends('layouts.app', [
-    'title' => 'Create New Role' 
+    'title' => 'Edit Role - ' . $role->role_name
 ])
 
 @section('styles')
@@ -23,7 +23,10 @@
                     <li class="breadcrumb-item">
                         <a href="javascript:void(0);">Roles</a>
                     </li>
-                    <li class="breadcrumb-item active" aria-current="page">Create New Role</li>
+                    <li class="breadcrumb-item">
+                        <a href="javascript:void(0);">{{ $role->role_name }}</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Edit Role</li>
                 </ol>
             </nav>
         </div>
@@ -34,7 +37,7 @@
     <div class="row g-3">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="fs-18 mb-0">Create New Role</h2>
+                <h2 class="fs-18 mb-0">Edit Role</h2>
 
                 <div class="d-flex align-items-center gap-2">
                     <a href="{{ route('admin.roles.index') }}"
@@ -86,7 +89,7 @@
                                     class="form-control @error('role_name') is-invalid @enderror" 
                                     id="role_name" 
                                     name="role_name" 
-                                    value="{{ old('role_name') }}" 
+                                    value="{{ old('role_name', $role->role_name) }}" 
                                     placeholder="e.g., Warehouse Manager"
                                     autocomplete="off"
                                     required>
@@ -107,17 +110,24 @@
                                     class="form-control @error('role_code') is-invalid @enderror" 
                                     id="role_code" 
                                     name="role_code" 
-                                    value="{{ old('role_code') }}" 
+                                    value="{{ old('role_code', $role->role_code) }}" 
                                     placeholder="e.g., warehouse_manager"
                                     pattern="[a-z0-9_]+"
                                     autocomplete="off"
+                                    @if(in_array($role->role_code, ['admin', 'operator', 'finance_hr'])) readonly @endif
                                     required>
 
                                 @error('role_code')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
 
-                                <small class="text-muted">Unique identifier (lowercase, no spaces)</small>
+                                @if(in_array($role->role_code, ['admin', 'operator', 'finance_hr']))
+                                    <small class="text-warning">
+                                        <i class="ti ti-lock me-1"></i>System role code cannot be changed
+                                    </small>
+                                @else
+                                    <small class="text-muted">Unique identifier (lowercase, no spaces)</small>
+                                @endif
                             </div>
 
                             {{-- Description --}}
@@ -129,7 +139,7 @@
                                         id="description" 
                                         name="description" 
                                         rows="4"
-                                        placeholder="Describe the role's responsibilities...">{{ old('description') }}</textarea>
+                                        placeholder="Describe the role's responsibilities...">{{ old('description', $role->description) }}</textarea>
 
                                 @error('description')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -142,7 +152,7 @@
                                     <span><i class="bi bi-info-circle me-2"></i>
                                         Selected Permissions:
                                     </span>
-                                    <strong id="permissionCount">0</strong>
+                                    <strong id="permissionCount">{{ count($rolePermissions) }}</strong>
                                 </div>
                             </div>
                         </div>
@@ -154,7 +164,7 @@
                                     Create Role
                                 </button>
 
-                                <a href="{{ route('admin.roles.index') }}" class="btn btn-outline-secondary">
+                                <a href="{{ route('admin.roles.show', $role->role_code) }}" class="btn btn-outline-secondary">
                                     <i class="ti ti-circle-x me-2"></i>
                                     Cancel
                                 </a>
@@ -286,7 +296,5 @@
 
     <!-- Sweetalerts JS -->
     <script src="{{ asset('assets/plugin/sweetalert2/sweetalert2.min.js') }}"></script>
-
-    @vite(['resources/assets/js/erp/create-new-role.js'])
 
 @endsection

@@ -61,7 +61,7 @@ class RoleController extends Controller
     {
         $validated = $request->validate([
             'role_name' => ['required', 'string', 'max:100', 'unique:roles,role_name'],
-            'role_code' => ['required', 'string', 'max:10', 'unique:roles,role_code', 'alpha_dash'],
+            'role_code' => ['required', 'string', 'max:100', 'unique:roles,role_code', 'alpha_dash'],
             'description' => ['nullable', 'string'],
             'permissions' => ['nullable', 'array'],
             'permissions.*' => ['exists:permissions,permission_id'],
@@ -173,14 +173,14 @@ class RoleController extends Controller
     /**
      * Edit role
      */
-    public function edit($roleId)
+    public function edit($roleCode)
     {
-        $role = DB::table('roles')->where('role_id', $roleId)->first();
+        $role = DB::table('roles')->where('role_code', $roleCode)->first();
         
         if (!$role) {
             abort(404, 'Role not found');
         }
-        
+
         $permissions = Permission::select('permission_id', 'module_name', 'permission_name', 'permission_code')
             ->orderBy('module_name')
             ->orderBy('permission_name')
@@ -188,7 +188,7 @@ class RoleController extends Controller
             ->groupBy('module_name');
         
         $rolePermissions = DB::table('role_permissions')
-            ->where('role_id', $roleId)
+            ->where('role_id', $role->role_id)
             ->pluck('permission_id')
             ->toArray();
         

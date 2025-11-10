@@ -1326,3 +1326,9 @@ input[type="range"]::-webkit-slider-runnable-track {
     }
 }
 /* === Custom Search === */
+
+input {
+    &:read-only {
+        background-color: $light !important;
+    }
+}
