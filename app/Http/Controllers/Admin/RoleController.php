@@ -44,12 +44,13 @@ class RoleController extends Controller
      */
     public function create()
     {
-        $permissions = Permission::select('permission_id', 'module_name', 'permission_name', 'permission_code')
+        $permissions = Permission::select('permission_id', 'module_name', 'permission_name', 'permission_code', 
+            'can_create', 'can_read', 'can_update', 'can_delete')
             ->orderBy('module_name')
             ->orderBy('permission_name')
             ->get()
             ->groupBy('module_name');
-        
+
         return view('admin.roles.create', compact('permissions'));
     }
 
@@ -60,10 +61,26 @@ class RoleController extends Controller
     {
         $validated = $request->validate([
             'role_name' => ['required', 'string', 'max:100', 'unique:roles,role_name'],
-            'role_code' => ['required', 'string', 'max:50', 'unique:roles,role_code', 'alpha_dash'],
+            'role_code' => ['required', 'string', 'max:10', 'unique:roles,role_code', 'alpha_dash'],
             'description' => ['nullable', 'string'],
             'permissions' => ['nullable', 'array'],
             'permissions.*' => ['exists:permissions,permission_id'],
+        ], [
+            'role_name.required' => 'The role name is required.',
+            'role_name.string' => 'The role name must be a valid text.',
+            'role_name.max' => 'The role name may not be longer than 100 characters.',
+            'role_name.unique' => 'This role name is already taken. Please choose another one.',
+
+            'role_code.required' => 'The role code is required.',
+            'role_code.string' => 'The role code must be a valid text.',
+            'role_code.max' => 'The role code may not be longer than 100 characters.',
+            'role_code.unique' => 'This role code already exists. Please use a different code.',
+            'role_code.alpha_dash' => 'The role code may only contain letters, numbers, dashes, and underscores.',
+
+            'description.string' => 'The description must be valid text.',
+
+            'permissions.array' => 'Invalid permission format. Please try again.',
+            'permissions.*.exists' => 'One or more selected permissions are invalid.',
         ]);
         
         DB::beginTransaction();
@@ -75,6 +92,7 @@ class RoleController extends Controller
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+
             
             // Attach permissions
             if (!empty($validated['permissions'])) {
@@ -86,7 +104,7 @@ class RoleController extends Controller
                         'updated_at' => now(),
                     ];
                 }, $validated['permissions']);
-                
+
                 DB::table('role_permissions')->insert($permissionData);
             }
             
@@ -107,11 +125,11 @@ class RoleController extends Controller
     /**
      * Show role details
      */
-    public function show($roleId)
+    public function show($roleCode)
     {
         $role = DB::table('roles')
             ->leftJoin('users', 'roles.role_id', '=', 'users.role_id')
-            ->where('roles.role_id', $roleId)
+            ->where('roles.role_code', $roleCode)
             ->select(
                 'roles.*',
                 DB::raw('COUNT(users.user_id) as users_count')
@@ -133,7 +151,7 @@ class RoleController extends Controller
         // Get permissions grouped by module
         $permissions = DB::table('permissions')
             ->join('role_permissions', 'permissions.permission_id', '=', 'role_permissions.permission_id')
-            ->where('role_permissions.role_id', $roleId)
+            ->where('role_permissions.role_id', $role->role_id)
             ->select(
                 'permissions.permission_id',
                 'permissions.module_name',
@@ -234,9 +252,9 @@ class RoleController extends Controller
     /**
      * Delete role
      */
-    public function destroy($roleId)
+    public function destroy($roleCode)
     {
-        $role = DB::table('roles')->where('role_id', $roleId)->first();
+        $role = DB::table('roles')->where('role_code', $roleCode)->first();
         
         if (!$role) {
             abort(404, 'Role not found');
@@ -246,17 +264,17 @@ class RoleController extends Controller
         if (in_array($role->role_code, ['admin', 'operator', 'finance_hr'])) {
             return back()->with('error', 'Cannot delete default system roles');
         }
-        
+
         // Check if role has users
-        $userCount = DB::table('users')->where('role_id', $roleId)->count();
+        $userCount = DB::table('users')->where('role_id', $role->role_id)->count();
         if ($userCount > 0) {
             return back()->with('error', 'Cannot delete role that has assigned users');
         }
-        
+
         DB::beginTransaction();
         try {
-            DB::table('role_permissions')->where('role_id', $roleId)->delete();
-            DB::table('roles')->where('role_id', $roleId)->delete();
+            DB::table('role_permissions')->where('role_id', $role->role_id)->delete();
+            DB::table('roles')->where('role_id', $role->role_id)->delete();
             
             DB::commit();
             

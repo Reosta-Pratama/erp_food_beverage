@@ -99,6 +99,10 @@ class TemplateController extends Controller
         return view('template.advanced-ui.scrollspy');
     }
 
+    public function sweetAlert(){
+        return view('template.advanced-ui.sweet-alert');
+    }
+
     public function inputs(){
         return view('template.form.elements.inputs');
     }

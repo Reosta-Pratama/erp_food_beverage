@@ -24,6 +24,63 @@
         <nav class="menu">
             <ul class="menu-list">
 
+                <!-- Menu item -->
+                <li class="menu-item {{ request()->is('admin/dashboard', 'operator/dashboard', 'finance-hr/dashboard') ? 'active' : '' }}">
+                    <a href="{{ route('dashboard') }}" 
+                    class="menu-link">
+                        <span class="menu-svg">
+                            <i class="ti ti-smart-home"></i>
+                        </span>
+                        <span class="menu-label">Dashboard</span>
+                    </a>
+                </li>
+
+                <!-- Menu category -->
+                <li class="menu-category">
+                    <span class="category-name">Management</span>
+                </li>
+
+                <!-- Menu item -->
+                @isAdmin
+                    <li class="menu-item has-sub">
+                        <a href="javascript:void(0);" class="menu-link">
+                            <span class="menu-svg">
+                                <i class="ti ti-users"></i>
+                            </span>
+                            <span class="menu-label">Users</span>
+                            <i class="ri-arrow-right-s-line menu-icon"></i>
+                        </a>
+                        <ul class="menu-item-child child1">
+                            <li class="menu-item menu-label1">
+                                <a href="javascript:void(0)">Users</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="{{ route('admin.roles.index') }}" class="menu-link">Roles</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="{{ route('admin.permissions.index') }}" class="menu-link">Permissions</a>
+                            </li>
+                            <li class="menu-item has-sub">
+                                <a href="javascript:void(0);" class="menu-link">
+                                    Logs
+                                    <i class="ri-arrow-right-s-line menu-icon"></i>
+                                </a>
+                                <ul class="menu-item-child child2">
+                                    <li class="menu-item">
+                                        <a href="{{ route('admin.logs.audit.index') }}" class="menu-link">Audit Log</a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="{{ route('admin.logs.activity.index') }}" class="menu-link">Activity Log</a>
+                                    </li>
+                                </ul>
+                            </li> 
+                            <li class="menu-item">
+                                <a href="{{ route('admin.users.index') }}" class="menu-link">User Management</a>
+                            </li>
+                        </ul>
+                    </li>
+                @endisAdmin
+
                 <!-- Menu category -->
                 <li class="menu-category">
                     <span class="category-name">Template</span>
@@ -217,95 +274,6 @@
                         </li>
                         <li class="menu-item">
                             <a href="{{ route('template.signUp') }}" class="menu-link">Sign Up</a>
-                        </li>
-                    </ul>
-                </li>
-
-                <!-- Menu category -->
-                <li class="menu-category">
-                    <span class="category-name">main</span>
-                </li>
-
-                <!-- Menu item -->
-                <li class="menu-item has-sub">
-                    <a href="javascript:void(0);" class="menu-link">
-                        <span class="menu-svg">
-                            <i class="ti ti-shield"></i>
-                        </span>
-                        <span class="menu-label">Admin</span>
-                        <i class="ri-arrow-right-s-line menu-icon"></i>
-                    </a>
-                    <ul class="menu-item-child child1">
-                        <li class="menu-item menu-label1">
-                            <a href="javascript:void(0)">Admin</a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="" class="menu-link">Dashboard</a>
-                        </li>
-                        <li class="menu-item has-sub">
-                            <a href="javascript:void(0);" class="menu-link">
-                                Appoinments
-                                <i class="ri-arrow-right-s-line menu-icon"></i>
-                            </a>
-                            <ul class="menu-item-child child2">
-                                <li class="menu-item">
-                                    <a href="" class="menu-link">Calendar</a>
-                                </li>
-                                <li class="menu-item">
-                                    <a href="" class="menu-link">View All</a>
-                                </li>
-                                <li class="menu-item">
-                                    <a href="" class="menu-link">Add Appoinment</a>
-                                </li>
-                                <li class="menu-item">
-                                    <a href="" class="menu-link">Edit Appoinment</a>
-                                </li>
-                            </ul>
-                        </li>   
-                    </ul>
-                </li>
-
-                <!-- Menu category -->
-                <li class="menu-category">
-                    <span class="category-name">Pages</span>
-                </li>
-
-                <!-- Menu item -->
-                <li class="menu-item has-sub">
-                    <a href="javascript:void(0);" class="menu-link">
-                        <span class="menu-svg">
-                            <i class="ti ti-shield-check"></i>
-                        </span>
-                        <span class="menu-label">Authentication</span>
-                        <i class="ri-arrow-right-s-line menu-icon"></i>
-                    </a>
-                    <ul class="menu-item-child child1">
-                        <li class="menu-item menu-label1">
-                            <a href="javascript:void(0)">Authentication</a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="" class="menu-link">Coming Soon</a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="" class="menu-link">Create Password</a>
-                        </li> 
-                        <li class="menu-item">
-                            <a href="" class="menu-link">Lock Screen</a>
-                        </li>   
-                        <li class="menu-item">
-                            <a href="" class="menu-link">Reset Password</a>
-                        </li> 
-                        <li class="menu-item">
-                            <a href="" class="menu-link">Sign Up</a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="" class="menu-link">Sign In</a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="" class="menu-link">Two Step Verication</a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="" class="menu-link">Under Maintenance</a>
                         </li>
                     </ul>
                 </li>
