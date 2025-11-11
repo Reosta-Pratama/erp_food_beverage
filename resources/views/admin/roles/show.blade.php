@@ -37,7 +37,8 @@
             </a>
             <a href="{{ route('admin.roles.index') }}"
                 class="btn btn-outline-secondary">
-                <i class="ti ti-arrow-left me-2"></i>Back
+                <i class="ti ti-arrow-left me-2"></i>
+                Back
             </a>
         </div>
     </div>
@@ -49,7 +50,7 @@
                 <div class="col-12">
                     <div class="card custom">
                         <div class="card-header">
-                            <div class="card-title fs-16">Role Information</div>
+                            <div class="card-title">Role Information</div>
                         </div>
                         <div class="card-body p-0">
                             <div class="table-responsive">
@@ -93,7 +94,7 @@
                 <div class="col-12">
                     <div class="card custom">
                         <div class="card-header">
-                            <div class="card-title fs-16">Statistics</div>
+                            <div class="card-title">Statistics</div>
                         </div>
                         <div class="card-body">
                             <div class="row g-3">

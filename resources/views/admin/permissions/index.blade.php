@@ -3,38 +3,6 @@
 ])
 
 @section('styles')
-    <style>
-        .permission-row {
-            transition: all 0.2s ease;
-        }
-        .permission-row:hover {
-            background-color: #f8f9fa;
-            transform: translateX(5px);
-        }
-        .module-badge {
-            font-size: 0.75rem;
-            padding: 0.35rem 0.65rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .crud-badge {
-            font-size: 0.65rem;
-            padding: 0.25rem 0.4rem;
-            font-weight: 600;
-        }
-        .filter-card {
-            border-left: 3px solid #0d6efd;
-        }
-        .stats-icon {
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 10px;
-        }
-    </style>
 @endsection
 
 @section('content')
@@ -76,7 +44,7 @@
     @endif
     
     <!-- Container -->
-    <div class="row g-3">
+    <div class="row g-4">
         <div class="col-md-6 col-lg-3">
             <div class="card custom">
                 <div class="card-body d-flex align-items-center">
@@ -95,7 +63,7 @@
             <div class="card custom">
                 <div class="card-body d-flex align-items-center">
                     <div class="avatar avatar-xxl svg-success bg-success bg-opacity-10 rounded-circle border-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-table"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14z" /><path d="M3 10h18" /><path d="M10 3v18" /></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-layout"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v1a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /><path d="M4 13m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /><path d="M14 4m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /></svg>
                     </div>
                     <div class="ms-3">
                         <h4 class="text-success fs-24 mb-1">{{ $modules->count() }}</h4>
@@ -148,202 +116,209 @@
     </div>
 
     <div class="row g-4">
+        <div class="col-lg-3">
+            <div class="card custom sticky-card">
+                <div class="card-header">
+                    <div class="card-title">Filters</div>
+                </div>
 
-    </div>
-    <!-- Container -->
+                <form method="GET" action="{{ route('admin.permissions.index') }}"
+                    class="card-body">
 
-    <div class="container-fluid">
-        <div class="row">
-            {{-- Filters --}}
-            <div class="col-lg-3 mb-4">
-                <div class="card filter-card shadow-sm border-0 sticky-top" style="top: 20px;">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0"><i class="bi bi-funnel me-2"></i>Filters</h5>
-                    </div>
-                    <div class="card-body">
-                        <form method="GET" action="{{ route('admin.permissions.index') }}">
-                            
-                            {{-- Search --}}
-                            <div class="mb-3">
-                                <label class="form-label">Search</label>
-                                <input type="text" 
-                                    class="form-control" 
-                                    name="search" 
-                                    value="{{ request('search') }}"
-                                    placeholder="Search permissions...">
-                            </div>
-
-                            {{-- Module Filter --}}
-                            <div class="mb-3">
-                                <label class="form-label">Module</label>
-                                <select class="form-select" name="module">
-                                    <option value="">All Modules</option>
-                                    @foreach($modules as $module)
-                                    <option value="{{ $module }}" {{ request('module') === $module ? 'selected' : '' }}>
-                                        {{ $module }}
-                                    </option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            {{-- Action Buttons --}}
-                            <div class="d-grid gap-2">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="bi bi-search me-2"></i>Apply Filters
-                                </button>
-                                <a href="{{ route('admin.permissions.index') }}" class="btn btn-outline-secondary">
-                                    <i class="bi bi-arrow-clockwise me-2"></i>Reset
-                                </a>
-                            </div>
-                        </form>
+                    {{-- Search --}}
+                    <div class="mb-3">
+                        <label for="search" class="form-label">Search</label>
+                        <input type="text" 
+                            class="form-control" 
+                            id="search" 
+                            name="search" 
+                            value="{{ request('search') }}"
+                            placeholder="Search permissions..."
+                            autocomplete="off">
                     </div>
 
-                    {{-- Module List --}}
-                    <div class="card-footer bg-white">
-                        <h6 class="mb-3"><i class="bi bi-list-ul me-2"></i>Quick Filter</h6>
-                        <div class="d-flex flex-wrap gap-1">
+                    {{-- Module Filter --}}
+                    <div class="mb-3">
+                        <label for="module" class="form-label">Module</label>
+                        <select class="form-select" id="module" name="module"
+                            data-trigger="data-trigger">
+                            <option value="">All Modules</option>
                             @foreach($modules as $module)
+                                <option value="{{ $module }}" {{ request('module') === $module ? 'selected' : '' }}>
+                                    {{ $module }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="ti ti-search me-2"></i>
+                            Apply Filters
+                        </button>
+                        <a href="{{ route('admin.permissions.index') }}" 
+                            class="btn btn-outline-danger">
+                            <i class="ti ti-rotate-clockwise me-2"></i>
+                            Reset
+                        </a>
+                    </div>
+                </form>
+
+                <div class="card-footer">
+                    <h6 class="mb-3">
+                        <i class="bi bi-list-ul me-2"></i>
+                        Quick Filter
+                    </h6>
+                    
+                    <div class="d-flex flex-wrap gap-1">
+                        @foreach($modules as $module)
                             <a href="{{ route('admin.permissions.index', ['module' => $module]) }}" 
-                            class="badge bg-{{ request('module') === $module ? 'primary' : 'secondary' }} text-decoration-none">
+                                class="badge bg-{{ request('module') === $module ? 'success' : 'secondary' }} text-decoration-none">
                                 {{ $module }}
                             </a>
-                            @endforeach
-                        </div>
+                        @endforeach
                     </div>
-                </div>
-            </div>
-
-            {{-- Permissions Table --}}
-            <div class="col-lg-9">
-                <div class="card shadow-sm border-0">
-                    <div class="card-header bg-white border-bottom">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0">
-                                <i class="bi bi-list-check me-2"></i>
-                                Permissions List
-                                <span class="badge bg-primary">{{ $permissions->total() }}</span>
-                            </h5>
-                            <div class="text-muted small">
-                                Showing {{ $permissions->firstItem() ?? 0 }} - {{ $permissions->lastItem() ?? 0 }} of {{ $permissions->total() }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body p-0">
-                        @if($permissions->count() > 0)
-                        <div class="table-responsive">
-                            <table class="table table-hover mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th style="width: 5%">#</th>
-                                        <th style="width: 25%">Permission Name</th>
-                                        <th style="width: 15%">Module</th>
-                                        <th style="width: 20%">CRUD Access</th>
-                                        <th style="width: 10%" class="text-center">Roles</th>
-                                        <th style="width: 15%" class="text-center">Created</th>
-                                        <th style="width: 10%" class="text-center">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($permissions as $index => $permission)
-                                    <tr class="permission-row">
-                                        <td class="text-muted">
-                                            {{ $permissions->firstItem() + $index }}
-                                        </td>
-                                        <td>
-                                            <div>
-                                                <div class="fw-bold">{{ $permission->permission_name }}</div>
-                                                <code class="small text-muted">{{ $permission->permission_code }}</code>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span class="module-badge badge bg-info">
-                                                {{ $permission->module_name }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex gap-1 flex-wrap">
-                                                @if($permission->can_create)
-                                                <span class="crud-badge badge bg-success">C</span>
-                                                @endif
-                                                @if($permission->can_read)
-                                                <span class="crud-badge badge bg-info">R</span>
-                                                @endif
-                                                @if($permission->can_update)
-                                                <span class="crud-badge badge bg-warning">U</span>
-                                                @endif
-                                                @if($permission->can_delete)
-                                                <span class="crud-badge badge bg-danger">D</span>
-                                                @endif
-                                                @if(!$permission->can_create && !$permission->can_read && !$permission->can_update && !$permission->can_delete)
-                                                <span class="crud-badge badge bg-secondary">None</span>
-                                                @endif
-                                            </div>
-                                        </td>
-                                        <td class="text-center">
-                                            @if($permission->roles_count > 0)
-                                            <span class="badge bg-primary rounded-pill">
-                                                {{ $permission->roles_count }}
-                                            </span>
-                                            @else
-                                            <span class="badge bg-secondary rounded-pill">0</span>
-                                            @endif
-                                        </td>
-                                        <td class="text-center text-muted small">
-                                            {{ \Carbon\Carbon::parse($permission->created_at)->format('d M Y') }}
-                                        </td>
-                                        <td class="text-center">
-                                            <div class="btn-group btn-group-sm" role="group">
-                                                <a href="{{ route('admin.permissions.show', $permission->permission_id) }}" 
-                                                class="btn btn-outline-primary" 
-                                                title="View Details">
-                                                    <i class="bi bi-eye"></i>
-                                                </a>
-                                                <a href="{{ route('admin.permissions.edit', $permission->permission_id) }}" 
-                                                class="btn btn-outline-warning" 
-                                                title="Edit">
-                                                    <i class="bi bi-pencil"></i>
-                                                </a>
-                                                <form action="{{ route('admin.permissions.destroy', $permission->permission_id) }}" 
-                                                    method="POST" 
-                                                    class="d-inline"
-                                                    onsubmit="return confirm('Are you sure you want to delete this permission?');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" 
-                                                            class="btn btn-outline-danger" 
-                                                            title="Delete"
-                                                            {{ $permission->roles_count > 0 ? 'disabled' : '' }}>
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        @else
-                        <div class="text-center py-5">
-                            <i class="bi bi-inbox text-muted" style="font-size: 3rem;"></i>
-                            <p class="text-muted mt-3">No permissions found</p>
-                            <a href="{{ route('admin.permissions.create') }}" class="btn btn-primary">
-                                <i class="bi bi-plus-circle me-2"></i>Create First Permission
-                            </a>
-                        </div>
-                        @endif
-                    </div>
-                    @if($permissions->hasPages())
-                        <div class="card-footer bg-white">
-                            {{ $permissions->links() }}
-                        </div>
-                    @endif
                 </div>
             </div>
         </div>
 
+        <div class="col-lg-9">
+            <div class="card custom">
+                <div class="card-header justify-content-between align-items-center">
+                    <div class="card-title d-flex align-items-center">
+                        Permissions List
+                        <span class="badge bg-primary ms-2">{{ $permissions->total() }}</span>
+                    </div>
+                    <div class="text-muted small">
+                        Showing {{ $permissions->firstItem() ?? 0 }} - {{ $permissions->lastItem() ?? 0 }} of {{ $permissions->total() }}
+                    </div>
+                </div>
+
+                <div class="card-body p-0">
+                    @if($permissions->count() > 0)
+                        <div class="table-responsive">
+                            <table class="table text-nowrap table-borderless mb-0">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Permission</th>
+                                        <th scope="col">Module</th>
+                                        <th scope="col" class="text-center">CRUD Access</th>
+                                        <th scope="col" class="text-center">Roles</th>
+                                        <th scope="col" class="text-center">Created</th>
+                                        <th scope="col" class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($permissions as $index => $permission)
+                                        <tr>
+                                            <td>
+                                                {{ $permissions->firstItem() + $index }}
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <div class="fw-bold">{{ $permission->permission_name }}</div>
+                                                    <code class="small text-muted">{{ $permission->permission_code }}</code>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-primary">
+                                                    {{ $permission->module_name }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex justify-content-center gap-1 flex-wrap">
+                                                    @if($permission->can_create)
+                                                        <span class="badge bg-success">C</span>
+                                                    @endif
+                                                    @if($permission->can_read)
+                                                        <span class="badge bg-info">R</span>
+                                                    @endif
+                                                    @if($permission->can_update)
+                                                        <span class="badge bg-warning">U</span>
+                                                    @endif
+                                                    @if($permission->can_delete)
+                                                        <span class="badge bg-danger">D</span>
+                                                    @endif
+                                                    @if(!$permission->can_create && !$permission->can_read && !$permission->can_update && !$permission->can_delete)
+                                                        <span class="badge bg-secondary">None</span>
+                                                    @endif
+                                                </div>
+                                            </td>
+                                            <td class="text-center">
+                                                @if($permission->roles_count > 0)
+                                                    {{ $permission->roles_count }}
+                                                @else
+                                                    0
+                                                @endif
+                                            </td>
+                                            <td class="text-center text-muted small">
+                                                {{ \Carbon\Carbon::parse($permission->created_at)->format('d M Y') }}
+                                            </td>
+                                            <td class="text-center">
+                                                <div class="d-grid gap-2 d-md-block">
+                                                    <a class="btn btn-sm btn-primary btn-wave"
+                                                        href="{{ route('admin.permissions.show', $permission->permission_id) }}"
+                                                        data-bs-toggle="tooltip" data-bs-placement="top" title="View Details">
+                                                        <i class="ti ti-eye"></i>
+                                                    </a>
+                                                    <a class="btn btn-sm btn-success btn-wave"
+                                                        href="{{ route('admin.permissions.edit', $permission->permission_id) }}"
+                                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                                        <i class="ti ti-pencil"></i>
+                                                    </a>
+                                                    <form action="{{ route('admin.permissions.destroy', $permission->permission_id) }}" 
+                                                        method="POST" 
+                                                        class="d-inline"
+                                                        onsubmit="return confirm('Are you sure you want to delete this permission?');">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        
+                                                        <button class="btn btn-sm btn-danger btn-wave"
+                                                            type="submit"
+                                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                                            <i class="ti ti-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @else
+                        <div class="text-center py-5">
+                            <i class="ti ti-inbox text-muted fs-40"></i>
+                            <p class="text-muted mt-3">No permissions found</p>
+                            <a href="{{ route('admin.permissions.create') }}" 
+                                class="btn btn-primary">
+                                <i class="ti ti-plus me-2"></i>
+                                Create First Permission
+                            </a>
+                        </div>
+                    @endif
+                </div>
+
+                <div class="card-footer d-flex justify-content-center">
+                    {{ $permissions->links('pagination.default') }}
+                </div>
+            </div>
+        </div>
     </div>
+    <!-- Container -->
+
 @endsection
 
 @section('scripts')
+
+    <script>
+        const moduleSelectElement = document.getElementById('module');
+        if (moduleSelectElement) {
+            const moduleChoices = new Choices(moduleSelectElement, {
+                searchEnabled: true
+            });
+        }
+    </script>
+
 @endsection

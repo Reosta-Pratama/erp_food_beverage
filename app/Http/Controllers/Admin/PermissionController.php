@@ -38,7 +38,8 @@ class PermissionController extends Controller
                 'permissions.can_update',
                 'permissions.can_delete',
                 'permissions.created_at'
-            );
+            )
+            ->orderByDesc('permissions.created_at');
         
         // Filter by module
         if ($request->filled('module')) {
@@ -56,7 +57,7 @@ class PermissionController extends Controller
         
         $permissions = $query->orderBy('permissions.module_name')
             ->orderBy('permissions.permission_name')
-            ->paginate(20);
+            ->paginate(10);
         
         // Get unique modules for filter
         $modules = DB::table('permissions')

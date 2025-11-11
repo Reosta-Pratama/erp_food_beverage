@@ -1,0 +1,16 @@
+@use 'variables-map' as *;
+
+.sticky-card {
+    position: sticky !important;
+    top: 68px;
+}
+
+.access-icon {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 1.5rem;
+}

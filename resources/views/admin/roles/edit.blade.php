@@ -47,21 +47,19 @@
 
     {{-- Error Messages --}}
     @if($errors->any())
-        <div class="col-12">
-            <div class="alert alert-danger alert-dismissible fade show">
-                <h6 class="d-flex align-items-center">
-                    <i class="ti ti-exclamation-circle fs-18 me-2"></i>
-                    Please fix the following errors:
-                </h6>
-                <ul class="mb-0">
-                    @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-                <button type="button" class="btn-close" data-bs-dismiss="alert">
-                    <i class="ti ti-x"></i>
-                </button>
-            </div>
+        <div class="alert alert-danger alert-dismissible fade show">
+            <h6 class="d-flex align-items-center">
+                <i class="ti ti-exclamation-circle fs-18 me-2"></i>
+                Please fix the following errors:
+            </h6>
+            <ul class="mb-0">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert">
+                <i class="ti ti-x"></i>
+            </button>
         </div>
     @endif
     
@@ -72,9 +70,9 @@
         @method('PUT')
 
         <div class="col-lg-4">
-            <div class="card custom" style="position: sticky; top: 68px">
+            <div class="card custom sticky-card">
                 <div class="card-header">
-                    <div class="card-title fs-16">Role Information</div>
+                    <div class="card-title">Role Information</div>
                 </div>
                 
                 <div class="card-body">
