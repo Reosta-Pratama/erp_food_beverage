@@ -66,7 +66,7 @@
         @csrf
 
         <div class="col-lg-4">
-            <div class="card custom" style="position: sticky; top: 68px">
+            <div class="card custom sticky-card">
                 <div class="card-header">
                     <div class="card-title fs-16">Role Information</div>
                 </div>

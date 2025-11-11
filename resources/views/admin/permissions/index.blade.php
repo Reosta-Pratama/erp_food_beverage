@@ -227,7 +227,7 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                <div class="d-flex justify-content-center gap-1 flex-wrap">
+                                                <div class="d-flex gap-1 flex-wrap">
                                                     @if($permission->can_create)
                                                         <span class="badge bg-success">C</span>
                                                     @endif

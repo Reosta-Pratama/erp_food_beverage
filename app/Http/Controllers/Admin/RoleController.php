@@ -92,7 +92,6 @@ class RoleController extends Controller
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-
             
             // Attach permissions
             if (!empty($validated['permissions'])) {

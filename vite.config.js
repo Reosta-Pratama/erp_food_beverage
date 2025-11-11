@@ -20,6 +20,7 @@ export default defineConfig({
                     'resources/assets/js/layouts/header.js',
                     'resources/assets/js/layouts/sidebar.js',
 
+                        'resources/assets/js/erp/create-new-permission.js',
                         'resources/assets/js/erp/create-new-role.js',
                         'resources/assets/js/erp/edit-role.js',
 

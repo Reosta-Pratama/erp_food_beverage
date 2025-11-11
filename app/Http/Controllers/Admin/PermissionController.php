@@ -88,6 +88,13 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
+        $request->merge([
+            'can_create' => $request->has('can_create'),
+            'can_read'   => $request->has('can_read'),
+            'can_update' => $request->has('can_update'),
+            'can_delete' => $request->has('can_delete'),
+        ]);
+
         $validated = $request->validate([
             'module_name' => ['required', 'string', 'max:100'],
             'permission_name' => ['required', 'string', 'max:150'],
@@ -96,23 +103,51 @@ class PermissionController extends Controller
             'can_read' => ['boolean'],
             'can_update' => ['boolean'],
             'can_delete' => ['boolean'],
+        ], [
+            'module_name.required' => 'The module name is required.',
+            'module_name.string' => 'The module name must be a valid text.',
+            'module_name.max' => 'The module name cannot exceed 100 characters.',
+
+            'permission_name.required' => 'The permission name is required.',
+            'permission_name.string' => 'The permission name must be a valid text.',
+            'permission_name.max' => 'The permission name cannot exceed 150 characters.',
+
+            'permission_code.required' => 'The permission code is required.',
+            'permission_code.string' => 'The permission code must be a valid text.',
+            'permission_code.max' => 'The permission code cannot exceed 150 characters.',
+            'permission_code.unique' => 'This permission code is already in use. Please choose another one.',
+
+            'can_create.boolean' => 'The create permission value must be true or false.',
+            'can_read.boolean' => 'The read permission value must be true or false.',
+            'can_update.boolean' => 'The update permission value must be true or false.',
+            'can_delete.boolean' => 'The delete permission value must be true or false.',
         ]);
-        
-        DB::table('permissions')->insert([
-            'module_name' => $validated['module_name'],
-            'permission_name' => $validated['permission_name'],
-            'permission_code' => $validated['permission_code'],
-            'can_create' => $request->has('can_create') ? 1 : 0,
-            'can_read' => $request->has('can_read') ? 1 : 0,
-            'can_update' => $request->has('can_update') ? 1 : 0,
-            'can_delete' => $request->has('can_delete') ? 1 : 0,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-        
-        return redirect()
-            ->route('admin.permissions.index')
-            ->with('success', 'Permission created successfully');
+
+        DB::beginTransaction();
+        try {
+            DB::table('permissions')->insert([
+                'module_name' => $validated['module_name'],
+                'permission_name' => $validated['permission_name'],
+                'permission_code' => $validated['permission_code'],
+                'can_create' => $validated['can_create'] ? 1 : 0,
+                'can_read' => $validated['can_read'] ? 1 : 0,
+                'can_update' => $validated['can_update'] ? 1 : 0,
+                'can_delete' => $validated['can_delete'] ? 1 : 0,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+            
+            DB::commit();
+
+            return redirect()
+                ->route('admin.permissions.index')
+                ->with('success', 'Permission created successfully');
+        } catch (\Exception $e) {
+             DB::rollBack();
+            return back()
+                ->withInput()
+                ->with('error', 'Failed to create permission: ' . $e->getMessage());
+        }
     }
 
     /**
