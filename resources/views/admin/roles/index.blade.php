@@ -23,37 +23,32 @@
     </div>
     <!-- Page Header -->
 
-    <!-- Container -->
-    <div class="row g-3">
-        @if(session('success'))
-            <div class="col-12">
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <i class="ti ti-circle-check fs-18 me-2"></i>
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert">
-                        <i class="ti ti-x"></i>
-                    </button>
-                </div>
-            </div>
-        @endif
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
+            <i class="ti ti-circle-check fs-18 me-2"></i>
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert">
+                <i class="ti ti-x"></i>
+            </button>
+        </div>
+    @endif
 
-        @if(session('error'))
-            <div class="col-12">
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="ti ti-exclamation-circle fs-18 me-2"></i>
-                    {{ session('error') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert">
-                        <i class="ti ti-x"></i>
-                    </button>
-                </div>
-            </div>
-        @endif
-        
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+            <i class="ti ti-exclamation-circle fs-18 me-2"></i>
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert">
+                <i class="ti ti-x"></i>
+            </button>
+        </div>
+    @endif
+
+    <!-- Container -->
+    <div class="row g-4">
         <div class="col-md-6 col-lg-3">
             <div class="card custom">
                 <div class="card-body d-flex align-items-center">
                     <div class="avatar avatar-xxl svg-primary bg-primary bg-opacity-10 rounded-circle border-0">
-                        
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4" /><path d="M15 19l2 2l4 -4" /></svg>
                     </div>
                     <div class="ms-3">
@@ -108,15 +103,19 @@
     </div>
 
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h5 class="fs-16 mb-0">Role Management</h5>
+        <div>
+            <h2 class="fs-22 mb-1">Roles Management</h2>
+            <p class="text-muted mb-0">Create, organize, and manage user roles within the system.</p>
+        </div>
         <div class="d-flex align-items-center">
-            <a href="{{ route('admin.roles.create') }}" class="btn btn-primary btn-sm">
-                <i class="ti ti-plus me-2"></i>Create New Role
+            <a href="{{ route('admin.roles.create') }}" class="btn btn-primary">
+                <i class="ti ti-plus me-2"></i>
+                Create New Role
             </a>
         </div>
     </div>
 
-    <div class="row">
+    <div class="row g-4">
         @forelse ($roles as $role)
             <div class="col-md-6 col-lg-4">
                 <div class="card custom">

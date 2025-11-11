@@ -64,7 +64,7 @@ class PermissionController extends Controller
             ->pluck('module_name')
             ->sort()
             ->values();
-        
+
         return view('admin.permissions.index', compact('permissions', 'modules'));
     }
 

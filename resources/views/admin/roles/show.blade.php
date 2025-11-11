@@ -26,25 +26,24 @@
     </div>
     <!-- Page Header -->
 
-    <!-- Container -->
-    <div class="row">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="fs-18 mb-0">{{ $role->role_name }}</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fs-22 mb-0">{{ $role->role_name }}</h2>
 
-                <div class="d-flex align-items-center gap-2">
-                    <a href="{{ route('admin.roles.edit', $role->role_code) }}" 
-                        class="btn btn-sm btn-primary">
-                        <i class="ti ti-pencil me-2"></i>Edit Role
-                    </a>
-                    <a href="{{ route('admin.roles.index') }}"
-                        class="btn btn-sm btn-outline-secondary">
-                        <i class="ti ti-arrow-left me-2"></i>Back
-                    </a>
-                </div>
-            </div>
+        <div class="d-flex align-items-center gap-2">
+            <a href="{{ route('admin.roles.edit', $role->role_code) }}" 
+                class="btn btn-primary">
+                <i class="ti ti-pencil me-2"></i>
+                Edit Role
+            </a>
+            <a href="{{ route('admin.roles.index') }}"
+                class="btn btn-outline-secondary">
+                <i class="ti ti-arrow-left me-2"></i>Back
+            </a>
         </div>
-
+    </div>
+    
+    <!-- Container -->
+    <div class="row g-4">
         <div class="col-lg-4">
             <div class="row">
                 <div class="col-12">
