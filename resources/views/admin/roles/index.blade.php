@@ -24,9 +24,7 @@
     <!-- Page Header -->
 
     <!-- Container -->
-
-
-    <div class="row">
+    <div class="row g-3">
         @if(session('success'))
             <div class="col-12">
                 <div class="alert alert-success alert-dismissible fade show" role="alert">

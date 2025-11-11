@@ -21,6 +21,7 @@ export default defineConfig({
                     'resources/assets/js/layouts/sidebar.js',
 
                         'resources/assets/js/erp/create-new-role.js',
+                        'resources/assets/js/erp/edit-role.js',
 
                         'resources/assets/js/custom/alert-custom.js',
                         'resources/assets/js/custom/auto-complete-custom.js',

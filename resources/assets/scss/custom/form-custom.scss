@@ -1327,7 +1327,7 @@ input[type="range"]::-webkit-slider-runnable-track {
 }
 /* === Custom Search === */
 
-input {
+input:not([type="checkbox"]):not([type="radio"]) {
     &:read-only {
         background-color: $light !important;
     }

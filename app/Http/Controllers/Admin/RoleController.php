@@ -181,7 +181,8 @@ class RoleController extends Controller
             abort(404, 'Role not found');
         }
 
-        $permissions = Permission::select('permission_id', 'module_name', 'permission_name', 'permission_code')
+        $permissions = Permission::select('permission_id', 'module_name', 'permission_name', 'permission_code', 
+            'can_create', 'can_read', 'can_update', 'can_delete')
             ->orderBy('module_name')
             ->orderBy('permission_name')
             ->get()
@@ -198,18 +199,38 @@ class RoleController extends Controller
     /**
      * Update role
      */
-    public function update(Request $request, $roleId)
+    public function update(Request $request, $roleCode)
     {
         $validated = $request->validate([
-            'role_name' => ['required', 'string', 'max:100', 'unique:roles,role_name,' . $roleId . ',role_id'],
-            'role_code' => ['required', 'string', 'max:50', 'unique:roles,role_code,' . $roleId . ',role_id', 'alpha_dash'],
+            'role_name' => ['required', 'string', 'max:100', 'unique:roles,role_name,' . $roleCode . ',role_code'],
+            'role_code' => ['required', 'string', 'max:100', 'unique:roles,role_code,' . $roleCode . ',role_code', 'alpha_dash'],
             'description' => ['nullable', 'string'],
             'permissions' => ['nullable', 'array'],
             'permissions.*' => ['exists:permissions,permission_id'],
+        ], [
+            'role_name.required' => 'Please enter a role name.',
+            'role_name.string' => 'The role name must be valid text.',
+            'role_name.max' => 'The role name can’t be longer than 100 characters.',
+            'role_name.unique' => 'This role name is already in use. Please choose a different one.',
+
+            'role_code.required' => 'Please enter a role code.',
+            'role_code.string' => 'The role code must be valid text.',
+            'role_code.max' => 'The role code can’t be longer than 100 characters.',
+            'role_code.unique' => 'This role code already exists. Please use another one.',
+            'role_code.alpha_dash' => 'The role code may only contain letters, numbers, dashes, and underscores.',
+
+            'description.string' => 'The description must be valid text.',
+
+            'permissions.array' => 'Invalid permission format. Please try again.',
+            'permissions.*.exists' => 'One or more selected permissions are invalid.',
         ]);
-        
+
         DB::beginTransaction();
         try {
+            $roleId = DB::table('roles')
+                ->where('role_code', $roleCode)
+                ->value('role_id');
+
             DB::table('roles')
                 ->where('role_id', $roleId)
                 ->update([
@@ -218,7 +239,7 @@ class RoleController extends Controller
                     'description' => $validated['description'] ?? null,
                     'updated_at' => now(),
                 ]);
-            
+
             // Sync permissions
             DB::table('role_permissions')->where('role_id', $roleId)->delete();
             
@@ -259,7 +280,7 @@ class RoleController extends Controller
         if (!$role) {
             abort(404, 'Role not found');
         }
-        
+
         // Prevent deleting default roles
         if (in_array($role->role_code, ['admin', 'operator', 'finance_hr'])) {
             return back()->with('error', 'Cannot delete default system roles');

@@ -40,7 +40,7 @@
                 <h2 class="fs-18 mb-0">Edit Role</h2>
 
                 <div class="d-flex align-items-center gap-2">
-                    <a href="{{ route('admin.roles.index') }}"
+                    <a href="{{ route('admin.roles.show', $role->role_code) }}"
                         class="btn btn-sm btn-outline-secondary">
                         <i class="ti ti-arrow-left me-2"></i>Back
                     </a>
@@ -68,9 +68,10 @@
             </div>
         @endif
 
-        <form action="{{ route('admin.roles.store') }}" method="POST" 
+        <form action="{{ route('admin.roles.update', $role->role_code) }}" method="POST" 
             id="roleForm" class="col-12">
             @csrf
+            @method('PUT')
 
             <div class="row">
                 <div class="col-lg-4">
@@ -161,7 +162,7 @@
                             <div class="d-grid gap-2">
                                 <button type="submit" class="btn btn-primary">
                                     <i class="ti ti-circle-check me-2"></i>
-                                    Create Role
+                                    Update Role
                                 </button>
 
                                 <a href="{{ route('admin.roles.show', $role->role_code) }}" class="btn btn-outline-secondary">
@@ -216,7 +217,7 @@
                                                                         value="{{ $permission->permission_id }}"
                                                                         id="perm_{{ $permission->permission_id }}"
                                                                         data-module="{{ Str::slug($moduleName) }}"
-                                                                        {{ in_array($permission->permission_id, old('permissions', [])) ? 'checked' : '' }}>
+                                                                        {{ in_array($permission->permission_id, old('permissions', $rolePermissions)) ? 'checked' : '' }}>
                                                                 </div>
                                                             </td>
                                                             <td>
@@ -296,5 +297,7 @@
 
     <!-- Sweetalerts JS -->
     <script src="{{ asset('assets/plugin/sweetalert2/sweetalert2.min.js') }}"></script>
+
+    @vite(['resources/assets/js/erp/edit-role.js'])
 
 @endsection
