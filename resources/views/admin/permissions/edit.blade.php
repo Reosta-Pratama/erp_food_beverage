@@ -1,5 +1,5 @@
 @extends('layouts.app', [
-    'title' => 'Create New Permission'
+    'title' => 'Edit Permission - ' . $permission->permission_name
 ])
 
 @section('styles')
@@ -35,7 +35,7 @@
                     <li class="breadcrumb-item">
                         <a href="javascript:void(0);">Permissions</a>
                     </li>
-                    <li class="breadcrumb-item active" aria-current="page">Create New Permission</li>
+                    <li class="breadcrumb-item active" aria-current="page">Edit Permission</li>
                 </ol>
             </nav>
         </div>
@@ -43,10 +43,10 @@
     <!-- Page Header -->
 
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fs-22 mb-0">Create New Permission</h2>
+        <h2 class="fs-22 mb-0">Edit Permission</h2>
 
         <div class="d-flex align-items-center gap-2">
-            <a href="{{ route('admin.permissions.index') }}"
+            <a href="{{ route('admin.permissions.show', $permission->permission_id) }}"
                 class="btn btn-outline-secondary">
                 <i class="ti ti-arrow-left me-2"></i>
                 Back
@@ -73,8 +73,9 @@
     @endif
 
     <!-- Container -->
-    <form action="{{ route('admin.permissions.store') }}" method="POST" id="permissionForm">
+    <form action="{{ route('admin.permissions.update', $permission->permission_id) }}" method="POST" id="permissionForm">
         @csrf
+        @method('PUT')
 
         <div class="row g-4 mb-4">
             <div class="col-lg-6">
@@ -94,7 +95,7 @@
                                    class="form-control @error('permission_name') is-invalid @enderror" 
                                    id="permission_name" 
                                    name="permission_name" 
-                                   value="{{ old('permission_name') }}" 
+                                   value="{{ old('permission_name', $permission->permission_name) }}" 
                                    placeholder="e.g., Manage Users"
                                    autocomplete="off"
                                    required>
@@ -116,7 +117,7 @@
                                    class="form-control @error('permission_code') is-invalid @enderror" 
                                    id="permission_code" 
                                    name="permission_code" 
-                                   value="{{ old('permission_code') }}" 
+                                   value="{{ old('permission_code', $permission->permission_code) }}" 
                                    placeholder="e.g., users.manage"
                                    required>
 
@@ -138,7 +139,7 @@
                                        class="form-control @error('module_name') is-invalid @enderror" 
                                        id="module_name" 
                                        name="module_name" 
-                                       value="{{ old('module_name') }}" 
+                                       value="{{ old('module_name', $permission->module_name) }}" 
                                        list="modulesList"
                                        placeholder="e.g., User Management"
                                        required>
@@ -194,7 +195,7 @@
                                            class="form-check-input crud-checkbox d-none" 
                                            id="can_create" 
                                            name="can_create"
-                                           {{ old('can_create') ? 'checked' : '' }}>
+                                           {{ old('can_create', $permission->can_create) ? 'checked' : '' }}>
                                     <i class="ti ti-plus text-success fs-36"></i>
                                     <h6 class="mb-1">Create</h6>
                                     <small class="text-muted">Add new records</small>
@@ -208,7 +209,7 @@
                                            class="form-check-input crud-checkbox d-none" 
                                            id="can_read" 
                                            name="can_read"
-                                           {{ old('can_read') ? 'checked' : '' }}>
+                                           {{ old('can_read', $permission->can_read) ? 'checked' : '' }}>
                                     <i class="ti ti-eye text-info fs-36"></i>
                                     <h6 class="mb-1">Read</h6>
                                     <small class="text-muted">View records</small>
@@ -222,7 +223,7 @@
                                            class="form-check-input crud-checkbox d-none" 
                                            id="can_update" 
                                            name="can_update"
-                                           {{ old('can_update') ? 'checked' : '' }}>
+                                           {{ old('can_update', $permission->can_update) ? 'checked' : '' }}>
                                     <i class="ti ti-pencil text-warning fs-36"></i>
                                     <h6 class="mb-1">Update</h6>
                                     <small class="text-muted">Modify records</small>
@@ -236,7 +237,7 @@
                                            class="form-check-input crud-checkbox d-none" 
                                            id="can_delete" 
                                            name="can_delete"
-                                           {{ old('can_delete') ? 'checked' : '' }}>
+                                           {{ old('can_delete', $permission->can_delete) ? 'checked' : '' }}>
                                     <i class="ti ti-trash text-danger fs-36"></i>
                                     <h6 class="mb-1">Delete</h6>
                                     <small class="text-muted">Remove records</small>
@@ -258,21 +259,21 @@
 
             <div class="col-12">
                 <div class="d-flex justify-content-between align-items-center">
-                    <a href="{{ route('admin.permissions.index') }}" 
+                    <a href="{{ route('admin.permissions.show', $permission->permission_id) }}" 
                         class="btn btn-outline-secondary">
                         <i class="ti ti-x me-2"></i>
                         Cancel
                     </a>
                     <button type="submit" class="btn btn-primary">
                         <i class="ti ti-check me-2"></i>
-                        Create Permission
+                        Update Permission
                     </button>
                 </div>
             </div>
         </div>
     </form>
     <!-- Container -->
-
+    
 @endsection
 
 @section('scripts')

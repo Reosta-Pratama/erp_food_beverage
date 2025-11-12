@@ -23,9 +23,6 @@
                     <li class="breadcrumb-item">
                         <a href="javascript:void(0);">Roles</a>
                     </li>
-                    <li class="breadcrumb-item">
-                        <a href="javascript:void(0);">{{ $role->role_name }}</a>
-                    </li>
                     <li class="breadcrumb-item active" aria-current="page">Edit Role</li>
                 </ol>
             </nav>
@@ -47,7 +44,7 @@
 
     {{-- Error Messages --}}
     @if($errors->any())
-        <div class="alert alert-danger alert-dismissible fade show">
+        <div class="alert alert-danger alert-dismissible d-flex align-items-center fade show">
             <h6 class="d-flex align-items-center">
                 <i class="ti ti-exclamation-circle fs-18 me-2"></i>
                 Please fix the following errors:

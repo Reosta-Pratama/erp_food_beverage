@@ -24,7 +24,7 @@
     <!-- Page Header -->
 
     @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
+        <div class="alert alert-success alert-dismissible d-flex align-items-center d-flex align-items-center fade show mb-3" role="alert">
             <i class="ti ti-circle-check fs-18 me-2"></i>
             {{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert">
@@ -34,7 +34,7 @@
     @endif
 
     @if(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+        <div class="alert alert-danger alert-dismissible d-flex align-items-center fade show mb-3" role="alert">
             <i class="ti ti-exclamation-circle fs-18 me-2"></i>
             {{ session('error') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert">

@@ -224,6 +224,13 @@ class PermissionController extends Controller
      */
     public function update(Request $request, $permissionId)
     {
+        $request->merge([
+            'can_create' => $request->has('can_create'),
+            'can_read'   => $request->has('can_read'),
+            'can_update' => $request->has('can_update'),
+            'can_delete' => $request->has('can_delete'),
+        ]);
+
         $validated = $request->validate([
             'module_name' => ['required', 'string', 'max:100'],
             'permission_name' => ['required', 'string', 'max:150'],
@@ -232,24 +239,52 @@ class PermissionController extends Controller
             'can_read' => ['boolean'],
             'can_update' => ['boolean'],
             'can_delete' => ['boolean'],
+        ], [
+            'module_name.required' => 'Please enter the module name.',
+            'module_name.string' => 'The module name must be a valid text.',
+            'module_name.max' => 'The module name cannot be longer than 100 characters.',
+
+            'permission_name.required' => 'Please enter the permission name.',
+            'permission_name.string' => 'The permission name must be a valid text.',
+            'permission_name.max' => 'The permission name cannot be longer than 150 characters.',
+
+            'permission_code.required' => 'Please enter the permission code.',
+            'permission_code.string' => 'The permission code must be a valid text.',
+            'permission_code.max' => 'The permission code cannot be longer than 150 characters.',
+            'permission_code.unique' => 'This permission code is already in use. Please choose a different one.',
+
+            'can_create.boolean' => 'The "Create" value must be true or false.',
+            'can_read.boolean' => 'The "Read" value must be true or false.',
+            'can_update.boolean' => 'The "Update" value must be true or false.',
+            'can_delete.boolean' => 'The "Delete" value must be true or false.',
         ]);
-        
-        DB::table('permissions')
-            ->where('permission_id', $permissionId)
-            ->update([
-                'module_name' => $validated['module_name'],
-                'permission_name' => $validated['permission_name'],
-                'permission_code' => $validated['permission_code'],
-                'can_create' => $request->has('can_create') ? 1 : 0,
-                'can_read' => $request->has('can_read') ? 1 : 0,
-                'can_update' => $request->has('can_update') ? 1 : 0,
-                'can_delete' => $request->has('can_delete') ? 1 : 0,
-                'updated_at' => now(),
-            ]);
-        
-        return redirect()
-            ->route('admin.permissions.index')
-            ->with('success', 'Permission updated successfully');
+
+        DB::beginTransaction();
+        try {
+            DB::table('permissions')
+                ->where('permission_id', $permissionId)
+                ->update([
+                    'module_name' => $validated['module_name'],
+                    'permission_name' => $validated['permission_name'],
+                    'permission_code' => $validated['permission_code'],
+                    'can_create' => $validated['can_create'] ? 1 : 0,
+                    'can_read' => $validated['can_read'] ? 1 : 0,
+                    'can_update' => $validated['can_update'] ? 1 : 0,
+                    'can_delete' => $validated['can_delete'] ? 1 : 0,
+                    'updated_at' => now(),
+                ]);
+
+            DB::commit();
+            
+            return redirect()
+                ->route('admin.permissions.index')
+                ->with('success', 'Permission updated successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()
+                ->withInput()
+                ->with('error', 'Failed to update permission: ' . $e->getMessage());
+        }
     }
     
     /**
@@ -265,13 +300,21 @@ class PermissionController extends Controller
         if ($roleCount > 0) {
             return back()->with('error', 'Cannot delete permission that is assigned to roles');
         }
+
+        DB::beginTransaction();
+        try {
+            DB::table('permissions')
+                ->where('permission_id', $permissionId)
+                ->delete();
+
+            DB::commit();
         
-        DB::table('permissions')
-            ->where('permission_id', $permissionId)
-            ->delete();
-        
-        return redirect()
-            ->route('admin.permissions.index')
-            ->with('success', 'Permission deleted successfully');
+            return redirect()
+                ->route('admin.permissions.index')
+                ->with('success', 'Permission deleted successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Failed to delete permission: ' . $e->getMessage());
+        }
     }
 }
