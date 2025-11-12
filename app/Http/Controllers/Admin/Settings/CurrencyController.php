@@ -3,17 +3,22 @@
 namespace App\Http\Controllers\Admin\Settings;
 
 use App\Http\Controllers\Controller;
+use App\LogsActivity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class CurrencyController extends Controller
 {
     //
+    use LogsActivity;
+    
     /**
      * List currencies
      */
     public function index()
     {
+        $this->logView('Settings - Currencies', 'Viewed currencies list');
+        
         $currencies = DB::table('currencies')
             ->orderByDesc('is_base_currency')
             ->orderBy('currency_code')
@@ -60,7 +65,7 @@ class CurrencyController extends Controller
                     ->update(['is_base_currency' => false]);
             }
 
-            DB::table('currencies')->insert([
+            $currencyId = DB::table('currencies')->insertGetId([
                 'currency_code' => strtoupper($validated['currency_code']),
                 'currency_name' => $validated['currency_name'],
                 'symbol' => $validated['symbol'] ?? null,
@@ -69,6 +74,9 @@ class CurrencyController extends Controller
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+
+            // Log CREATE
+            $this->logCreate('Settings - Currencies', 'currencies', $currencyId, $validated);
 
             DB::commit();
             
@@ -147,6 +155,15 @@ class CurrencyController extends Controller
 
         DB::beginTransaction();
         try {
+            // Capture old data
+            $oldData = [
+                'currency_code' => $currency->currency_code,
+                'currency_name' => $currency->currency_name,
+                'symbol' => $currency->symbol,
+                'exchange_rate' => $currency->exchange_rate,
+                'is_base_currency' => $currency->is_base_currency,
+            ];
+
             // If this is set as base currency, unset others
             if ($request->boolean('is_base_currency')) {
                 DB::table('currencies')
@@ -165,6 +182,9 @@ class CurrencyController extends Controller
                     'is_base_currency' => $request->boolean('is_base_currency'),
                     'updated_at' => now(),
                 ]);
+
+            // Log UPDATE
+            $this->logUpdate('Settings - Currencies', 'currencies', $currency->currency_id, $oldData, $validated);
 
             DB::commit();
             
@@ -200,9 +220,20 @@ class CurrencyController extends Controller
 
         DB::beginTransaction();
         try {
+            // Capture data before deletion
+            $oldData = [
+                'currency_code' => $currency->currency_code,
+                'currency_name' => $currency->currency_name,
+                'symbol' => $currency->symbol,
+                'exchange_rate' => $currency->exchange_rate,
+            ];
+
             DB::table('currencies')
                 ->where('currency_id', $currency->currency_id)
                 ->delete();
+
+            // Log DELETE
+            $this->logDelete('Settings - Currencies', 'currencies', $currency->currency_id, $oldData);
 
             DB::commit();
             
@@ -244,6 +275,13 @@ class CurrencyController extends Controller
                     'exchange_rate' => 1.000000,
                     'updated_at' => now(),
                 ]);
+
+            // Log special action
+            $this->logActivity(
+                'Updated',
+                "Set {$currency->currency_name} ({$currency->currency_code}) as base currency",
+                'Settings - Currencies'
+            );
 
             DB::commit();
             
