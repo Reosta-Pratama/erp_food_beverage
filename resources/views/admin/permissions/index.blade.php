@@ -166,11 +166,11 @@
 
                 <div class="card-footer">
                     <h6 class="mb-3">
-                        <i class="bi bi-list-ul me-2"></i>
+                        <i class="ti ti-list me-2"></i>
                         Quick Filter
                     </h6>
                     
-                    <div class="d-flex flex-wrap gap-1">
+                    <div class="d-flex flex-wrap gap-2">
                         @foreach($modules as $module)
                             <a href="{{ route('admin.permissions.index', ['module' => $module]) }}" 
                                 class="badge bg-{{ request('module') === $module ? 'success' : 'secondary' }} text-decoration-none">

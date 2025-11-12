@@ -100,14 +100,24 @@ class ActivityLogController extends Controller
         ]);
         
         $cutoffDate = now()->subDays($validated['days']);
-        
-        // Use direct SQL for better performance on large datasets
-        $deletedCount = DB::delete(
-            'DELETE FROM activity_logs WHERE activity_timestamp < ?',
-            [$cutoffDate]
-        );
-        
-        return back()->with('success', "Successfully deleted {$deletedCount} activity logs older than {$validated['days']} days");
+
+        DB::beginTransaction();
+        try {
+            // Use direct SQL for better performance on large datasets
+            $deletedCount = DB::delete(
+                'DELETE FROM activity_logs WHERE activity_timestamp < ?',
+                [$cutoffDate]
+            );
+
+            DB::commit();
+            
+            return back()
+                ->with('success', "Successfully deleted {$deletedCount} activity logs older than {$validated['days']} days");
+                
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Failed to delete activity: ' . $e->getMessage());
+        }
     }
     
     /**
