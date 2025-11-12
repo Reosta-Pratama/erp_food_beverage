@@ -8,24 +8,6 @@
     <link rel="stylesheet" href="{{ asset('assets/plugin/flatpickr/flatpickr.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugin/flatpickr/flatpickr.min.css') }}">
 
-    <style>
-        .timeline-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #0d6efd;
-            position: relative;
-        }
-        .timeline-dot::before {
-            content: '';
-            position: absolute;
-            width: 2px;
-            height: 100%;
-            background: #dee2e6;
-            left: 5px;
-            top: 12px;
-        }
-    </style>
 @endsection
 
 @section('content')
@@ -286,11 +268,6 @@
                                 <div class="card custom mb-0">
                                     <div class="card-body">
                                         <div class="d-flex">
-                                            {{-- Timeline Dot --}}
-                                            <div class="me-3">
-                                                <div class="timeline-dot"></div>
-                                            </div>
-
                                             {{-- Log Content --}}
                                             <div class="flex-grow-1">
                                                 <div class="d-flex justify-content-between align-items-start mb-2">

@@ -67,10 +67,10 @@
                                 </a>
                                 <ul class="menu-item-child child2">
                                     <li class="menu-item">
-                                        <a href="{{ route('admin.logs.audit.index') }}" class="menu-link">Audit Log</a>
+                                        <a href="{{ route('admin.logs.activity.index') }}" class="menu-link">Activity Log</a>
                                     </li>
                                     <li class="menu-item">
-                                        <a href="{{ route('admin.logs.activity.index') }}" class="menu-link">Activity Log</a>
+                                        <a href="{{ route('admin.logs.audit.index') }}" class="menu-link">Audit Log</a>
                                     </li>
                                 </ul>
                             </li> 

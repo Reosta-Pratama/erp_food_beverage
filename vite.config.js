@@ -21,6 +21,7 @@ export default defineConfig({
                     'resources/assets/js/layouts/sidebar.js',
 
                         'resources/assets/js/erp/activity-log.js', 
+                        'resources/assets/js/erp/audit-log.js', 
                         'resources/assets/js/erp/create-new-permission.js',
                         'resources/assets/js/erp/create-new-role.js',
                         'resources/assets/js/erp/edit-role.js',
