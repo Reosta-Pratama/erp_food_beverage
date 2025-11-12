@@ -1327,8 +1327,8 @@ input[type="range"]::-webkit-slider-runnable-track {
 }
 /* === Custom Search === */
 
-input:not([type="checkbox"]):not([type="radio"]) {
-    &:read-only {
-        background-color: $light !important;
-    }
-}
+// input:not([type="checkbox"]):not([type="radio"]) {
+//     &:read-only {
+//         background-color: $light !important;
+//     }
+// }

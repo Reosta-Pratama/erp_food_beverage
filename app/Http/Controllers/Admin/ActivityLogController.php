@@ -29,7 +29,17 @@ class ActivityLogController extends Controller
                 'roles.role_name',
                 'roles.role_code'
             );
-        
+
+        // Extract date_from and date_to from daterange input
+        if ($request->filled('daterange')) {
+            [$dateFrom, $dateTo] = array_map('trim', explode('to', $request->daterange . ' to ')); 
+            
+            $request->merge([
+                'date_from' => $dateFrom ?: null,
+                'date_to' => $dateTo ?: null,
+            ]);
+        }
+
         // Filter by user
         if ($request->filled('user_id')) {
             $query->where('activity_logs.user_id', $request->user_id);

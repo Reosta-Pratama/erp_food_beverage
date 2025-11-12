@@ -3,63 +3,29 @@
 ])
 
 @section('styles')
-<style>
-    .log-card {
-        transition: all 0.2s ease;
-        border-left: 3px solid transparent;
-    }
-    .log-card:hover {
-        background-color: #f8f9fa;
-        border-left-color: #0d6efd;
-        transform: translateX(3px);
-    }
-    .activity-icon {
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 8px;
-        font-size: 1.2rem;
-    }
-    .timeline-dot {
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        background: #0d6efd;
-        position: relative;
-    }
-    .timeline-dot::before {
-        content: '';
-        position: absolute;
-        width: 2px;
-        height: 100%;
-        background: #dee2e6;
-        left: 5px;
-        top: 12px;
-    }
-    .filter-badge {
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
-    .filter-badge:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .stats-card {
-        border-left: 4px solid;
-    }
-    .stats-card.primary { border-left-color: #0d6efd; }
-    .stats-card.success { border-left-color: #198754; }
-    .stats-card.warning { border-left-color: #ffc107; }
-    .stats-card.danger { border-left-color: #dc3545; }
-    
-    .log-type-badge {
-        font-size: 0.7rem;
-        padding: 0.3rem 0.6rem;
-        font-weight: 600;
-    }
-</style>
+
+    <!-- FlatPickr CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/plugin/flatpickr/flatpickr.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/plugin/flatpickr/flatpickr.min.css') }}">
+
+    <style>
+        .timeline-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #0d6efd;
+            position: relative;
+        }
+        .timeline-dot::before {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            background: #dee2e6;
+            left: 5px;
+            top: 12px;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -204,7 +170,19 @@
                     {{-- Date Range --}}
                     <div class="mb-3">
                         <label class="form-label fw-bold">Date Range</label>
-                        <input type="date" 
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-text text-muted"> 
+                                    <i class="ti ti-calendar"></i> 
+                                </div>
+                                <input name="daterange"
+                                    date_from=@json(request('date_from'))
+                                    date_to=@json(request('date_to'))
+                                    type="text" class="form-control daterange" placeholder="Date range...">
+                            </div>
+                        </div>
+                        
+                        {{-- <input type="date" 
                                 class="form-control mb-2" 
                                 name="date_from" 
                                 value="{{ request('date_from') }}"
@@ -213,7 +191,7 @@
                                 class="form-control" 
                                 name="date_to" 
                                 value="{{ request('date_to') }}"
-                                placeholder="To">
+                                placeholder="To"> --}}
                     </div>
 
                     {{-- User Filter --}}
@@ -528,23 +506,10 @@
 @endsection
 
 @section('scripts')
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Confirm before clearing logs
-        document.querySelector('#clearModal form').addEventListener('submit', function(e) {
-            const days = document.getElementById('days').value;
-            if (days && !confirm(`Are you sure you want to delete all activity logs older than ${days} days? This action cannot be undone.`)) {
-                e.preventDefault();
-            }
-        });
-        
-        // Quick filter badges
-        document.querySelectorAll('.filter-badge').forEach(badge => {
-            badge.addEventListener('click', function(e) {
-                e.preventDefault();
-                window.location.href = this.href;
-            });
-        });
-    });
-    </script>
+
+    <!-- FlatPickr JS -->
+    <script src="{{ asset('assets/plugin/flatpickr/flatpickr.min.js') }}"></script>
+
+    @vite(['resources/assets/js/erp/activity-log.js'])
+
 @endsection
