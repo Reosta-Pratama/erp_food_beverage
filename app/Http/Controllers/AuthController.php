@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\LogsActivity;
 use App\Models\UserManagement\ActivityLog;
 use App\Models\UserManagement\User;
 use Illuminate\Http\Request;
@@ -11,6 +12,8 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     //
+    use LogsActivity;
+    
     /**
      * Display the login form or redirect authenticated users to their dashboard.
      */
@@ -53,6 +56,13 @@ class AuthController extends Controller
 
         // If user not found
         if (!$user) {
+            // Log failed login attempt 
+            $this->logActivity(
+                'Failed Login',
+                "No account found with that email address.: {$validatedData['email']}",
+                'Authentication'
+            );
+            
             return back()
                 ->withErrors(['email' => 'No account found with that email address.'])
                 ->withInput($request->only('email'));
@@ -60,6 +70,13 @@ class AuthController extends Controller
 
         // If password does not match
         if (!Hash::check($validatedData['password'], $user->password_hash)) {
+            // Log failed login attempt 
+            $this->logActivity(
+                'Failed Login',
+                "Failed login attempt for username: {$user->username}",
+                'Authentication'
+            );
+            
             return back()
                 ->withErrors(['password' => 'The password you entered is incorrect.'])
                 ->withInput($request->only('email'));
@@ -73,6 +90,9 @@ class AuthController extends Controller
 
         // Regenerate session for security
         $request->session()->regenerate();
+
+        // Log successful login
+        $this->logLogin();
 
         return $this->redirectToDashboard();
     }
@@ -90,6 +110,9 @@ class AuthController extends Controller
             'module_name' => 'Authentication',
             'activity_timestamp' => now(),
         ]);
+
+        // Log before logout (karena Auth::logout() akan clear session)
+        $this->logLogout();
 
         Auth::logout();
 

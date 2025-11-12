@@ -16,7 +16,7 @@ class UserController extends Controller
     /**
      * Display a listing of users
      */
-    public function index(Request $request)
+    public function index(Request $request) 
     {
         $query = DB::table('users')
             ->join('roles', 'users.role_id', '=', 'roles.role_id')
