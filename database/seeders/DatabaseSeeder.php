@@ -21,6 +21,9 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             RolePermissionSeeder::class,
             UserSeeder::class, 
+
+            // Sprint 2: Basic Master Data
+            SettingsModuleSeeder::class, 
         ]);
     }
 }

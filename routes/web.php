@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AuditLogController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\Settings\CompanyProfileController;
 use App\Http\Controllers\Admin\Settings\CurrencyController;
 use App\Http\Controllers\Admin\Settings\TaxRateController;
 use App\Http\Controllers\Admin\Settings\UnitOfMeasureController;
@@ -138,12 +139,12 @@ Route::middleware('auth')->group(function () {
             Route::prefix('settings')->name('settings.')->group(function () {
                 
                 // Company Profile (Single Record)
-                // Route::prefix('company-profile')->name('company-profile.')->group(function () {
-                //     Route::get('/', [CompanyProfileController::class, 'index'])->name('index');
-                //     Route::get('/edit', [CompanyProfileController::class, 'edit'])->name('edit');
-                //     Route::put('/', [CompanyProfileController::class, 'update'])->name('update');
-                //     Route::delete('/logo', [CompanyProfileController::class, 'deleteLogo'])->name('delete-logo');
-                // });
+                Route::prefix('company-profile')->name('company-profile.')->group(function () {
+                    Route::get('/', [CompanyProfileController::class, 'index'])->name('index');
+                    Route::get('/edit', [CompanyProfileController::class, 'edit'])->name('edit');
+                    Route::put('/', [CompanyProfileController::class, 'update'])->name('update');
+                    Route::delete('/logo', [CompanyProfileController::class, 'deleteLogo'])->name('delete-logo');
+                });
                 
                 // Units of Measure
                 Route::prefix('uom')->name('uom.')->group(function () {
