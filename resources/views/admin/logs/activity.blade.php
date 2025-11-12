@@ -181,23 +181,14 @@
                                     type="text" class="form-control daterange" placeholder="Date range...">
                             </div>
                         </div>
-                        
-                        {{-- <input type="date" 
-                                class="form-control mb-2" 
-                                name="date_from" 
-                                value="{{ request('date_from') }}"
-                                placeholder="From">
-                        <input type="date" 
-                                class="form-control" 
-                                name="date_to" 
-                                value="{{ request('date_to') }}"
-                                placeholder="To"> --}}
                     </div>
 
                     {{-- User Filter --}}
                     <div class="mb-3">
                         <label class="form-label fw-bold">User</label>
-                        <select class="form-select" name="user_id">
+                        <select
+                            class="form-control single-select"
+                            name="user_id">
                             <option value="">All Users</option>
                             @foreach($users as $user)
                                 <option value="{{ $user->user_id }}" {{ request('user_id') == $user->user_id ? 'selected' : '' }}>
@@ -210,7 +201,9 @@
                     {{-- Activity Type Filter --}}
                     <div class="mb-3">
                         <label class="form-label fw-bold">Activity Type</label>
-                        <select class="form-select" name="activity_type">
+                        <select
+                            class="form-control single-select"
+                            name="activity_type">
                             <option value="">All Types</option>
                             @foreach($activityTypes as $type => $count)
                                 <option value="{{ $type }}" {{ request('activity_type') === $type ? 'selected' : '' }}>
@@ -223,7 +216,9 @@
                     {{-- Module Filter --}}
                     <div class="mb-3">
                         <label class="form-label fw-bold">Module</label>
-                        <select class="form-select" name="module_name">
+                        <select
+                            class="form-control single-select"
+                            name="module_name">
                             <option value="">All Modules</option>
                             @foreach($modules as $module => $count)
                                 <option value="{{ $module }}" {{ request('module_name') === $module ? 'selected' : '' }}>
@@ -470,7 +465,9 @@
                         <label for="days" class="form-label">
                             Delete logs older than: <span class="text-danger">*</span>
                         </label>
-                        <select class="form-select" name="days" id="days" required>
+                        <select
+                            class="form-control single-select"
+                            name="days" required>
                             <option value="">Select period...</option>
                             <option value="30">30 days (1 month)</option>
                             <option value="60">60 days (2 months)</option>

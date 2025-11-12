@@ -10,12 +10,20 @@ document.addEventListener('DOMContentLoaded', function () {
             // Determine default date range (only if both have value)
             const defaultDates = dateFrom && dateTo ? [dateFrom, dateTo] : null;
 
-            // Initialize Flatpickr
             flatpickr(element, {
                 mode: "range",            
                 dateFormat: "Y-m-d",      
                 disableMobile: true,      
                 defaultDate: defaultDates 
+            });
+        });
+    }
+
+    const dropdownElements = document.querySelectorAll('.single-select');
+    if (dropdownElements.length > 0) {
+        dropdownElements.forEach((dropdown) => {
+            new Choices(dropdown, {
+                searchEnabled: true,
             });
         });
     }
