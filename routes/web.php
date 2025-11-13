@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\Settings\TaxRateController;
 use App\Http\Controllers\Admin\Settings\UnitOfMeasureController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Products\ProductCategoryController;
+use App\Http\Controllers\Products\ProductController;
 use App\Http\Controllers\TemplateController;
 use Illuminate\Support\Facades\Route;
 
@@ -186,6 +188,39 @@ Route::middleware('auth')->group(function () {
                 });
             });
         });
+
+    /*
+    |--------------------------------------------------------------------------
+    | PRODUCT MANAGEMENT MODULE
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('products')->name('products.')->group(function () {
+        
+        // Product Categories
+        Route::prefix('categories')->name('categories.')->group(function () {
+            Route::get('/', [ProductCategoryController::class, 'index'])->name('index');
+            Route::get('/create', [ProductCategoryController::class, 'create'])->name('create');
+            Route::post('/', [ProductCategoryController::class, 'store'])->name('store');
+            Route::get('/{category}', [ProductCategoryController::class, 'show'])->name('show');
+            Route::get('/{category}/edit', [ProductCategoryController::class, 'edit'])->name('edit');
+            Route::put('/{category}', [ProductCategoryController::class, 'update'])->name('update');
+            Route::delete('/{category}', [ProductCategoryController::class, 'destroy'])->name('destroy');
+        });
+        
+        // Products
+        Route::get('/', [ProductController::class, 'index'])->name('index');
+        Route::get('/create', [ProductController::class, 'create'])->name('create');
+        Route::post('/', [ProductController::class, 'store'])->name('store');
+        Route::get('/export', [ProductController::class, 'export'])->name('export');
+        Route::get('/{product}', [ProductController::class, 'show'])->name('show');
+        Route::get('/{product}/edit', [ProductController::class, 'edit'])->name('edit');
+        Route::put('/{product}', [ProductController::class, 'update'])->name('update');
+        Route::delete('/{product}', [ProductController::class, 'destroy'])->name('destroy');
+        
+        // Additional actions
+        Route::patch('/{product}/toggle-status', [ProductController::class, 'toggleStatus'])->name('toggle-status');
+        Route::post('/bulk-update-prices', [ProductController::class, 'bulkUpdatePrices'])->name('bulk-update-prices');
+    });
 
     /*
     |--------------------------------------------------------------------------
