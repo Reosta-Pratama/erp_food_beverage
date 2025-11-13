@@ -11,6 +11,10 @@ use App\Http\Controllers\Admin\Settings\TaxRateController;
 use App\Http\Controllers\Admin\Settings\UnitOfMeasureController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HRM\DepartmentController;
+use App\Http\Controllers\HRM\EmployeeController;
+use App\Http\Controllers\HRM\EmployeeSelfServiceController;
+use App\Http\Controllers\HRM\PositionController;
 use App\Http\Controllers\Products\ProductCategoryController;
 use App\Http\Controllers\Products\ProductController;
 use App\Http\Controllers\TemplateController;
@@ -220,6 +224,69 @@ Route::middleware('auth')->group(function () {
         // Additional actions
         Route::patch('/{product}/toggle-status', [ProductController::class, 'toggleStatus'])->name('toggle-status');
         Route::post('/bulk-update-prices', [ProductController::class, 'bulkUpdatePrices'])->name('bulk-update-prices');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | HRM MODULE (Admin Access)
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('hrm')->name('hrm.')->group(function () {
+        
+        // Departments
+        Route::prefix('departments')->name('departments.')->group(function () {
+            Route::get('/', [DepartmentController::class, 'index'])->name('index');
+            Route::get('/create', [DepartmentController::class, 'create'])->name('create');
+            Route::post('/', [DepartmentController::class, 'store'])->name('store');
+            Route::get('/{department}', [DepartmentController::class, 'show'])->name('show');
+            Route::get('/{department}/edit', [DepartmentController::class, 'edit'])->name('edit');
+            Route::put('/{department}', [DepartmentController::class, 'update'])->name('update');
+            Route::delete('/{department}', [DepartmentController::class, 'destroy'])->name('destroy');
+            
+            // Additional actions
+            Route::post('/{department}/assign-manager', [DepartmentController::class, 'assignManager'])->name('assign-manager');
+        });
+        
+        // Positions
+        Route::prefix('positions')->name('positions.')->group(function () {
+            Route::get('/', [PositionController::class, 'index'])->name('index');
+            Route::get('/create', [PositionController::class, 'create'])->name('create');
+            Route::post('/', [PositionController::class, 'store'])->name('store');
+            Route::get('/{position}', [PositionController::class, 'show'])->name('show');
+            Route::get('/{position}/edit', [PositionController::class, 'edit'])->name('edit');
+            Route::put('/{position}', [PositionController::class, 'update'])->name('update');
+            Route::delete('/{position}', [PositionController::class, 'destroy'])->name('destroy');
+        });
+        
+        // Employees
+        Route::prefix('employees')->name('employees.')->group(function () {
+            Route::get('/', [EmployeeController::class, 'index'])->name('index');
+            Route::get('/create', [EmployeeController::class, 'create'])->name('create');
+            Route::post('/', [EmployeeController::class, 'store'])->name('store');
+            Route::get('/export', [EmployeeController::class, 'export'])->name('export');
+            Route::get('/{employee}', [EmployeeController::class, 'show'])->name('show');
+            Route::get('/{employee}/edit', [EmployeeController::class, 'edit'])->name('edit');
+            Route::put('/{employee}', [EmployeeController::class, 'update'])->name('update');
+            Route::delete('/{employee}', [EmployeeController::class, 'destroy'])->name('destroy');
+            
+            // Additional actions
+            Route::post('/{employee}/terminate', [EmployeeController::class, 'terminate'])->name('terminate');
+        });
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | EMPLOYEE SELF SERVICE (All Authenticated Users with Employee Link)
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('employee')->name('employee.')->middleware('auth')->group(function () {
+        Route::get('/dashboard', [EmployeeSelfServiceController::class, 'dashboard'])->name('dashboard');
+        Route::get('/profile', [EmployeeSelfServiceController::class, 'profile'])->name('profile');
+        Route::put('/profile', [EmployeeSelfServiceController::class, 'updateProfile'])->name('profile.update');
+        Route::get('/attendance', [EmployeeSelfServiceController::class, 'attendance'])->name('attendance');
+        Route::get('/leaves', [EmployeeSelfServiceController::class, 'leaves'])->name('leaves');
+        Route::post('/leaves/request', [EmployeeSelfServiceController::class, 'requestLeave'])->name('leaves.request');
+        Route::get('/payslips', [EmployeeSelfServiceController::class, 'payslips'])->name('payslips');
     });
 
     /*

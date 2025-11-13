@@ -24,6 +24,11 @@ class DatabaseSeeder extends Seeder
 
             // Sprint 2: Basic Master Data
             SettingsModuleSeeder::class, 
+            // Sprint 2: Product Management
+            ProductManagementSeeder::class,
+            
+            // Sprint 3: HR Foundation
+            HRMModuleSeeder::class,
         ]);
     }
 }
