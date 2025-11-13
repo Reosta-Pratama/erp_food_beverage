@@ -70,7 +70,7 @@
                                 </a>
 
                                 <ul
-                                    class="dropdown-menu dropdown-menu-end"
+                                    class="profile-dropdown dropdown-menu dropdown-menu-end"
                                     aria-labelledby="dropdownMenuProfile">
                                     <li class="info-profile">
                                         <div class="d-flex align-items-center gap-2">

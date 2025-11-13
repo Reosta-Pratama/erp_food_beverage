@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\LogsActivity;
 use App\Models\UserManagement\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -10,11 +11,15 @@ use Illuminate\Support\Facades\DB;
 class RoleController extends Controller
 {
     //
+    use LogsActivity;
+    
     /**
      * List roles with counts
      */
     public function index()
     {
+        $this->logView('User Management - Roles', 'Viewed roles list');
+
         $roles = DB::table('roles')
             ->leftJoin('users', 'roles.role_id', '=', 'users.role_id')
             ->leftJoin('role_permissions', 'roles.role_id', '=', 'role_permissions.role_id')
@@ -106,6 +111,19 @@ class RoleController extends Controller
 
                 DB::table('role_permissions')->insert($permissionData);
             }
+
+            // Log CREATE
+            $this->logCreate(
+                'User Management - Roles',
+                'roles',
+                $roleId,
+                [
+                    'role_name' => $validated['role_name'],
+                    'role_code' => $validated['role_code'],
+                    'description' => $validated['description'] ?? null,
+                    'permissions_count' => count($validated['permissions'] ?? []),
+                ]
+            );
             
             DB::commit();
             
@@ -146,6 +164,12 @@ class RoleController extends Controller
         if (!$role) {
             abort(404, 'Role not found');
         }
+
+        // Log VIEW
+        $this->logView(
+            'User Management - Roles',
+            "Viewed role: {$role->role_name} (Code: {$roleCode})"
+        );
         
         // Get permissions grouped by module
         $permissions = DB::table('permissions')
@@ -200,21 +224,27 @@ class RoleController extends Controller
      */
     public function update(Request $request, $roleCode)
     {
+        $role = DB::table('roles')->where('role_code', $roleCode)->first();
+        
+        if (!$role) {
+            abort(404, 'Role not found');
+        }
+
         $validated = $request->validate([
-            'role_name' => ['required', 'string', 'max:100', 'unique:roles,role_name,' . $roleCode . ',role_code'],
-            'role_code' => ['required', 'string', 'max:100', 'unique:roles,role_code,' . $roleCode . ',role_code', 'alpha_dash'],
+            'role_name' => ['required', 'string', 'max:100', 'unique:roles,role_name,' . $role->role_id . ',role_id'],
+            'role_code' => ['required', 'string', 'max:100', 'unique:roles,role_code,' . $role->role_id . ',role_id', 'alpha_dash'],
             'description' => ['nullable', 'string'],
             'permissions' => ['nullable', 'array'],
             'permissions.*' => ['exists:permissions,permission_id'],
         ], [
             'role_name.required' => 'Please enter a role name.',
             'role_name.string' => 'The role name must be valid text.',
-            'role_name.max' => 'The role name can’t be longer than 100 characters.',
+            'role_name.max' => "The role name can't be longer than 100 characters.",
             'role_name.unique' => 'This role name is already in use. Please choose a different one.',
 
             'role_code.required' => 'Please enter a role code.',
             'role_code.string' => 'The role code must be valid text.',
-            'role_code.max' => 'The role code can’t be longer than 100 characters.',
+            'role_code.max' => "The role code can't be longer than 100 characters.",
             'role_code.unique' => 'This role code already exists. Please use another one.',
             'role_code.alpha_dash' => 'The role code may only contain letters, numbers, dashes, and underscores.',
 
@@ -226,12 +256,21 @@ class RoleController extends Controller
 
         DB::beginTransaction();
         try {
-            $roleId = DB::table('roles')
-                ->where('role_code', $roleCode)
-                ->value('role_id');
+            // Capture old data
+            $oldPermissions = DB::table('role_permissions')
+                ->where('role_id', $role->role_id)
+                ->pluck('permission_id')
+                ->toArray();
+
+            $oldData = [
+                'role_name' => $role->role_name,
+                'role_code' => $role->role_code,
+                'description' => $role->description,
+                'permissions_count' => count($oldPermissions),
+            ];
 
             DB::table('roles')
-                ->where('role_id', $roleId)
+                ->where('role_id', $role->role_id)
                 ->update([
                     'role_name' => $validated['role_name'],
                     'role_code' => $validated['role_code'],
@@ -240,12 +279,12 @@ class RoleController extends Controller
                 ]);
 
             // Sync permissions
-            DB::table('role_permissions')->where('role_id', $roleId)->delete();
+            DB::table('role_permissions')->where('role_id', $role->role_id)->delete();
             
             if (!empty($validated['permissions'])) {
-                $permissionData = array_map(function($permId) use ($roleId) {
+                $permissionData = array_map(function($permId) use ($role) {
                     return [
-                        'role_id' => $roleId,
+                        'role_id' => $role->role_id,
                         'permission_id' => $permId,
                         'created_at' => now(),
                         'updated_at' => now(),
@@ -254,6 +293,20 @@ class RoleController extends Controller
                 
                 DB::table('role_permissions')->insert($permissionData);
             }
+
+            // Log UPDATE
+            $this->logUpdate(
+                'User Management - Roles',
+                'roles',
+                $role->role_id,
+                $oldData,
+                [
+                    'role_name' => $validated['role_name'],
+                    'role_code' => $validated['role_code'],
+                    'description' => $validated['description'] ?? null,
+                    'permissions_count' => count($validated['permissions'] ?? []),
+                ]
+            );
             
             DB::commit();
             
@@ -293,8 +346,28 @@ class RoleController extends Controller
 
         DB::beginTransaction();
         try {
+            // Capture data before deletion
+            $permissionsCount = DB::table('role_permissions')
+                ->where('role_id', $role->role_id)
+                ->count();
+
+            $oldData = [
+                'role_name' => $role->role_name,
+                'role_code' => $role->role_code,
+                'description' => $role->description,
+                'permissions_count' => $permissionsCount,
+            ];
+
             DB::table('role_permissions')->where('role_id', $role->role_id)->delete();
             DB::table('roles')->where('role_id', $role->role_id)->delete();
+
+            // Log DELETE
+            $this->logDelete(
+                'User Management - Roles',
+                'roles',
+                $role->role_id,
+                $oldData
+            );
             
             DB::commit();
             

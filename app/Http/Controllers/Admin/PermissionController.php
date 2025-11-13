@@ -3,17 +3,22 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\LogsActivity as AppLogsActivity;
+use App\Traits\LogsActivity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class PermissionController extends Controller
 {
-    //
+    use AppLogsActivity;
+
     /**
      * List permissions with role count
      */
     public function index(Request $request)
     {
+        $this->logView('User Management - Permissions', 'Viewed permissions list');
+
         $query = DB::table('permissions')
             ->leftJoin('role_permissions', 'permissions.permission_id', '=', 'role_permissions.permission_id')
             ->select(
@@ -38,8 +43,7 @@ class PermissionController extends Controller
                 'permissions.can_update',
                 'permissions.can_delete',
                 'permissions.created_at'
-            )
-            ->orderByDesc('permissions.created_at');
+            );
         
         // Filter by module
         if ($request->filled('module')) {
@@ -57,7 +61,7 @@ class PermissionController extends Controller
         
         $permissions = $query->orderBy('permissions.module_name')
             ->orderBy('permissions.permission_name')
-            ->paginate(10);
+            ->paginate(50);
         
         // Get unique modules for filter
         $modules = DB::table('permissions')
@@ -98,7 +102,7 @@ class PermissionController extends Controller
         $validated = $request->validate([
             'module_name' => ['required', 'string', 'max:100'],
             'permission_name' => ['required', 'string', 'max:150'],
-            'permission_code' => ['required', 'string', 'max:150', 'unique:permissions,permission_code'],
+            'permission_code' => ['required', 'string', 'max:50', 'unique:permissions,permission_code'],
             'can_create' => ['boolean'],
             'can_read' => ['boolean'],
             'can_update' => ['boolean'],
@@ -114,7 +118,7 @@ class PermissionController extends Controller
 
             'permission_code.required' => 'The permission code is required.',
             'permission_code.string' => 'The permission code must be a valid text.',
-            'permission_code.max' => 'The permission code cannot exceed 150 characters.',
+            'permission_code.max' => 'The permission code cannot exceed 50 characters.',
             'permission_code.unique' => 'This permission code is already in use. Please choose another one.',
 
             'can_create.boolean' => 'The create permission value must be true or false.',
@@ -125,7 +129,7 @@ class PermissionController extends Controller
 
         DB::beginTransaction();
         try {
-            DB::table('permissions')->insert([
+            $permissionId = DB::table('permissions')->insertGetId([
                 'module_name' => $validated['module_name'],
                 'permission_name' => $validated['permission_name'],
                 'permission_code' => $validated['permission_code'],
@@ -136,6 +140,14 @@ class PermissionController extends Controller
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+
+            // Log CREATE
+            $this->logCreate(
+                'User Management - Permissions',
+                'permissions',
+                $permissionId,
+                $validated
+            );
             
             DB::commit();
 
@@ -143,7 +155,7 @@ class PermissionController extends Controller
                 ->route('admin.permissions.index')
                 ->with('success', 'Permission created successfully');
         } catch (\Exception $e) {
-             DB::rollBack();
+            DB::rollBack();
             return back()
                 ->withInput()
                 ->with('error', 'Failed to create permission: ' . $e->getMessage());
@@ -180,6 +192,12 @@ class PermissionController extends Controller
         if (!$permission) {
             abort(404, 'Permission not found');
         }
+
+        // Log VIEW
+        $this->logView(
+            'User Management - Permissions',
+            "Viewed permission: {$permission->permission_name} (Code: {$permission->permission_code})"
+        );
         
         // Get assigned roles
         $roles = DB::table('roles')
@@ -224,6 +242,14 @@ class PermissionController extends Controller
      */
     public function update(Request $request, $permissionId)
     {
+        $permission = DB::table('permissions')
+            ->where('permission_id', $permissionId)
+            ->first();
+        
+        if (!$permission) {
+            abort(404, 'Permission not found');
+        }
+
         $request->merge([
             'can_create' => $request->has('can_create'),
             'can_read'   => $request->has('can_read'),
@@ -234,7 +260,7 @@ class PermissionController extends Controller
         $validated = $request->validate([
             'module_name' => ['required', 'string', 'max:100'],
             'permission_name' => ['required', 'string', 'max:150'],
-            'permission_code' => ['required', 'string', 'max:150', 'unique:permissions,permission_code,' . $permissionId . ',permission_id'],
+            'permission_code' => ['required', 'string', 'max:50', 'unique:permissions,permission_code,' . $permissionId . ',permission_id'],
             'can_create' => ['boolean'],
             'can_read' => ['boolean'],
             'can_update' => ['boolean'],
@@ -250,7 +276,7 @@ class PermissionController extends Controller
 
             'permission_code.required' => 'Please enter the permission code.',
             'permission_code.string' => 'The permission code must be a valid text.',
-            'permission_code.max' => 'The permission code cannot be longer than 150 characters.',
+            'permission_code.max' => 'The permission code cannot be longer than 50 characters.',
             'permission_code.unique' => 'This permission code is already in use. Please choose a different one.',
 
             'can_create.boolean' => 'The "Create" value must be true or false.',
@@ -261,6 +287,17 @@ class PermissionController extends Controller
 
         DB::beginTransaction();
         try {
+            // Capture old data
+            $oldData = [
+                'module_name' => $permission->module_name,
+                'permission_name' => $permission->permission_name,
+                'permission_code' => $permission->permission_code,
+                'can_create' => $permission->can_create,
+                'can_read' => $permission->can_read,
+                'can_update' => $permission->can_update,
+                'can_delete' => $permission->can_delete,
+            ];
+
             DB::table('permissions')
                 ->where('permission_id', $permissionId)
                 ->update([
@@ -273,6 +310,15 @@ class PermissionController extends Controller
                     'can_delete' => $validated['can_delete'] ? 1 : 0,
                     'updated_at' => now(),
                 ]);
+
+            // Log UPDATE
+            $this->logUpdate(
+                'User Management - Permissions',
+                'permissions',
+                $permissionId,
+                $oldData,
+                $validated
+            );
 
             DB::commit();
             
@@ -292,6 +338,14 @@ class PermissionController extends Controller
      */
     public function destroy($permissionId)
     {
+        $permission = DB::table('permissions')
+            ->where('permission_id', $permissionId)
+            ->first();
+        
+        if (!$permission) {
+            abort(404, 'Permission not found');
+        }
+
         // Check if permission is assigned to any roles
         $roleCount = DB::table('role_permissions')
             ->where('permission_id', $permissionId)
@@ -303,9 +357,28 @@ class PermissionController extends Controller
 
         DB::beginTransaction();
         try {
+            // Capture data before deletion
+            $oldData = [
+                'module_name' => $permission->module_name,
+                'permission_name' => $permission->permission_name,
+                'permission_code' => $permission->permission_code,
+                'can_create' => $permission->can_create,
+                'can_read' => $permission->can_read,
+                'can_update' => $permission->can_update,
+                'can_delete' => $permission->can_delete,
+            ];
+
             DB::table('permissions')
                 ->where('permission_id', $permissionId)
                 ->delete();
+
+            // Log DELETE
+            $this->logDelete(
+                'User Management - Permissions',
+                'permissions',
+                $permissionId,
+                $oldData
+            );
 
             DB::commit();
         
