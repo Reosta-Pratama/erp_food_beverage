@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Settings;
+namespace App\Http\Controllers\Settings;
 
 use App\Http\Controllers\Controller;
 use App\LogsActivity;
@@ -293,3 +293,4 @@ class CurrencyController extends Controller
         }
     }
 }
+
