@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\LogsActivity;
 use App\Models\UserManagement\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,12 +13,16 @@ use Illuminate\Support\Facades\Password;
 
 class UserController extends Controller
 {
-    //
+    use LogsActivity;
+    
     /**
      * Display a listing of users
      */
     public function index(Request $request) 
     {
+        // Log VIEW activity
+        $this->logView('User Management - Users', 'Viewed users list');
+        
         $query = DB::table('users')
             ->join('roles', 'users.role_id', '=', 'roles.role_id')
             ->leftJoin('employees', 'users.employee_id', '=', 'employees.employee_id')
@@ -60,7 +65,6 @@ class UserController extends Controller
         $users = $query->orderByDesc('users.created_at')
             ->paginate(20);
         
-        // Get roles for filter (keep using model for small datasets)
         $roles = Role::select('role_id', 'role_name', 'role_code')->get();
         
         return view('admin.users.index', compact('users', 'roles'));
@@ -71,9 +75,10 @@ class UserController extends Controller
      */
     public function create()
     {
+        // No logging needed for form display
+        
         $roles = Role::select('role_id', 'role_name', 'role_code')->get();
         
-        // Optimized: Get employees without users using subquery
         $employees = DB::table('employees')
             ->leftJoin('users', 'employees.employee_id', '=', 'users.employee_id')
             ->whereNull('users.user_id')
@@ -102,11 +107,33 @@ class UserController extends Controller
             'role_id' => ['required', 'exists:roles,role_id'],
             'employee_id' => ['nullable', 'exists:employees,employee_id', 'unique:users,employee_id'],
             'is_active' => ['boolean'],
+        ], [
+            'username.required' => 'Username is required.',
+            'username.unique' => 'This username is already taken.',
+            'username.alpha_dash' => 'Username may only contain letters, numbers, dashes and underscores.',
+            
+            'email.required' => 'Email address is required.',
+            'email.email' => 'Please provide a valid email address.',
+            'email.unique' => 'This email is already registered.',
+            
+            'password.required' => 'Password is required.',
+            'password.confirmed' => 'Password confirmation does not match.',
+            'password.min' => 'Password must be at least 8 characters.',
+            
+            'full_name.required' => 'Full name is required.',
+            
+            'role_id.required' => 'Please select a role.',
+            'role_id.exists' => 'Selected role is invalid.',
+            
+            'employee_id.exists' => 'Selected employee is invalid.',
+            'employee_id.unique' => 'This employee already has a user account.',
         ]);
         
-        // Use DB transaction for safety
         DB::beginTransaction();
         try {
+            // Get role name for logging
+            $role = DB::table('roles')->where('role_id', $validated['role_id'])->first();
+            
             $userId = DB::table('users')->insertGetId([
                 'username' => $validated['username'],
                 'email' => $validated['email'],
@@ -119,6 +146,22 @@ class UserController extends Controller
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+            
+            // Log CREATE action (exclude password from log)
+            $this->logCreate(
+                'User Management - Users',
+                'users',
+                $userId,
+                [
+                    'username' => $validated['username'],
+                    'email' => $validated['email'],
+                    'full_name' => $validated['full_name'],
+                    'phone' => $validated['phone'] ?? null,
+                    'role_name' => $role->role_name,
+                    'employee_id' => $validated['employee_id'] ?? null,
+                    'is_active' => $request->has('is_active') ? 1 : 0,
+                ]
+            );
             
             DB::commit();
             
@@ -139,7 +182,6 @@ class UserController extends Controller
      */
     public function show($userId)
     {
-        // Single query with all related data
         $user = DB::table('users')
             ->join('roles', 'users.role_id', '=', 'roles.role_id')
             ->leftJoin('employees', 'users.employee_id', '=', 'employees.employee_id')
@@ -159,7 +201,12 @@ class UserController extends Controller
             abort(404, 'User not found');
         }
         
-        // Get recent activities
+        // Log VIEW activity
+        $this->logView(
+            'User Management - Users',
+            "Viewed user: {$user->username} (ID: {$userId})"
+        );
+        
         $recentActivities = DB::table('activity_logs')
             ->where('user_id', $userId)
             ->select(
@@ -181,6 +228,8 @@ class UserController extends Controller
      */
     public function edit($userId)
     {
+        // No logging needed for form display
+        
         $user = DB::table('users')
             ->where('user_id', $userId)
             ->first();
@@ -222,24 +271,95 @@ class UserController extends Controller
             'role_id' => ['required', 'exists:roles,role_id'],
             'employee_id' => ['nullable', 'exists:employees,employee_id', 'unique:users,employee_id,' . $userId . ',user_id'],
             'is_active' => ['boolean'],
+        ], [
+            'username.required' => 'Username is required.',
+            'username.unique' => 'This username is already taken by another user.',
+            'username.alpha_dash' => 'Username may only contain letters, numbers, dashes and underscores.',
+            
+            'email.required' => 'Email address is required.',
+            'email.email' => 'Please provide a valid email address.',
+            'email.unique' => 'This email is already used by another user.',
+            
+            'full_name.required' => 'Full name is required.',
+            
+            'role_id.required' => 'Please select a role.',
+            'role_id.exists' => 'Selected role is invalid.',
+            
+            'employee_id.exists' => 'Selected employee is invalid.',
+            'employee_id.unique' => 'This employee already has a user account.',
         ]);
         
-        DB::table('users')
-            ->where('user_id', $userId)
-            ->update([
-                'username' => $validated['username'],
-                'email' => $validated['email'],
-                'full_name' => $validated['full_name'],
-                'phone' => $validated['phone'] ?? null,
-                'role_id' => $validated['role_id'],
-                'employee_id' => $validated['employee_id'] ?? null,
-                'is_active' => $request->has('is_active') ? 1 : 0,
-                'updated_at' => now(),
-            ]);
-        
-        return redirect()
-            ->route('admin.users.index')
-            ->with('success', 'User updated successfully');
+        DB::beginTransaction();
+        try {
+            // Capture OLD data before update
+            $oldUser = DB::table('users')
+                ->join('roles', 'users.role_id', '=', 'roles.role_id')
+                ->where('users.user_id', $userId)
+                ->select(
+                    'users.username',
+                    'users.email',
+                    'users.full_name',
+                    'users.phone',
+                    'users.role_id',
+                    'users.employee_id',
+                    'users.is_active',
+                    'roles.role_name as old_role_name'
+                )
+                ->first();
+            
+            // Get new role name
+            $newRole = DB::table('roles')->where('role_id', $validated['role_id'])->first();
+            
+            DB::table('users')
+                ->where('user_id', $userId)
+                ->update([
+                    'username' => $validated['username'],
+                    'email' => $validated['email'],
+                    'full_name' => $validated['full_name'],
+                    'phone' => $validated['phone'] ?? null,
+                    'role_id' => $validated['role_id'],
+                    'employee_id' => $validated['employee_id'] ?? null,
+                    'is_active' => $request->has('is_active') ? 1 : 0,
+                    'updated_at' => now(),
+                ]);
+            
+            // Log UPDATE action
+            $this->logUpdate(
+                'User Management - Users',
+                'users',
+                $userId,
+                [
+                    'username' => $oldUser->username,
+                    'email' => $oldUser->email,
+                    'full_name' => $oldUser->full_name,
+                    'phone' => $oldUser->phone,
+                    'role_name' => $oldUser->old_role_name,
+                    'employee_id' => $oldUser->employee_id,
+                    'is_active' => $oldUser->is_active,
+                ],
+                [
+                    'username' => $validated['username'],
+                    'email' => $validated['email'],
+                    'full_name' => $validated['full_name'],
+                    'phone' => $validated['phone'] ?? null,
+                    'role_name' => $newRole->role_name,
+                    'employee_id' => $validated['employee_id'] ?? null,
+                    'is_active' => $request->has('is_active') ? 1 : 0,
+                ]
+            );
+            
+            DB::commit();
+            
+            return redirect()
+                ->route('admin.users.index')
+                ->with('success', 'User updated successfully');
+                
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()
+                ->withInput()
+                ->with('error', 'Failed to update user: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -252,13 +372,27 @@ class UserController extends Controller
             return back()->with('error', 'You cannot delete your own account');
         }
         
-        // Check if last admin (optimized query)
         $user = DB::table('users')
             ->join('roles', 'users.role_id', '=', 'roles.role_id')
             ->where('users.user_id', $userId)
-            ->select('users.user_id', 'roles.role_code')
+            ->select(
+                'users.user_id',
+                'users.username',
+                'users.email',
+                'users.full_name',
+                'users.phone',
+                'users.employee_id',
+                'users.is_active',
+                'roles.role_code',
+                'roles.role_name'
+            )
             ->first();
         
+        if (!$user) {
+            abort(404, 'User not found');
+        }
+        
+        // Check if last admin
         if ($user->role_code === 'admin') {
             $adminCount = DB::table('users')
                 ->join('roles', 'users.role_id', '=', 'roles.role_id')
@@ -270,11 +404,36 @@ class UserController extends Controller
             }
         }
         
-        DB::table('users')->where('user_id', $userId)->delete();
-        
-        return redirect()
-            ->route('admin.users.index')
-            ->with('success', 'User deleted successfully');
+        DB::beginTransaction();
+        try {
+            DB::table('users')->where('user_id', $userId)->delete();
+            
+            // Log DELETE action
+            $this->logDelete(
+                'User Management - Users',
+                'users',
+                $userId,
+                [
+                    'username' => $user->username,
+                    'email' => $user->email,
+                    'full_name' => $user->full_name,
+                    'phone' => $user->phone,
+                    'role_name' => $user->role_name,
+                    'employee_id' => $user->employee_id,
+                    'is_active' => $user->is_active,
+                ]
+            );
+            
+            DB::commit();
+            
+            return redirect()
+                ->route('admin.users.index')
+                ->with('success', 'User deleted successfully');
+                
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Failed to delete user: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -284,16 +443,56 @@ class UserController extends Controller
     {
         $validated = $request->validate([
             'new_password' => ['required', 'confirmed', Password::min(8)],
+        ], [
+            'new_password.required' => 'New password is required.',
+            'new_password.confirmed' => 'Password confirmation does not match.',
+            'new_password.min' => 'Password must be at least 8 characters.',
         ]);
         
-        DB::table('users')
-            ->where('user_id', $userId)
-            ->update([
-                'password_hash' => Hash::make($validated['new_password']),
-                'updated_at' => now(),
-            ]);
-        
-        return back()->with('success', 'Password reset successfully');
+        DB::beginTransaction();
+        try {
+            // Get user info for logging
+            $user = DB::table('users')
+                ->where('user_id', $userId)
+                ->select('username', 'email')
+                ->first();
+            
+            DB::table('users')
+                ->where('user_id', $userId)
+                ->update([
+                    'password_hash' => Hash::make($validated['new_password']),
+                    'updated_at' => now(),
+                ]);
+            
+            // Log password reset as special audit action
+            $this->logAudit(
+                'PASSWORD_RESET',
+                'User Management - Users',
+                'users',
+                $userId,
+                null,
+                [
+                    'username' => $user->username,
+                    'email' => $user->email,
+                    'reset_by' => Auth::user()->username,
+                    'reset_time' => now()->toDateTimeString(),
+                ]
+            );
+            
+            $this->logActivity(
+                'Password Reset',
+                "Reset password for user: {$user->username} (ID: {$userId})",
+                'User Management - Users'
+            );
+            
+            DB::commit();
+            
+            return back()->with('success', 'Password reset successfully');
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Failed to reset password: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -305,13 +504,51 @@ class UserController extends Controller
             return back()->with('error', 'You cannot deactivate your own account');
         }
         
-        DB::table('users')
-            ->where('user_id', $userId)
-            ->update([
-                'is_active' => DB::raw('NOT is_active'),
-                'updated_at' => now(),
-            ]);
-        
-        return back()->with('success', 'User status updated successfully');
+        DB::beginTransaction();
+        try {
+            // Get current user data
+            $user = DB::table('users')
+                ->where('user_id', $userId)
+                ->select('username', 'email', 'is_active')
+                ->first();
+            
+            if (!$user) {
+                abort(404, 'User not found');
+            }
+            
+            $newStatus = !$user->is_active;
+            
+            DB::table('users')
+                ->where('user_id', $userId)
+                ->update([
+                    'is_active' => $newStatus,
+                    'updated_at' => now(),
+                ]);
+            
+            // Log status toggle
+            $this->logAudit(
+                'STATUS_CHANGE',
+                'User Management - Users',
+                'users',
+                $userId,
+                ['is_active' => $user->is_active],
+                ['is_active' => $newStatus]
+            );
+            
+            $statusText = $newStatus ? 'activated' : 'deactivated';
+            $this->logActivity(
+                'Status Toggle',
+                "User {$statusText}: {$user->username} (ID: {$userId})",
+                'User Management - Users'
+            );
+            
+            DB::commit();
+            
+            return back()->with('success', 'User status updated successfully');
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Failed to update status: ' . $e->getMessage());
+        }
     }
 }
