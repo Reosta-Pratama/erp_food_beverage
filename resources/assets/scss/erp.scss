@@ -25,3 +25,67 @@
         }
     }
 }
+
+.logo-company-size {
+    width: 200px;
+    height: 200px;
+
+    > img {
+        object-fit: cover;
+        object-position: center;
+    }
+
+    &.initial {
+        background: $avatar-bg;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: $default-radius;
+
+        > span {
+            color: $white;
+            font-size: 4rem;
+            font-weight: 600;
+        }
+    }
+}
+
+.logo-preview-container {
+    width: 200px;
+    height: 200px;
+    border-radius: $default-radius;
+    border: 2px dashed $default-border;
+    overflow: hidden;
+
+    > .image-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        color: $text-muted;
+        gap: 2px;
+
+        > i {
+            font-size: 3rem;
+        }
+
+        > img {
+            width: 100%;
+            max-width: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+    }
+}
+
+.current-logo-container {
+    margin-bottom: 12px;
+
+    > img {
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+    }
+}

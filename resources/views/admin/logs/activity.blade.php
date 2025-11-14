@@ -133,7 +133,7 @@
         <div class="col-lg-3">
             <div class="card custom sticky-card">
                 <div class="card-header">
-                    <div class="card-title fs-16">Filters</div>
+                    <div class="card-title">Filters</div>
                 </div>
 
                 <form method="GET" action="{{ route('admin.logs.activity.index') }}" id="filterForm"

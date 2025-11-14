@@ -7,6 +7,7 @@ use App\LogsActivity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class CompanyProfileController extends Controller
 {
@@ -41,6 +42,42 @@ class CompanyProfileController extends Controller
      */
     public function update(Request $request)
     {
+        $messages = [
+            'company_name.required' => 'The company name is required.',
+            'company_name.string' => 'The company name must be a valid text.',
+            'company_name.max' => 'The company name cannot exceed 200 characters.',
+
+            'legal_name.string' => 'The legal name must be a valid text.',
+            'legal_name.max' => 'The legal name cannot exceed 200 characters.',
+
+            'tax_id.string' => 'The tax ID must be a valid text.',
+            'tax_id.max' => 'The tax ID cannot exceed 50 characters.',
+
+            'address.string' => 'The address must be a valid text.',
+
+            'city.string' => 'The city name must be a valid text.',
+            'city.max' => 'The city name cannot exceed 100 characters.',
+
+            'country.string' => 'The country name must be a valid text.',
+            'country.max' => 'The country name cannot exceed 100 characters.',
+
+            'postal_code.string' => 'The postal code must be a valid text.',
+            'postal_code.max' => 'The postal code cannot exceed 20 characters.',
+
+            'phone.string' => 'The phone number must be a valid text.',
+            'phone.max' => 'The phone number cannot exceed 20 characters.',
+
+            'email.email' => 'Please enter a valid email address.',
+            'email.max' => 'The email address cannot exceed 150 characters.',
+
+            'website.url' => 'Please enter a valid website URL.',
+            'website.max' => 'The website URL cannot exceed 200 characters.',
+
+            'logo.image' => 'The logo must be a valid image file.',
+            'logo.max' => 'The logo file size cannot exceed 2MB.',
+            'logo.mimes' => 'The logo must be in JPG, JPEG, or PNG format.',
+        ];
+
         $validated = $request->validate([
             'company_name' => ['required', 'string', 'max:200'],
             'legal_name' => ['nullable', 'string', 'max:200'],
@@ -53,15 +90,7 @@ class CompanyProfileController extends Controller
             'email' => ['nullable', 'email', 'max:150'],
             'website' => ['nullable', 'url', 'max:200'],
             'logo' => ['nullable', 'image', 'max:2048', 'mimes:jpg,jpeg,png'],
-        ], [
-            'company_name.required' => 'Company name is required.',
-            'company_name.max' => 'Company name cannot exceed 200 characters.',
-            'email.email' => 'Please provide a valid email address.',
-            'website.url' => 'Please provide a valid website URL.',
-            'logo.image' => 'Logo must be an image file.',
-            'logo.max' => 'Logo size cannot exceed 2MB.',
-            'logo.mimes' => 'Logo must be a JPG, JPEG, or PNG file.',
-        ]);
+        ], $messages);
 
         DB::beginTransaction();
         try {
@@ -74,8 +103,11 @@ class CompanyProfileController extends Controller
                     Storage::disk('public')->delete($profile->logo_path);
                 }
                 
-                $logoPath = $request->file('logo')->store('company/logo', 'public');
-                $validated['logo_path'] = $logoPath;
+                $uniqueName = time() . '_' . Str::random(20) . '.' . $request->file('logo')->extension();
+                $request->file('logo')->storeAs('company/logo', $uniqueName, 'public');
+
+                $validated['logo_path'] = 'company/logo/' . $uniqueName;
+
             }
 
             if ($profile) {
@@ -176,8 +208,6 @@ class CompanyProfileController extends Controller
             $profile = DB::table('company_profile')->first();
             
             if ($profile && $profile->logo_path) {
-                $oldLogoPath = $profile->logo_path;
-                
                 Storage::disk('public')->delete($profile->logo_path);
                 
                 DB::table('company_profile')

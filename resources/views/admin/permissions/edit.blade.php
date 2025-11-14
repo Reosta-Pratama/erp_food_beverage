@@ -81,7 +81,7 @@
             <div class="col-lg-6">
                 <div class="card custom">
                     <div class="card-header">
-                        <div class="card-title fs-16">Permission Information</div>
+                        <div class="card-title">Permission Information</div>
                     </div>
 
                     <div class="card-body">
