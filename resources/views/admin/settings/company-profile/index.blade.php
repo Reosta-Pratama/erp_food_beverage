@@ -152,19 +152,19 @@
                                 <div class="table-responsive">
                                     <table class="table mb-0">
                                         <tr>
-                                            <td class="text-muted">Company Name</td>
+                                            <td class="text-muted w-25">Company Name</td>
                                             <td class="fw-bold">
                                                 {{ $profile->company_name }}
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td class="text-muted">Legal Name</td>
+                                            <td class="text-muted w-25">Legal Name</td>
                                             <td>
                                                 {{ $profile->legal_name ?? '-' }}
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td class="text-muted">Tax ID / NPWP</td>
+                                            <td class="text-muted w-25">Tax ID / NPWP</td>
                                             <td>
                                                 @if($profile->tax_id)
                                                     <code class="badge bg-light text-dark">{{ $profile->tax_id }}</code>
@@ -188,7 +188,7 @@
                                 <div class="table-responsive">
                                     <table class="table mb-0">
                                         <tr>
-                                            <td class="text-muted">Phone</td>
+                                            <td class="text-muted w-25">Phone</td>
                                             <td>
                                                 @if($profile->phone)
                                                     <a href="tel:{{ $profile->phone }}">
@@ -201,7 +201,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td class="text-muted">Email</td>
+                                            <td class="text-muted w-25">Email</td>
                                             <td>
                                                 @if($profile->email)
                                                     <a href="mailto:{{ $profile->email }}">
@@ -214,7 +214,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td class="text-muted">Website</td>
+                                            <td class="text-muted w-25">Website</td>
                                             <td>
                                                 @if($profile->website)
                                                     <a href="{{ $profile->website }}" target="_blank">
@@ -241,7 +241,7 @@
                                 <div class="table-responsive">
                                     <table class="table mb-0">
                                         <tr>
-                                            <td class="text-muted">Street Address</td>
+                                            <td class="text-muted w-25">Street Address</td>
                                             <td>
                                                 @if($profile->address)
                                                     {{ $profile->address }}
@@ -251,7 +251,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td class="text-muted">City</td>
+                                            <td class="text-muted w-25">City</td>
                                             <td>
                                                 @if($profile->city)
                                                     {{ $profile->city }}
@@ -261,7 +261,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td class="text-muted">Postal Code</td>
+                                            <td class="text-muted w-25">Postal Code</td>
                                             <td>
                                                 @if($profile->postal_code)
                                                     {{ $profile->postal_code }}
@@ -271,7 +271,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td class="text-muted">Country</td>
+                                            <td class="text-muted w-25">Country</td>
                                             <td>
                                                 @if($profile->country)
                                                     {{ $profile->country }}

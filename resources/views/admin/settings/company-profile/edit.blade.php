@@ -335,36 +335,49 @@
 @endsection
 
 @section('modals')
-{{-- Delete Logo Confirmation Modal --}}
-<div class="modal fade" id="deleteLogoModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title">
-                    <i class="bi bi-trash me-2"></i>Delete Company Logo
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <form action="{{ route('admin.settings.company-profile.delete-logo') }}" method="POST" id="deleteLogoForm">
+    
+    {{-- Delete Logo Confirmation Modal --}}
+    <div class="modal fade" id="deleteLogoModal" 
+        data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="deleteLogoModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <form action="{{ route('admin.settings.company-profile.delete-logo') }}" method="POST" 
+                class="modal-content" id="deleteLogoForm">
                 @csrf
                 @method('DELETE')
+
+                <div class="modal-header">
+                    <h6 class="modal-title">
+                        Delete Company Logo
+                    </h6>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
                 <div class="modal-body">
                     <div class="alert alert-warning">
-                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <i class="ti ti-exclamation-circle me-2"></i>
                         Are you sure you want to delete the company logo?
                     </div>
-                    <p class="mb-0">This action cannot be undone. The logo will be permanently removed.</p>
+                    <p class="mb-0">
+                        This action cannot be undone. The logo will be permanently removed.
+                    </p>
                 </div>
+
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Cancel
+                    </button>
                     <button type="submit" class="btn btn-danger">
-                        <i class="bi bi-trash me-2"></i>Delete Logo
+                        <i class="ti ti-trash me-2"></i>
+                        Delete Logo
                     </button>
                 </div>
+
             </form>
         </div>
     </div>
-</div>
+
 @endsection
 
 @section('scripts')
