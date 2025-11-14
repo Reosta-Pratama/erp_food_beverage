@@ -61,7 +61,7 @@ class PermissionController extends Controller
         
         $permissions = $query->orderBy('permissions.module_name')
             ->orderBy('permissions.permission_name')
-            ->paginate(50);
+            ->paginate(20);
         
         // Get unique modules for filter
         $modules = DB::table('permissions')

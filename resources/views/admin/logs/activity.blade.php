@@ -264,52 +264,52 @@
                     <div class="row g-3">
                         @if($logs->count() > 0)
                             @foreach($logs as $log)
-                            <div class="col-12">
-                                <div class="card custom mb-0">
-                                    <div class="card-body">
-                                        <div class="d-flex">
-                                            {{-- Log Content --}}
-                                            <div class="flex-grow-1">
-                                                <div class="d-flex justify-content-between align-items-start mb-2">
-                                                    <div>
-                                                        <h6 class="mb-1">
-                                                            <span class="log-type-badge badge 
-                                                                @if(str_contains($log->activity_type, 'Create')) bg-success
-                                                                @elseif(str_contains($log->activity_type, 'Update')) bg-warning
-                                                                @elseif(str_contains($log->activity_type, 'Delete')) bg-danger
-                                                                @elseif(str_contains($log->activity_type, 'Login')) bg-info
-                                                                @else bg-secondary
-                                                                @endif">
-                                                                {{ $log->activity_type }}
-                                                            </span>
-                                                            <span class="badge bg-light text-dark">{{ $log->module_name }}</span>
-                                                        </h6>
+                                <div class="col-12">
+                                    <div class="card custom mb-0">
+                                        <div class="card-body">
+                                            <div class="d-flex">
+                                                {{-- Log Content --}}
+                                                <div class="flex-grow-1">
+                                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                                        <div>
+                                                            <h6 class="mb-1">
+                                                                <span class="log-type-badge badge 
+                                                                    @if(str_contains($log->activity_type, 'Create')) bg-success
+                                                                    @elseif(str_contains($log->activity_type, 'Update')) bg-warning
+                                                                    @elseif(str_contains($log->activity_type, 'Delete')) bg-danger
+                                                                    @elseif(str_contains($log->activity_type, 'Login')) bg-info
+                                                                    @else bg-secondary
+                                                                    @endif">
+                                                                    {{ $log->activity_type }}
+                                                                </span>
+                                                                <span class="badge bg-light text-dark">{{ $log->module_name }}</span>
+                                                            </h6>
+                                                        </div>
+                                                        <small class="text-muted">
+                                                            <i class="ti ti-clock me-1"></i>
+                                                            {{ \Carbon\Carbon::parse($log->activity_timestamp)->diffForHumans() }}
+                                                        </small>
                                                     </div>
-                                                    <small class="text-muted">
-                                                        <i class="ti ti-clock me-1"></i>
-                                                        {{ \Carbon\Carbon::parse($log->activity_timestamp)->diffForHumans() }}
-                                                    </small>
-                                                </div>
-                                                
-                                                <p class="mb-2">{{ $log->description }}</p>
-                                                
-                                                <div class="d-flex align-items-center text-muted small">
-                                                    <i class="ti ti-user-circle fs-16 me-2"></i>
-                                                    <strong>{{ $log->full_name }}</strong>
-                                                    <span class="mx-2">•</span>
-                                                    <code>{{ $log->username }}</code>
-                                                    <span class="mx-2">•</span>
-                                                    <span class="badge bg-light text-black">{{ $log->role_name }}</span>
-                                                    <span class="mx-2">•</span>
-                                                    <span>
-                                                        {{ \Carbon\Carbon::parse($log->activity_timestamp)->format('d M Y - H:i:s') }}
-                                                    </span>
+                                                    
+                                                    <p class="mb-2">{{ $log->description }}</p>
+                                                    
+                                                    <div class="d-flex align-items-center text-muted small">
+                                                        <i class="ti ti-user-circle fs-16 me-2"></i>
+                                                        <strong>{{ $log->full_name }}</strong>
+                                                        <span class="mx-2">•</span>
+                                                        <code>{{ $log->username }}</code>
+                                                        <span class="mx-2">•</span>
+                                                        <span class="badge bg-light text-black">{{ $log->role_name }}</span>
+                                                        <span class="mx-2">•</span>
+                                                        <span>
+                                                            {{ \Carbon\Carbon::parse($log->activity_timestamp)->format('d M Y - H:i:s') }}
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                             @endforeach
                         @else
                             <div class="col-12">
@@ -321,6 +321,10 @@
                             </div>
                         @endif
                     </div>
+                </div>
+
+                <div class="card-footer d-flex justify-content-center">
+                    {{ $logs->links('pagination.default') }}
                 </div>
             </div>
         </div>
