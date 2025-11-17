@@ -39,6 +39,29 @@ document.addEventListener('DOMContentLoaded', function () {
                 e.preventDefault();
             }
         });
+    const clearModal = document.getElementById('clearModal');
+    const form = clearModal
+        .querySelector('form');
+    form
+        .addEventListener('submit', function (e) {
+            const days = document
+                .getElementById('days')
+                .value
+                .trim();
+
+            if (!days) {
+                e.preventDefault();
+                alert('Please enter number of days.');
+                document
+                    .getElementById('days')
+                    .focus();
+                return;
+            }
+
+            if (!confirm(`Are you sure you want to delete all activity logs older than ${days} days? This action cannot be undone.`)) {
+                e.preventDefault();
+            }
+        });
 
     // Quick filter badges
     document

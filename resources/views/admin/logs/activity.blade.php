@@ -314,7 +314,7 @@
                         @else
                             <div class="col-12">
                                 <div class="text-center py-5">
-                                    <i class="ti ti-inbox text-muted fs-40"></i>
+                                    <i class="ti ti-file-x text-muted fs-40"></i>
                                     <h5 class="text-muted mt-3">No Activity Logs Found</h5>
                                     <p class="text-muted">Try adjusting your filters or check back later</p>
                                 </div>
@@ -323,9 +323,11 @@
                     </div>
                 </div>
 
-                <div class="card-footer d-flex justify-content-center">
-                    {{ $logs->links('pagination.default') }}
-                </div>
+                @if($logs->hasPages())
+                    <div class="card-footer d-flex justify-content-center">
+                        {{ $logs->links('pagination.default') }}
+                    </div>
+                @endif
             </div>
         </div>
     </div>
@@ -448,7 +450,7 @@
                         </label>
                         <select
                             class="form-control single-select"
-                            name="days" required>
+                            id="days" name="days">
                             <option value="">Select period...</option>
                             <option value="30">30 days (1 month)</option>
                             <option value="60">60 days (2 months)</option>

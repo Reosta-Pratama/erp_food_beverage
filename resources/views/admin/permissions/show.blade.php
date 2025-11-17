@@ -195,7 +195,7 @@
                         <div class="card custom">
                             <div class="card-body">
                                 <div class="text-center py-5">
-                                    <i class="ti ti-inbox text-muted fs-40"></i>
+                                    <i class="ti ti-file-x text-muted fs-40"></i>
                                     <p class="text-muted mt-3 mb-0">
                                         This permission is not assigned to any roles yet.
                                     </p>

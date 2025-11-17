@@ -146,7 +146,7 @@ class AuditLogController extends Controller
             ->orderByDesc('action_timestamp')
             ->limit(5)
             ->get();
-        
+
         return view('admin.logs.audit-detail', compact('auditLog', 'relatedLogs'));
     }
     

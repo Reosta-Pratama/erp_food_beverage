@@ -289,7 +289,7 @@
                         </div>
                     @else
                         <div class="text-center py-5">
-                            <i class="ti ti-inbox text-muted fs-40"></i>
+                            <i class="ti ti-file-x text-muted fs-40"></i>
                             <p class="text-muted mt-3">No permissions found</p>
                             <a href="{{ route('admin.permissions.create') }}" 
                                 class="btn btn-primary">

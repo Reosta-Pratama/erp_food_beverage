@@ -132,12 +132,12 @@
                             <span class="menu-svg">
                                 <i class="ti ti-certificate"></i>
                             </span>
-                            <span class="menu-label">Training & Development</span>
+                            <span class="menu-label">Training</span>
                             <i class="ri-arrow-right-s-line menu-icon"></i>
                         </a>
                         <ul class="menu-item-child child1">
                             <li class="menu-item menu-label1">
-                                <a href="javascript:void(0)">Training & Development</a>
+                                <a href="javascript:void(0)">Training</a>
                             </li>
                             @canRead('training_programs')
                                 <li class="menu-item">

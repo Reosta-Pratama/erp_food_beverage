@@ -107,8 +107,11 @@ class CompanyProfileController extends Controller
                 $request->file('logo')->storeAs('company/logo', $uniqueName, 'public');
 
                 $validated['logo_path'] = 'company/logo/' . $uniqueName;
-
+            } else {
+                $validated['logo_path'] = $profile->logo_path;
             }
+
+            unset($validated['logo']);
 
             if ($profile) {
                 // Capture old data for audit
@@ -123,6 +126,7 @@ class CompanyProfileController extends Controller
                     'phone' => $profile->phone,
                     'email' => $profile->email,
                     'website' => $profile->website,
+                    'logo_path' => $profile->logo_path,
                 ];
 
                 // Update existing profile
