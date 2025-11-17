@@ -133,6 +133,11 @@ class AuditLogController extends Controller
         $auditLog->old_data = $auditLog->old_data ? json_decode($auditLog->old_data, true) : null;
         $auditLog->new_data = $auditLog->new_data ? json_decode($auditLog->new_data, true) : null;
         
+        // dd(
+        //     $auditLog->old_data,
+        //     $auditLog->new_data
+        // );
+
         // Get related records (previous and next audit for same record)
         $relatedLogs = DB::table('audit_logs')
             ->where('table_name', $auditLog->table_name)

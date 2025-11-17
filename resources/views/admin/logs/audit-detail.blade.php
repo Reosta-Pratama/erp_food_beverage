@@ -377,6 +377,41 @@
                                             </div>
                                         </div>
                                     </div>
+                                @elseif(in_array($auditLog->action_type, ['LOGIN', 'LOGOUT']) && $auditLog->new_data)
+                                    <div class="row g-3">
+                                        <div class="col-12">
+                                            <div class="card custom">
+                                                <div class="card-header">
+                                                    <div class="card-title text-info">
+                                                        <i class="ti ti-login me-2"></i>
+                                                        Authentication
+                                                    </div>
+                                                </div>
+                                                <div class="card-body p-0">
+                                                    <div class="table-responsive">
+                                                        <table class="table text-nowrap">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col">Field</th>
+                                                                    <th scope="col">Value</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach($auditLog->new_data as $key => $value)
+                                                                    <tr>
+                                                                        <td>
+                                                                            <strong>{{ $key }}</strong>
+                                                                        </td>
+                                                                        <td>{{ is_array($value) ? json_encode($value) : $value }}</td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 @endif
 
                             </div>
