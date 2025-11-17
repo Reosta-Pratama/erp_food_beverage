@@ -172,9 +172,9 @@ Route::middleware('auth')->group(function () {
                     Route::get('/', [AuditLogController::class, 'index'])
                         ->middleware('permission:logs.read')
                         ->name('index');
-                    Route::get('/trail', [AuditLogController::class, 'trail'])
-                        ->middleware('permission:logs.read')
-                        ->name('trail');
+                    // Route::get('/trail', [AuditLogController::class, 'trail'])
+                    //     ->middleware('permission:logs.read')
+                    //     ->name('trail');
                     Route::get('/statistics', [AuditLogController::class, 'statistics'])
                         ->middleware('permission:logs.read')
                         ->name('statistics');

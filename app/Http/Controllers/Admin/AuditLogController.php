@@ -173,34 +173,34 @@ class AuditLogController extends Controller
     /**
      * Get audit trail for specific record
      */
-    public function trail(Request $request)
-    {
-        $validated = $request->validate([
-            'table_name' => ['required', 'string'],
-            'record_id' => ['required', 'integer'],
-        ]);
+    // public function trail(Request $request)
+    // {
+    //     $validated = $request->validate([
+    //         'table_name' => ['required', 'string'],
+    //         'record_id' => ['required', 'integer'],
+    //     ]);
         
-        $trail = DB::table('audit_logs')
-            ->join('users', 'audit_logs.user_id', '=', 'users.user_id')
-            ->where('audit_logs.table_name', $validated['table_name'])
-            ->where('audit_logs.record_id', $validated['record_id'])
-            ->select(
-                'audit_logs.audit_id',
-                'audit_logs.action_type',
-                'audit_logs.action_timestamp',
-                'audit_logs.old_data',
-                'audit_logs.new_data',
-                'users.username',
-                'users.full_name'
-            )
-            ->orderByDesc('audit_logs.action_timestamp')
-            ->get();
+    //     $trail = DB::table('audit_logs')
+    //         ->join('users', 'audit_logs.user_id', '=', 'users.user_id')
+    //         ->where('audit_logs.table_name', $validated['table_name'])
+    //         ->where('audit_logs.record_id', $validated['record_id'])
+    //         ->select(
+    //             'audit_logs.audit_id',
+    //             'audit_logs.action_type',
+    //             'audit_logs.action_timestamp',
+    //             'audit_logs.old_data',
+    //             'audit_logs.new_data',
+    //             'users.username',
+    //             'users.full_name'
+    //         )
+    //         ->orderByDesc('audit_logs.action_timestamp')
+    //         ->get();
         
-        return response()->json([
-            'success' => true,
-            'trail' => $trail,
-        ]);
-    }
+    //     return response()->json([
+    //         'success' => true,
+    //         'trail' => $trail,
+    //     ]);
+    // }
     
     /**
      * Export audit logs to CSV
