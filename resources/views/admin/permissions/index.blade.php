@@ -300,9 +300,11 @@
                     @endif
                 </div>
 
-                <div class="card-footer d-flex justify-content-center">
-                    {{ $permissions->links('pagination.default') }}
-                </div>
+                @if ($permissions->hasPages())
+                    <div class="card-footer d-flex justify-content-center">
+                        {{ $permissions->links('pagination.default') }}
+                    </div>
+                @endif
             </div>
         </div>
     </div>

@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
+use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
@@ -44,7 +44,7 @@ class UserController extends Controller
         
         // Search
         if ($request->filled('search')) {
-            $search = $request->search;
+            $search = $request->input('search');
             $query->where(function($q) use ($search) {
                 $q->where('users.username', 'like', "%{$search}%")
                   ->orWhere('users.email', 'like', "%{$search}%")
@@ -54,12 +54,12 @@ class UserController extends Controller
         
         // Filter by role
         if ($request->filled('role')) {
-            $query->where('roles.role_code', $request->role);
+            $query->where('roles.role_code', $request->input('role'));
         }
         
         // Filter by status
         if ($request->filled('status')) {
-            $query->where('users.is_active', $request->status === 'active' ? 1 : 0);
+            $query->where('users.is_active', $request->input('status') === 'active' ? 1 : 0);
         }
         
         $users = $query->orderByDesc('users.created_at')
@@ -206,7 +206,7 @@ class UserController extends Controller
             'User Management - Users',
             "Viewed user: {$user->username} (ID: {$userId})"
         );
-        
+
         $recentActivities = DB::table('activity_logs')
             ->where('user_id', $userId)
             ->select(

@@ -6,7 +6,6 @@
 @endsection
 
 @section('content')
-<div class="container-fluid">
 
     <!-- Page Header -->
     <div
@@ -313,7 +312,6 @@
     @endif
     <!-- Container -->
 
-</div>
 @endsection
 
 @section('scripts')

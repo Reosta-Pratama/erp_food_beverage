@@ -25,6 +25,7 @@ export default defineConfig({
                         'resources/assets/js/erp/company-profile.js', 
                         'resources/assets/js/erp/create-new-permission.js',
                         'resources/assets/js/erp/create-new-role.js',
+                        'resources/assets/js/erp/create-new-user.js',
                         'resources/assets/js/erp/edit-role.js',
 
                         'resources/assets/js/custom/alert-custom.js',
