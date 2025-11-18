@@ -11,6 +11,7 @@ class Recipe extends Model
     protected $primaryKey = 'recipe_id';
 
     protected $fillable = [
+        'recipe_code',
         'product_id',
         'recipe_name',
         'recipe_version',
@@ -30,4 +31,29 @@ class Recipe extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    /**
+     * Get the product this recipe produces
+     */
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'product_id');
+    }
+    
+    /**
+     * Get all ingredients in this recipe
+     */
+    public function ingredients()
+    {
+        return $this->hasMany(RecipeIngredient::class, 'recipe_id', 'recipe_id')
+            ->orderBy('sequence_order');
+    }
+    
+    /**
+     * Get the unit of measure for batch size
+     */
+    public function unitOfMeasure()
+    {
+        return $this->belongsTo(UnitOfMeasure::class, 'uom_id', 'uom_id');
+    }
 }

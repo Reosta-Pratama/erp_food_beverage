@@ -26,4 +26,28 @@ class BomItem extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    /**
+     * Get the BOM this item belongs to
+     */
+    public function billOfMaterial()
+    {
+        return $this->belongsTo(BillOfMaterial::class, 'bom_id', 'bom_id');
+    }
+    
+    /**
+     * Get the material/product
+     */
+    public function material()
+    {
+        return $this->belongsTo(Product::class, 'material_id', 'product_id');
+    }
+    
+    /**
+     * Get the unit of measure
+     */
+    public function unitOfMeasure()
+    {
+        return $this->belongsTo(UnitOfMeasure::class, 'uom_id', 'uom_id');
+    }
 }

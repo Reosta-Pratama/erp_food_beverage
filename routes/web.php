@@ -11,6 +11,8 @@ use App\Http\Controllers\Employee\EmployeeSelfServiceController;
 use App\Http\Controllers\HRM\DepartmentController;
 use App\Http\Controllers\HRM\EmployeeController;
 use App\Http\Controllers\HRM\PositionController;
+use App\Http\Controllers\Inventory\BOMController;
+use App\Http\Controllers\Inventory\RecipeController;
 use App\Http\Controllers\Products\ProductCategoryController;
 use App\Http\Controllers\Products\ProductController;
 use App\Http\Controllers\Settings\CompanyProfileController;
@@ -356,6 +358,100 @@ Route::middleware('auth')->group(function () {
                 ->middleware('permission:products.update')
                 ->name('bulk-update-prices');
         });
+
+    /*
+    |--------------------------------------------------------------------------
+    | BOM & RECIPE (Admin + Operator)
+    | Operator: Full CRUD access
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware(['auth', 'role:admin,operator'])
+    ->prefix('inventory')
+    ->name('inventory.')
+    ->group(function () {
+        
+        /*
+        |----------------------------------------------------------------------
+        | BILL OF MATERIALS (BOM)
+        |----------------------------------------------------------------------
+        */
+        Route::prefix('bom')->name('bom.')->group(function () {
+            Route::get('/', [BOMController::class, 'index'])
+                ->middleware('permission:inventory.read')
+                ->name('index');
+            
+            Route::get('/create', [BOMController::class, 'create'])
+                ->middleware('permission:inventory.create')
+                ->name('create');
+            
+            Route::post('/', [BOMController::class, 'store'])
+                ->middleware('permission:inventory.create')
+                ->name('store');
+            
+            Route::get('/export', [BOMController::class, 'export'])
+                ->middleware('permission:inventory.read')
+                ->name('export');
+            
+            Route::get('/{bomCode}', [BOMController::class, 'show'])
+                ->middleware('permission:inventory.read')
+                ->name('show');
+            
+            Route::get('/{bomCode}/edit', [BOMController::class, 'edit'])
+                ->middleware('permission:inventory.update')
+                ->name('edit');
+            
+            Route::put('/{bomCode}', [BOMController::class, 'update'])
+                ->middleware('permission:inventory.update')
+                ->name('update');
+            
+            Route::delete('/{bomCode}', [BOMController::class, 'destroy'])
+                ->middleware('permission:inventory.delete')
+                ->name('destroy');
+        });
+        
+        /*
+        |----------------------------------------------------------------------
+        | RECIPES
+        |----------------------------------------------------------------------
+        */
+        Route::prefix('recipes')->name('recipes.')->group(function () {
+            Route::get('/', [RecipeController::class, 'index'])
+                ->middleware('permission:inventory.read')
+                ->name('index');
+            
+            Route::get('/create', [RecipeController::class, 'create'])
+                ->middleware('permission:inventory.create')
+                ->name('create');
+            
+            Route::post('/', [RecipeController::class, 'store'])
+                ->middleware('permission:inventory.create')
+                ->name('store');
+            
+            Route::get('/export', [RecipeController::class, 'export'])
+                ->middleware('permission:inventory.read')
+                ->name('export');
+            
+            Route::get('/{recipeCode}', [RecipeController::class, 'show'])
+                ->middleware('permission:inventory.read')
+                ->name('show');
+            
+            Route::get('/{recipeCode}/edit', [RecipeController::class, 'edit'])
+                ->middleware('permission:inventory.update')
+                ->name('edit');
+            
+            Route::put('/{recipeCode}', [RecipeController::class, 'update'])
+                ->middleware('permission:inventory.update')
+                ->name('update');
+            
+            Route::delete('/{recipeCode}', [RecipeController::class, 'destroy'])
+                ->middleware('permission:inventory.delete')
+                ->name('destroy');
+            
+            Route::get('/{recipeCode}/print', [RecipeController::class, 'print'])
+                ->middleware('permission:inventory.read')
+                ->name('print');
+        });
+    });
 
     /*
     |--------------------------------------------------------------------------

@@ -29,4 +29,20 @@ class Product extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+     /**
+     * Get BOMs for this product
+     */
+    public function billsOfMaterials()
+    {
+        return $this->hasMany(BillOfMaterial::class, 'product_id', 'product_id');
+    }
+    
+    /**
+     * Get recipes for this product
+     */
+    public function recipes()
+    {
+        return $this->hasMany(Recipe::class, 'product_id', 'product_id');
+    }
 }
