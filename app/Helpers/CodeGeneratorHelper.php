@@ -16,35 +16,26 @@ class CodeGeneratorHelper
      */
     public static function generate(string $table, string $column, string $prefix): string
     {
-        // Prefix max 2 chars
-        $prefix = substr($prefix, 0, 2);
-
-        // Year last digit + month (e.g., 2024 → 4, month 11 → 411)
-        $yearMonth = date('y'); // 24
-        $year = substr($yearMonth, -1); // 4
-        $month = date('m'); // 11
-        $ym = $year . $month; // 411
-
-        // Pattern: BO411%
-        $pattern = $prefix . $ym . '%';
-
-        // Get last sequence for this period
+        $yearMonth = date('Ym'); // Format: 202411
+        $pattern = $prefix . '-' . $yearMonth . '-%';
+        
+        // Get last sequence for current month
         $lastCode = DB::table($table)
             ->where($column, 'like', $pattern)
             ->orderByDesc($column)
             ->value($column);
-
+        
         if ($lastCode) {
-            // Last 5 digits → sequence
-            $lastSequence = (int) substr($lastCode, -5);
+            // Extract sequence number from last code
+            $lastSequence = (int) substr($lastCode, -4);
             $newSequence = $lastSequence + 1;
         } else {
+            // First code for this month
             $newSequence = 1;
         }
-
-        // Format always 10 chars
-        // PP + YMM + 5-digit sequence = 10 chars
-        return sprintf('%s%s%05d', $prefix, $ym, $newSequence);
+        
+        // Format: BOM-202411-0001
+        return sprintf('%s-%s-%04d', $prefix, $yearMonth, $newSequence);
     }
 
     /**

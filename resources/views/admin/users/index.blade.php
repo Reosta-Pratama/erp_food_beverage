@@ -3,6 +3,10 @@
 ])
 
 @section('styles')
+
+    <!-- Sweetalerts CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/plugin/sweetalert2/sweetalert2.min.css') }}">
+
 @endsection
 
 @section('content')
@@ -226,8 +230,8 @@
                                                     @canDelete('users')
                                                         <form action="{{ route('admin.users.destroy', $user->user_id) }}" 
                                                             method="POST" 
-                                                            class="d-inline"
-                                                            onsubmit="return confirm('Are you sure you want to delete this user?');">
+                                                            data-username="{{ $user->username }}"
+                                                            class="d-inline delete-user-form">
                                                             @csrf
                                                             @method('DELETE')
                                                             
@@ -273,6 +277,9 @@
 
 @section('scripts')
 
+    <!-- Sweetalerts JS -->
+    <script src="{{ asset('assets/plugin/sweetalert2/sweetalert2.min.js') }}"></script>
+
     <script>
         const dropdownElements = document.querySelectorAll('.single-select');
         if (dropdownElements.length > 0) {
@@ -280,6 +287,36 @@
                 new Choices(dropdown, {searchEnabled: true});
             });
         }
+    </script>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const deleteForms = document.querySelectorAll('.delete-user-form');
+
+        deleteForms.forEach(form => {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault(); 
+
+                const username = form.getAttribute('data-username');
+
+                Swal.fire({
+                    title: `Delete user "${username}"?`,
+                    text: "This action cannot be undone. All associated data will be permanently deleted.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    reverseButtons: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#6c757d",
+                    confirmButtonText: "Yes, delete",
+                    cancelButtonText: "Cancel"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit(); 
+                    }
+                });
+            });
+        });
+    });
     </script>
   
 @endsection

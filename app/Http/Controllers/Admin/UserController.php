@@ -219,7 +219,7 @@ class UserController extends Controller
             ->orderByDesc('activity_timestamp')
             ->limit(20)
             ->get();
-        
+
         return view('admin.users.show', compact('user', 'recentActivities'));
     }
 
@@ -391,7 +391,7 @@ class UserController extends Controller
         if (!$user) {
             abort(404, 'User not found');
         }
-        
+
         // Check if last admin
         if ($user->role_code === 'admin') {
             $adminCount = DB::table('users')

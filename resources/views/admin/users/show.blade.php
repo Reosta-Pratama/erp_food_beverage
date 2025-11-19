@@ -154,13 +154,127 @@
                         <div class="card-header">
                             <div class="card-title">Contact Information</div>
                         </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="text-muted small">Email Address</label>
+                                    <div>
+                                        <a href="mailto:{{ $user->email }}" 
+                                            class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline">
+                                            {{ $user->email }}
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="text-muted small">Phone Number</label>
+                                    <div>
+                                        @if($user->phone)
+                                            <a href="tel:{{ $user->phone }}" 
+                                                class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline">
+                                                {{ $user->phone }}
+                                            </a>
+                                        @else
+                                            <span class="text-muted">Not provided</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                @if($user->employee_code)
+                    <div class="col-12">
+                        <div class="card custom">
+                            <div class="card-header">
+                                <div class="card-title">Employee Statistics</div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="text-muted small">Employee Code</label>
+                                        <div>
+                                            <strong>{{ $user->employee_code }}</strong>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="text-muted small">Employee Name</label>
+                                        <div>{{ $user->employee_name }}</div>
+                                    </div>
+                                    @if($user->employee_email)
+                                        <div class="col-md-6">
+                                            <label class="text-muted small">Employee Email</label>
+                                            <div>
+                                                <a href="mailto:{{ $user->employee_email }}"
+                                                    class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline">
+                                                    {{ $user->employee_email }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
 
                 <div class="col-12">
                     <div class="card custom">
                         <div class="card-header">
                             <div class="card-title">Account Statistics</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="text-muted small">Last Login</label>
+                                    <div>
+                                        @if($user->last_login)
+                                            {{ \Carbon\Carbon::parse($user->last_login)->format('d M Y - H:i') }}
+                                            <br>
+                                            <small class="text-muted">
+                                                ({{ \Carbon\Carbon::parse($user->last_login)->diffForHumans() }})
+                                            </small>
+                                        @else
+                                            <span class="text-muted">Never logged in</span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="text-muted small">Account Created</label>
+                                    <div>
+                                        {{ \Carbon\Carbon::parse($user->created_at)->format('d M Y - H:i') }}
+                                        <br>
+                                        <small class="text-muted">
+                                            ({{ \Carbon\Carbon::parse($user->created_at)->diffForHumans() }})
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="text-muted small">Last Updated</label>
+                                    <div>
+                                        {{ \Carbon\Carbon::parse($user->updated_at)->format('d M Y - H:i') }}
+                                        <br>
+                                        <small class="text-muted">
+                                            ({{ \Carbon\Carbon::parse($user->updated_at)->diffForHumans() }})
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="text-muted small">Email Verified</label>
+                                    <div>
+                                        @if($user->email_verified_at)
+                                            <span class="badge bg-success">Verified</span>
+                                            <br>
+                                            <small class="text-muted">
+                                                {{ \Carbon\Carbon::parse($user->email_verified_at)->format('d M Y') }}
+                                            </small>
+                                        @else
+                                            <span class="badge bg-warning">Not Verified</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -170,6 +284,62 @@
                         <div class="card-header">
                             <div class="card-title">Recent Activity</div>
                         </div>
+                        <div class="card-body p-0">
+                            @if($recentActivities->count() > 0)
+                                <div class="table-responsive">
+                                    <table class="table text-nowrap table-borderless mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Type</th>
+                                                <th scope="col">Module</th>
+                                                <th scope="col">Description</th>
+                                                <th scope="col">Time</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($recentActivities as $activity)
+                                                <tr>
+                                                    <td>
+                                                        @php
+                                                            $type = strtoupper($activity->activity_type);
+                                                            $colors = [
+                                                                'VIEWED' => 'info',
+                                                                'CREATE' => 'success',
+                                                                'UPDATE' => 'warning',
+                                                                'DELETE' => 'danger',
+                                                            ];
+                                                        @endphp
+
+                                                        <span class="badge bg-{{ $colors[$type] ?? 'secondary' }}">
+                                                            {{ $activity->activity_type }}
+                                                        </span>
+                                                    </td>
+
+                                                    <td>
+                                                        <small>{{ $activity->module_name }}</small>
+                                                    </td>
+                                                    
+                                                    <td>
+                                                        <small>{{ $activity->description }}</small>
+                                                    </td>
+
+                                                    <td>
+                                                        <small class="text-muted">
+                                                            {{ \Carbon\Carbon::parse($activity->activity_timestamp)->diffForHumans() }}
+                                                        </small>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @else
+                                <p class="text-center text-muted py-3 mb-0">
+                                    <i class="ti ti-inbox fs-40 d-block mb-2"></i>
+                                    No recent activity
+                                </p>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
@@ -177,247 +347,77 @@
     </div>
     <!-- Container -->
 
-    
-
-    
-
-<div class="container-fluid">
-   
-
-    <div class="row">
-        <!-- Details & Activity -->
-        <div class="col-lg-8">
-            <!-- Contact Information -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="mb-0">Contact Information</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="text-muted small">Email Address</label>
-                            <div>
-                                <a href="mailto:{{ $user->email }}" class="text-decoration-none">
-                                    <i class="bi bi-envelope me-2"></i>{{ $user->email }}
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="text-muted small">Phone Number</label>
-                            <div>
-                                @if($user->phone)
-                                    <a href="tel:{{ $user->phone }}" class="text-decoration-none">
-                                        <i class="bi bi-telephone me-2"></i>{{ $user->phone }}
-                                    </a>
-                                @else
-                                    <span class="text-muted">Not provided</span>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Employee Information -->
-            @if($user->employee_code)
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="mb-0">Employee Information</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="text-muted small">Employee Code</label>
-                            <div><strong>{{ $user->employee_code }}</strong></div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="text-muted small">Employee Name</label>
-                            <div>{{ $user->employee_name }}</div>
-                        </div>
-                        @if($user->employee_email)
-                        <div class="col-md-6">
-                            <label class="text-muted small">Employee Email</label>
-                            <div>
-                                <a href="mailto:{{ $user->employee_email }}">
-                                    {{ $user->employee_email }}
-                                </a>
-                            </div>
-                        </div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-            @endif
-
-            <!-- Account Statistics -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="mb-0">Account Statistics</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="text-muted small">Last Login</label>
-                            <div>
-                                @if($user->last_login)
-                                    {{ \Carbon\Carbon::parse($user->last_login)->format('d M Y, H:i') }}
-                                    <br><small class="text-muted">
-                                        ({{ \Carbon\Carbon::parse($user->last_login)->diffForHumans() }})
-                                    </small>
-                                @else
-                                    <span class="text-muted">Never logged in</span>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="text-muted small">Account Created</label>
-                            <div>
-                                {{ \Carbon\Carbon::parse($user->created_at)->format('d M Y, H:i') }}
-                                <br><small class="text-muted">
-                                    ({{ \Carbon\Carbon::parse($user->created_at)->diffForHumans() }})
-                                </small>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="text-muted small">Last Updated</label>
-                            <div>
-                                {{ \Carbon\Carbon::parse($user->updated_at)->format('d M Y, H:i') }}
-                                <br><small class="text-muted">
-                                    ({{ \Carbon\Carbon::parse($user->updated_at)->diffForHumans() }})
-                                </small>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="text-muted small">Email Verified</label>
-                            <div>
-                                @if($user->email_verified_at)
-                                    <span class="badge bg-success">Verified</span>
-                                    <br><small class="text-muted">
-                                        {{ \Carbon\Carbon::parse($user->email_verified_at)->format('d M Y') }}
-                                    </small>
-                                @else
-                                    <span class="badge bg-warning">Not Verified</span>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Recent Activity -->
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">Recent Activity</h5>
-                </div>
-                <div class="card-body">
-                    @if($recentActivities->count() > 0)
-                    <div class="table-responsive">
-                        <table class="table table-sm table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Type</th>
-                                    <th>Module</th>
-                                    <th>Description</th>
-                                    <th>Time</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($recentActivities as $activity)
-                                <tr>
-                                    <td>
-                                        @if($activity->activity_type === 'VIEW')
-                                            <span class="badge bg-info">{{ $activity->activity_type }}</span>
-                                        @elseif($activity->activity_type === 'CREATE')
-                                            <span class="badge bg-success">{{ $activity->activity_type }}</span>
-                                        @elseif($activity->activity_type === 'UPDATE')
-                                            <span class="badge bg-warning">{{ $activity->activity_type }}</span>
-                                        @elseif($activity->activity_type === 'DELETE')
-                                            <span class="badge bg-danger">{{ $activity->activity_type }}</span>
-                                        @else
-                                            <span class="badge bg-secondary">{{ $activity->activity_type }}</span>
-                                        @endif
-                                    </td>
-                                    <td><small>{{ $activity->module_name }}</small></td>
-                                    <td><small>{{ $activity->description }}</small></td>
-                                    <td>
-                                        <small class="text-muted">
-                                            {{ \Carbon\Carbon::parse($activity->activity_timestamp)->diffForHumans() }}
-                                        </small>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    @else
-                    <p class="text-center text-muted py-3 mb-0">
-                        <i class="bi bi-inbox fs-1 d-block mb-2"></i>
-                        No recent activity
-                    </p>
-                    @endif
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 @endsection
 
 @section('modals')
     
 
+    {{-- Reset Password Modal --}}
+    @canUpdate('users')
+        <div class="modal fade" id="resetPasswordModal" 
+            data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="resetPasswordModal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <form action="{{ route('admin.users.reset-password', $user->user_id) }}" method="POST"
+                    class="modal-content">
+                    @csrf
 
+                    <div class="modal-header">
+                        <h6 class="modal-title">
+                            Reset Password
+                        </h6>
 
-<!-- Reset Password Modal -->
-@canUpdate('users')
-<div class="modal fade" id="resetPasswordModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form action="{{ route('admin.users.reset-password', $user->user_id) }}" method="POST">
-                @csrf
-                <div class="modal-header">
-                    <h5 class="modal-title">Reset Password</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="alert alert-warning">
-                        <i class="bi bi-exclamation-triangle me-2"></i>
-                        You are about to reset the password for <strong>{{ $user->username }}</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="new_password" class="form-label">
-                            New Password <span class="text-danger">*</span>
-                        </label>
-                        <input type="password" 
-                               class="form-control" 
-                               id="new_password" 
-                               name="new_password" 
-                               required
-                               minlength="8">
-                        <small class="text-muted">Minimum 8 characters</small>
+                    <div class="modal-body">
+                        <div class="alert alert-warning d-flex align-items-center gap-2">
+                            <i class="ti ti-exclamation-circle"></i>
+                            You are about to reset the password for 
+                            <strong>{{ $user->username }}</strong>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="new_password" class="form-label">
+                                New Password <span class="text-danger">*</span>
+                            </label>
+                            <input type="password" 
+                                class="form-control" 
+                                id="new_password" 
+                                name="new_password" 
+                                required
+                                minlength="8">
+                            <small class="text-muted">Minimum 8 characters</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="new_password_confirmation" class="form-label">
+                                Confirm New Password <span class="text-danger">*</span>
+                            </label>
+                            <input type="password" 
+                                class="form-control" 
+                                id="new_password_confirmation" 
+                                name="new_password_confirmation" 
+                                required
+                                minlength="8">
+                        </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="new_password_confirmation" class="form-label">
-                            Confirm New Password <span class="text-danger">*</span>
-                        </label>
-                        <input type="password" 
-                               class="form-control" 
-                               id="new_password_confirmation" 
-                               name="new_password_confirmation" 
-                               required
-                               minlength="8">
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary"
+                            data-bs-dismiss="modal">
+                            Close
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="ti ti-circle-check me-2"></i>
+                            Reset Password
+                        </button>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Reset Password</button>
-                </div>
-            </form>
+
+                </form>
+            </div>
         </div>
-    </div>
-</div>
-@endcanUpdate
+    @endcanUpdate
 
 @endsection
 
