@@ -344,12 +344,15 @@
         <div class="modal-dialog modal-dialog-centered">
             <form action="{{ route('admin.logs.activity.export') }}" method="get"
                 class="modal-content">
-                <div class="modal-header">
-                    <h6 class="modal-title">
+                <div class="modal-header d-flex justify-content-between bg-success">
+                    <h6 class="modal-title text-white">
                         Export Activity Logs
                     </h6>
 
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn btn-icon btn-white-transparent" 
+                        data-bs-dismiss="modal" aria-label="Close">
+                        <i class="ti ti-x"></i>
+                    </button>
                 </div>
                 
                 <div class="modal-body">
@@ -430,12 +433,15 @@
                 class="modal-content">
                 @csrf
 
-                <div class="modal-header">
-                    <h6 class="modal-title">
+                <div class="modal-header d-flex justify-content-between bg-danger">
+                    <h6 class="modal-title text-white">
                         Clear Old Activity Logs
                     </h6>
 
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn btn-icon btn-white-transparent" 
+                        data-bs-dismiss="modal" aria-label="Close">
+                        <i class="ti ti-x"></i>
+                    </button>
                 </div>
                 
                 <div class="modal-body">

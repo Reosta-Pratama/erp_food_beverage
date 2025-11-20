@@ -241,9 +241,6 @@
 
 @endsection
 
-@section('modals')
-@endsection
-
 @section('scripts')
 
     <!-- Sweetalerts JS -->

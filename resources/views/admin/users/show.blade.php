@@ -350,7 +350,6 @@
 @endsection
 
 @section('modals')
-    
 
     {{-- Reset Password Modal --}}
     @canUpdate('users')
@@ -362,12 +361,15 @@
                     class="modal-content">
                     @csrf
 
-                    <div class="modal-header">
-                        <h6 class="modal-title">
+                    <div class="modal-header d-flex justify-content-between bg-primary">
+                        <h6 class="modal-title text-white">
                             Reset Password
                         </h6>
 
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn btn-icon btn-white-transparent" 
+                            data-bs-dismiss="modal" aria-label="Close">
+                            <i class="ti ti-x"></i>
+                        </button>
                     </div>
 
                     <div class="modal-body">

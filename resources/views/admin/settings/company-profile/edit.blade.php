@@ -346,12 +346,15 @@
                 @csrf
                 @method('DELETE')
 
-                <div class="modal-header">
-                    <h6 class="modal-title">
+                <div class="modal-header d-flex justify-content-between bg-danger">
+                    <h6 class="modal-title text-white">
                         Delete Company Logo
                     </h6>
 
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn btn-icon btn-white-transparent" 
+                        data-bs-dismiss="modal" aria-label="Close">
+                        <i class="ti ti-x"></i>
+                    </button>
                 </div>
 
                 <div class="modal-body">
