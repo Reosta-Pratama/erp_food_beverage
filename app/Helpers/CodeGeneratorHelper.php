@@ -3,11 +3,13 @@
 namespace App\Helpers;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class CodeGeneratorHelper
 {
     /**
-     * Generate unique code with format: PREFIX-YYYYMM-XXXX
+     * Generate unique secure code with format: PREFIX-RANDOMSTRING
+     * More secure and harder to guess for URL parameters
      * 
      * @param string $table - Table name
      * @param string $column - Column name (e.g., 'bom_code', 'recipe_code')
@@ -16,26 +18,123 @@ class CodeGeneratorHelper
      */
     public static function generate(string $table, string $column, string $prefix): string
     {
-        $yearMonth = date('Ym'); // Format: 202411
-        $pattern = $prefix . '-' . $yearMonth . '-%';
+        $maxAttempts = 10;
+        $attempt = 0;
         
-        // Get last sequence for current month
-        $lastCode = DB::table($table)
-            ->where($column, 'like', $pattern)
-            ->orderByDesc($column)
-            ->value($column);
+        do {
+            // Generate random string (alphanumeric, case-sensitive)
+            // Format: PREFIX-XXXXXXXXXX (total 15 chars if prefix is 3 chars)
+            $randomLength = 15 - strlen($prefix) - 1; // -1 for dash separator
+            
+            // Using cryptographically secure random string
+            $randomString = strtoupper(substr(
+                str_replace(['/', '+', '='], '', base64_encode(random_bytes(12))),
+                0,
+                $randomLength
+            ));
+            
+            $code = $prefix . '-' . $randomString;
+            
+            // Check if code already exists
+            $exists = DB::table($table)
+                ->where($column, $code)
+                ->exists();
+            
+            if (!$exists) {
+                return $code;
+            }
+            
+            $attempt++;
+            
+        } while ($attempt < $maxAttempts);
         
-        if ($lastCode) {
-            // Extract sequence number from last code
-            $lastSequence = (int) substr($lastCode, -4);
-            $newSequence = $lastSequence + 1;
-        } else {
-            // First code for this month
-            $newSequence = 1;
-        }
+        throw new \Exception("Failed to generate unique code after {$maxAttempts} attempts");
+    }
+
+    /**
+     * Alternative: Generate with timestamp + random for better uniqueness
+     * Format: PREFIX-TTTTRRRRRR (T=timestamp, R=random)
+     */
+    public static function generateWithTimestamp(string $table, string $column, string $prefix): string
+    {
+        $maxAttempts = 10;
+        $attempt = 0;
         
-        // Format: BOM-202411-0001
-        return sprintf('%s-%s-%04d', $prefix, $yearMonth, $newSequence);
+        do {
+            // Get compact timestamp (base36)
+            $timestamp = base_convert(time(), 10, 36);
+            
+            // Calculate remaining length
+            $remainingLength = 15 - strlen($prefix) - strlen($timestamp) - 1;
+            
+            // Generate random string for remaining space
+            $random = strtoupper(substr(
+                str_replace(['/', '+', '='], '', base64_encode(random_bytes(8))),
+                0,
+                $remainingLength
+            ));
+            
+            $code = $prefix . '-' . $timestamp . $random;
+            
+            // Check if code already exists
+            $exists = DB::table($table)
+                ->where($column, $code)
+                ->exists();
+            
+            if (!$exists) {
+                return $code;
+            }
+            
+            $attempt++;
+            usleep(100000); // 100ms delay
+            
+        } while ($attempt < $maxAttempts);
+        
+        throw new \Exception("Failed to generate unique code after {$maxAttempts} attempts");
+    }
+
+    /**
+     * Alternative: Using UUID-like format (most secure)
+     * Format: PREFIX-XXYYZZZZ (shorter UUID)
+     */
+    public static function generateUUIDStyle(string $table, string $column, string $prefix): string
+    {
+        $maxAttempts = 10;
+        $attempt = 0;
+        
+        do {
+            // Generate UUID and take parts
+            $uuid = Str::uuid()->toString();
+            $uuidParts = explode('-', $uuid);
+            
+            // Take first segments to fit in 15 chars
+            $remainingLength = 15 - strlen($prefix) - 1;
+            $shortUuid = strtoupper(substr(str_replace('-', '', $uuid), 0, $remainingLength));
+            
+            $code = $prefix . '-' . $shortUuid;
+            
+            // Check if code already exists
+            $exists = DB::table($table)
+                ->where($column, $code)
+                ->exists();
+            
+            if (!$exists) {
+                return $code;
+            }
+            
+            $attempt++;
+            
+        } while ($attempt < $maxAttempts);
+        
+        throw new \Exception("Failed to generate unique code after {$maxAttempts} attempts");
+    }
+
+    /**
+     * Generate Unit Of Measure Code
+     */
+    public static function generateUOMCode(): string
+    {
+        return self::generate('units_of_measure', 'uom_code ', 'UOM');
     }
 
     /**

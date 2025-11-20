@@ -10,6 +10,7 @@
     <style>
         .crud-checkbox-card {
             transition: all 300ms ease;
+            cursor: pointer;
         }
         .crud-checkbox-card:hover {
             border-color: var(--primary);
@@ -77,7 +78,7 @@
         @csrf
 
         <div class="row g-4 mb-4">
-            <div class="col-lg-6">
+            <div class="col-md-6">
                 <div class="card custom">
                     <div class="card-header">
                         <div class="card-title">Permission Information</div>
@@ -174,7 +175,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-6">
+            <div class="col-md-6">
                 <div class="card custom">
                     <div class="card-header">
                         <div class="card-title">CRUD Access Permissions</div>

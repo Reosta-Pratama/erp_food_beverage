@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('units_of_measure', function (Blueprint $table) {
             $table->id('uom_id');
             $table->string('uom_name', 100)->unique();
-            $table->char('uom_code', 10)->unique();
+            $table->char('uom_code', 15)->unique();
             $table->string('uom_type', 50);
             $table->timestamps();
         });

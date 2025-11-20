@@ -23,6 +23,7 @@ export default defineConfig({
                         'resources/assets/js/erp/activity-log.js', 
                         'resources/assets/js/erp/audit-log.js', 
                         'resources/assets/js/erp/company-profile.js', 
+                        'resources/assets/js/erp/create-new-measure.js',
                         'resources/assets/js/erp/create-new-permission.js',
                         'resources/assets/js/erp/create-new-role.js',
                         'resources/assets/js/erp/create-new-user.js',
