@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Settings;
 
+use App\Helpers\CodeGeneratorHelper;
 use App\Http\Controllers\Controller;
 use App\LogsActivity;
 use Illuminate\Http\Request;
@@ -66,8 +67,11 @@ class UnitOfMeasureController extends Controller
 
         DB::beginTransaction();
         try {
+            // Generate unique BOM code
+            $uomCode = CodeGeneratorHelper::generateUOMCode();
+
             $uomId = DB::table('units_of_measure')->insertGetId([
-                'uom_code' => strtoupper(Str::random(10)),
+                'uom_code' => $uomCode,
                 'uom_name' => $validated['uom_name'],
                 'uom_type' => $validated['uom_type'],
                 'created_at' => now(),
@@ -151,10 +155,31 @@ class UnitOfMeasureController extends Controller
             abort(404, 'Unit of measure not found');
         }
 
-        $validated = $request->validate([
-            'uom_name' => ['required', 'string', 'max:100', 'unique:units_of_measure,uom_name,' . $uom->uom_id . ',uom_id'],
-            'uom_type' => ['required', 'string', 'max:50'],
-        ]);
+        $validated = $request->validate(
+            [
+                'uom_name' => [
+                    'required',
+                    'string',
+                    'max:100',
+                    'unique:units_of_measure,uom_name,' . $uom->uom_id . ',uom_id'
+                ],
+                'uom_type' => [
+                    'required',
+                    'string',
+                    'max:50'
+                ],
+            ],
+            [
+                'uom_name.required' => 'Please enter a unit name.',
+                'uom_name.string'   => 'Unit name must be a valid text.',
+                'uom_name.max'      => 'Unit name cannot exceed 100 characters.',
+                'uom_name.unique'   => 'This unit name is already registered.',
+
+                'uom_type.required' => 'Please select a unit type.',
+                'uom_type.string'   => 'Unit type must be valid.',
+                'uom_type.max'      => 'Unit type cannot exceed 50 characters.',
+            ]
+        );
 
         DB::beginTransaction();
         try {
@@ -162,6 +187,7 @@ class UnitOfMeasureController extends Controller
             $oldData = [
                 'uom_name' => $uom->uom_name,
                 'uom_type' => $uom->uom_type,
+                'updated_at' => $uom->updated_at,
             ];
 
             DB::table('units_of_measure')

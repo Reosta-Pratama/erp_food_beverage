@@ -53,7 +53,8 @@
                                         id="email"
                                         placeholder="Enter the email address.."
                                         type="text"
-                                        name="email">
+                                        name="email"
+                                        value="admin@erp.com">
                                 </div>
                             </div>
 
@@ -67,7 +68,8 @@
                                         id="create-password"
                                         placeholder="Enter the password.."
                                         type="password"
-                                        name="password">
+                                        name="password"
+                                        value="password123">
                                     <button
                                         class="show-password-button"
                                         type="button"

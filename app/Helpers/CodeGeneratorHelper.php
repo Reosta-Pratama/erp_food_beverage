@@ -43,7 +43,7 @@ class CodeGeneratorHelper
             if (!$exists) {
                 return $code;
             }
-            
+
             $attempt++;
             
         } while ($attempt < $maxAttempts);
@@ -134,7 +134,7 @@ class CodeGeneratorHelper
      */
     public static function generateUOMCode(): string
     {
-        return self::generate('units_of_measure', 'uom_code ', 'UOM');
+        return self::generate('units_of_measure', 'uom_code', 'UOM');
     }
 
     /**

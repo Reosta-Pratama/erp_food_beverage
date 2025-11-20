@@ -1,5 +1,5 @@
 @extends('layouts.app', [
-    'title' => 'Add New Unit of Measure'
+    'title' => 'Edit Unit - ' . $uom->uom_name
 ])
 
 @section('styles')
@@ -24,6 +24,7 @@
 
 @section('content')
 
+
     <!-- Page Header -->
     <div
         class="d-flex align-items-center justify-content-between page-header-breadcrumb flex-wrap gap-2">
@@ -36,7 +37,7 @@
                     <li class="breadcrumb-item">
                         <a href="javascript:void(0);">Units of Measure</a>
                     </li>
-                    <li class="breadcrumb-item active" aria-current="page">Create New Units of Measure</li>
+                    <li class="breadcrumb-item active" aria-current="page">Edit Units of Measure</li>
                 </ol>
             </nav>
         </div>
@@ -44,10 +45,10 @@
     <!-- Page Header -->
 
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fs-22 mb-0">Create New Units of Measure</h2>
+        <h2 class="fs-22 mb-0">Edit Units of Measure</h2>
 
         <div class="d-flex align-items-center gap-2">
-            <a href="{{ route('admin.settings.uom.index') }}"
+            <a href="{{ route('admin.settings.uom.show', $uom->uom_code) }}"
                 class="btn btn-outline-secondary">
                 <i class="ti ti-arrow-left me-2"></i>
                 Back
@@ -84,16 +85,38 @@
     @endif
 
     <!-- Container -->
-    <form action="{{ route('admin.settings.uom.store') }}" method="POST" id="uomForm"
-        class="row mb-4">
+    <form action="{{ route('admin.settings.uom.update', $uom->uom_code) }}" method="POST" 
+        id="uomForm" class="row justify-content-center mb-4">
         @csrf
+        @method('PUT')
 
-        <div class="col-md-6">
+        <div class="col-8">
             <div class="card custom">
                 <div class="card-header">
-                    <div class="card-title">Unit Information</div>
+                    <div class="card-title">Current Information</div>
                 </div>
                 <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <small class="text-muted">Unit Code</small>
+                            <code class="d-block mb-3">{{ $uom->uom_code }}</code>
+                        </div>
+                        <div class="col-md-6">
+                            <small class="text-muted">Created</small>
+                            <div class="small">{{ \Carbon\Carbon::parse($uom->created_at)->format('d M Y - H:i') }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-8">
+            <div  class="card custom">
+                <div class="card-header">
+                    <div class="card-title">Edit Unit Information</div>
+                </div>
+                <div class="card-body">
+
                     {{-- Unit Name --}}
                     <div class="mb-3">
                         <label for="uom_name" class="form-label fw-bold">
@@ -104,7 +127,7 @@
                                 class="form-control form-control-lg @error('uom_name') is-invalid @enderror" 
                                 id="uom_name" 
                                 name="uom_name" 
-                                value="{{ old('uom_name') }}" 
+                                value="{{ old('uom_name', $uom->uom_name) }}" 
                                 placeholder="e.g., Kilogram, Liter, Meter, Piece"
                                 required
                                 autocomplete="off"
@@ -141,11 +164,11 @@
                                     <label class="card custom crud-checkbox-card text-center p-3 mb-0" 
                                         for="type_{{ $type['value'] }}">
                                         <input type="radio" 
-                                           class="form-check-input crud-checkbox d-none" 
+                                           class="form-check-input crud-checkbox d-none {{ $uom->uom_type === $type['value'] ? 'checked' : '' }}" 
                                            id="type_{{ $type['value'] }}" 
                                            name="uom_type"
                                            value="{{ $type['value'] }}"
-                                           {{ old('uom_type') === $type['value'] ? 'checked' : '' }}>
+                                           {{ old('uom_type', $uom->uom_type) === $type['value'] ? 'checked' : '' }}>
                                             <i class="ti {{ $type['icon'] }} text-{{ $type['color'] }} fs-36"></i>
                                             <h6 class="mb-1">{{ $type['value'] }}</h6>
                                             <small class="text-muted">{{ $type['examples'] }}</small>
@@ -158,84 +181,24 @@
                             <div class="text-danger small mt-2">{{ $message }}</div>
                         @enderror
                     </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-md-6">
-            <div class="card custom">
-                <div class="card-header">
-                    <div class="card-title">Common Examples</div>
-                </div>
-                <div class="card-body">
-                    <div class="row g-4">
-                        <div class="col-md-6">
-                            <h6 class="text-success">
-                                <i class="ti ti-file-analytics me-2"></i>
-                                Weight Units
-                            </h6>
-                            <ul class="list-group small">
-                                <li class="list-group-item">Kilogram (kg)</li>
-                                <li class="list-group-item">Gram (g)</li>
-                                <li class="list-group-item">Ton</li>
-                                <li class="list-group-item">Pound (lb)</li>
-                            </ul>
-                        </div>
-                        <div class="col-md-6">
-                            <h6 class="text-primary">
-                                <i class="ti ti-flask me-2"></i>
-                                Volume Units
-                            </h6>
-                            <ul class="list-group small">
-                                <li class="list-group-item">Liter (L)</li>
-                                <li class="list-group-item">Milliliter (mL)</li>
-                                <li class="list-group-item">Gallon</li>
-                                <li class="list-group-item">Cubic Meter (m³)</li>
-                            </ul>
-                        </div>
-                        <div class="col-md-6">
-                            <h6 class="text-warning">
-                                <i class="ti ti-ruler me-2"></i>
-                                Length Units
-                            </h6>
-                            <ul class="list-group small">
-                                <li class="list-group-item">Meter (m)</li>
-                                <li class="list-group-item">Centimeter (cm)</li>
-                                <li class="list-group-item">Inch</li>
-                                <li class="list-group-item">Foot</li>
-                            </ul>
-                        </div>
-                        <div class="col-md-6">
-                            <h6 class="text-danger">
-                                <i class="ti ti-123 me-2"></i>
-                                Quantity Units
-                            </h6>
-                            <ul class="list-group small">
-                                <li class="list-group-item">Piece (pcs)</li>
-                                <li class="list-group-item">Box</li>
-                                <li class="list-group-item">Dozen</li>
-                                <li class="list-group-item">Pack</li>
-                            </ul>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </div>
 
-        <div class="col-12">
+        <div class="col-8">
             <div class="d-flex justify-content-between align-items-center">
-                <a href="{{ route('admin.settings.uom.index') }}" 
+                <a href="{{ route('admin.settings.uom.show', $uom->uom_code) }}" 
                     class="btn btn-outline-secondary">
                     <i class="ti ti-x me-2"></i>
                     Cancel
                 </a>
                 <button type="submit" class="btn btn-primary">
                     <i class="ti ti-check me-2"></i>
-                    Create Unit
+                    Update Unit
                 </button>
             </div>
         </div>
-
     </form>
     <!-- Container -->
 
