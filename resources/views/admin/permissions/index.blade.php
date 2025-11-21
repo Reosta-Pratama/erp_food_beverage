@@ -197,7 +197,7 @@
                 <div class="card-body p-0">
                     @if($permissions->count() > 0)
                         <div class="table-responsive">
-                            <table class="table text-nowrap table-borderless mb-0">
+                            <table class="table table-borderless table-hover text-nowrap mb-0">
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
@@ -289,7 +289,7 @@
                         </div>
                     @else
                         <div class="text-center py-5">
-                            <i class="ti ti-file-x text-muted fs-40"></i>
+                            <i class="ti ti-database-off text-muted display-1"></i>
                             <p class="text-muted mt-3">No permissions found</p>
                             <a href="{{ route('admin.permissions.create') }}" 
                                 class="btn btn-primary">

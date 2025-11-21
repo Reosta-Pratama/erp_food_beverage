@@ -362,7 +362,7 @@
                     @else
                         <div class="col-12">
                             <div class="text-center py-5">
-                                <i class="ti ti-file-x text-muted fs-40"></i>
+                                <i class="ti ti-database-off text-muted display-1"></i>
                                 <h5 class="text-muted mt-3">No Activity Logs Found</h5>
                                 <p class="text-muted">Try adjusting your filters or check back later</p>
                             </div>

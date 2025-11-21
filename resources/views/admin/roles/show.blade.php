@@ -158,7 +158,7 @@
                         <div class="card custom">
                             <div class="card-body p-2">
                                 <div class="table-responsive">
-                                    <table class="table text-nowrap table-borderless mb-0">
+                                    <table class="table text-nowrap table-borderless table-hover mb-0">
                                         <thead>
                                             <tr>
                                                 <th scope="col">#</th>

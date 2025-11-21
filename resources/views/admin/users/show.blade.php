@@ -335,7 +335,7 @@
                                 </div>
                             @else
                                 <p class="text-center text-muted py-3 mb-0">
-                                    <i class="ti ti-inbox fs-40 d-block mb-2"></i>
+                                    <i class="ti ti-database-off display-1 d-block mb-2"></i>
                                     No recent activity
                                 </p>
                             @endif

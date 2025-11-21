@@ -425,7 +425,7 @@
                             </div>
 
                             <div class="card-body text-center py-5">
-                                <i class="ti ti-file-x text-muted fs-40"></i>
+                                <i class="ti ti-database-off text-muted display-1"></i>
                                 <h5 class="text-muted mt-3">No Data Changes Recorded</h5>
                                 <p class="text-muted mb-0">This audit entry does not contain detailed data changes</p>
                             </div>
