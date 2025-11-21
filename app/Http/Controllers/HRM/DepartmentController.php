@@ -16,11 +16,11 @@ class DepartmentController extends Controller
     /**
      * List departments with employee count
      */
-    public function index()
+     public function index(Request $request)
     {
         $this->logView('HRM - Departments', 'Viewed departments list');
 
-        $departments = DB::table('departments')
+        $query = DB::table('departments')
             ->leftJoin('employees as manager', 'departments.manager_id', '=', 'manager.employee_id')
             ->leftJoin('employees', 'departments.department_id', '=', 'employees.department_id')
             ->select(
@@ -44,9 +44,41 @@ class DepartmentController extends Controller
                 'manager.first_name',
                 'manager.last_name',
                 'manager.employee_code'
-            )
-            ->orderBy('departments.department_name')
-            ->get();
+            );
+
+        // Search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('departments.department_name', 'like', "%{$search}%")
+                  ->orWhere('departments.department_code', 'like', "%{$search}%")
+                  ->orWhere(DB::raw('CONCAT(manager.first_name, " ", manager.last_name)'), 'like', "%{$search}%");
+            });
+        }
+
+        // Manager filter
+        if ($request->filled('manager')) {
+            if ($request->manager === 'unassigned') {
+                $query->whereNull('departments.manager_id');
+            } elseif ($request->manager === 'assigned') {
+                $query->whereNotNull('departments.manager_id');
+            }
+        }
+
+        // Sorting
+        $sortBy = $request->get('sort_by', 'department_name');
+        $sortOrder = $request->get('sort_order', 'asc');
+        
+        $allowedSort = ['department_name', 'department_code', 'manager_name', 'employees_count', 'created_at'];
+        if (in_array($sortBy, $allowedSort)) {
+            if ($sortBy === 'manager_name') {
+                $query->orderBy(DB::raw('CONCAT(manager.first_name, " ", manager.last_name)'), $sortOrder);
+            } else {
+                $query->orderBy($sortBy, $sortOrder);
+            }
+        }
+
+        $departments = $query->paginate(10)->withQueryString();
         
         return view('admin.hrm.departments.index', compact('departments'));
     }
