@@ -45,14 +45,45 @@ class PositionController extends Controller
                 'departments.department_code'
             );
 
+        // Search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('positions.position_name', 'like', "%{$search}%")
+                  ->orWhere('positions.position_code', 'like', "%{$search}%")
+                  ->orWhere('departments.department_name', 'like', "%{$search}%");
+            });
+        }
+
         // Filter by department
         if ($request->filled('department_id')) {
             $query->where('positions.department_id', $request->department_id);
         }
 
-        $positions = $query->orderBy('departments.department_name')
-            ->orderBy('positions.position_name')
-            ->get();
+        // Employee count filter
+        if ($request->filled('employee_status')) {
+            if ($request->employee_status === 'empty') {
+                $query->havingRaw('COUNT(DISTINCT employees.employee_id) = 0');
+            } elseif ($request->employee_status === 'filled') {
+                $query->havingRaw('COUNT(DISTINCT employees.employee_id) > 0');
+            }
+        }
+
+        // Sorting
+        $sortBy = $request->get('sort_by', 'department_name');
+        $sortOrder = $request->get('sort_order', 'asc');
+        
+        $allowedSort = ['position_name', 'position_code', 'department_name', 'employees_count', 'created_at'];
+        if (in_array($sortBy, $allowedSort)) {
+            $query->orderBy($sortBy, $sortOrder);
+        }
+
+        // Secondary sort
+        if ($sortBy !== 'position_name') {
+            $query->orderBy('position_name', 'asc');
+        }
+
+        $positions = $query->paginate(15)->withQueryString();
 
         // Get departments for filter
         $departments = DB::table('departments')

@@ -33,11 +33,24 @@ class EmployeeController extends Controller
                 'employees.employment_status',
                 'employees.join_date',
                 'employees.base_salary',
+                'employees.gender',
                 'departments.department_name',
                 'departments.department_code',
                 'positions.position_name',
                 'positions.position_code'
             );
+
+        // Search - UPDATED
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('employees.first_name', 'like', "%{$search}%")
+                ->orWhere('employees.last_name', 'like', "%{$search}%")
+                ->orWhere('employees.employee_code', 'like', "%{$search}%")
+                ->orWhere('employees.email', 'like', "%{$search}%")
+                ->orWhere('employees.phone', 'like', "%{$search}%");
+            });
+        }
 
         // Filter by department
         if ($request->filled('department_id')) {
@@ -54,20 +67,38 @@ class EmployeeController extends Controller
             $query->where('employees.employment_status', $request->employment_status);
         }
 
-        // Search
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('employees.first_name', 'like', "%{$search}%")
-                  ->orWhere('employees.last_name', 'like', "%{$search}%")
-                  ->orWhere('employees.employee_code', 'like', "%{$search}%")
-                  ->orWhere('employees.email', 'like', "%{$search}%");
-            });
+        // NEW: Filter by gender
+        if ($request->filled('gender')) {
+            $query->where('employees.gender', $request->gender);
         }
 
-        $employees = $query->orderBy('employees.first_name')
-            ->orderBy('employees.last_name')
-            ->paginate(50);
+        // NEW: Filter by join date range
+        if ($request->filled('join_date_from')) {
+            $query->whereDate('employees.join_date', '>=', $request->join_date_from);
+        }
+        if ($request->filled('join_date_to')) {
+            $query->whereDate('employees.join_date', '<=', $request->join_date_to);
+        }
+
+        // NEW: Sorting
+        $sortBy = $request->get('sort_by', 'first_name');
+        $sortOrder = $request->get('sort_order', 'asc');
+        
+        $allowedSort = ['first_name', 'last_name', 'employee_code', 'department_name', 'position_name', 'employment_status', 'join_date', 'base_salary'];
+        if (in_array($sortBy, $allowedSort)) {
+            $query->orderBy($sortBy, $sortOrder);
+        }
+
+        // Secondary sort
+        if ($sortBy !== 'first_name') {
+            $query->orderBy('first_name', 'asc');
+        }
+        if ($sortBy !== 'last_name') {
+            $query->orderBy('last_name', 'asc');
+        }
+
+        // NEW: Pagination with query string
+        $employees = $query->paginate(20)->withQueryString();
 
         // Get filter options
         $departments = DB::table('departments')
