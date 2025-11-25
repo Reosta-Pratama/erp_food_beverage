@@ -15,6 +15,10 @@
     font-size: 1.5rem;
 }
 
+.profile-dropdown.dropdown-menu.dropdown-menu-end.show {
+    width: 250px;
+}
+
 .dropdown-menu {
     &.show {
         max-height: 250px;
@@ -23,6 +27,19 @@
         &.profile-dropdown {
             max-height: 500px !important;
         }
+    }
+}
+
+.avatar-font {
+    background: $avatar-bg;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    > span {
+        color: $white;
+        font-size: 1.5rem;
+        font-weight: 600;
     }
 }
 

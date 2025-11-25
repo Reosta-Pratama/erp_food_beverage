@@ -61,12 +61,13 @@
                             <li class="menu-item dropdown-profile position-relative">
                                 <a
                                     id="dropdownMenuProfile"
-                                    class="menu-link avatar avatar-sm"
+                                    class="menu-link avatar avatar-sm avatar-font"
                                     href="javascript:void(0)"
                                     role="button" 
                                     data-bs-toggle="dropdown" data-bs-offset="0,10"
+                                    data-bs-auto-close="outside"
                                     aria-expanded="false">
-                                    <img src="{{ asset('assets/images/avatar/1.jpg') }}" alt="img">
+                                    <span>{{ strtoupper(substr(Auth::user()->full_name, 0, 1)) }}</span>
                                 </a>
 
                                 <ul
@@ -74,12 +75,12 @@
                                     aria-labelledby="dropdownMenuProfile">
                                     <li class="info-profile">
                                         <div class="d-flex align-items-center gap-2">
-                                            <div class="avatar avatar-md">
-                                                <img src="{{ asset('assets/images/avatar/1.jpg') }}" alt="img">
-                                            </div>
+                                            <span class="avatar avatar-md avatar-font">
+                                                <span>{{ strtoupper(substr(Auth::user()->full_name, 0, 1)) }}</span>
+                                            </span>
                                             <div class="d-flex flex-column">
-                                                <h6 class="mb-0 fs-14">Mr. ChatGPT</h6>
-                                                <span class="text-muted fs-12">expert.chatgpt@gmail.com</span>
+                                                <h6 class="mb-0 fs-14">{{ Auth::user()->full_name }}</h6>
+                                                <span class="text-muted fs-12">{{ Auth::user()->email }}</span>
                                             </div>
                                         </div>
                                     </li>
