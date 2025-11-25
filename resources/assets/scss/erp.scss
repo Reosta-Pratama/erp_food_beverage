@@ -35,7 +35,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    
+
     > span {
         color: $white;
         font-size: 1.5rem;
@@ -104,5 +104,15 @@
         width: 200px;
         height: 200px;
         object-fit: cover;
+    }
+}
+
+.last-border-none {
+    > tbody {
+        > tr:last-child {
+            > td {
+                border-bottom: none;
+            }
+        }
     }
 }

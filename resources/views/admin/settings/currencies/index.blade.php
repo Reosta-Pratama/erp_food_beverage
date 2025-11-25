@@ -117,23 +117,29 @@
                                         </td>
                                         <td class="text-center">
                                             <div class="d-grid gap-2 d-md-block">
+                                                <a class="btn btn-sm btn-primary"
+                                                    href="{{ route('admin.settings.currencies.show', $currency->currency_code) }}"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Detail">
+                                                    <i class="ti ti-eye"></i>
+                                                </a>
+                                                
                                                 @canUpdate('settings')
-                                                    @if (!$currency->is_base_currency)
+                                                    {{-- @if (!$currency->is_base_currency)
                                                         <form action="{{ route('admin.settings.currencies.set-base', $currency->currency_code) }}" 
                                                             method="POST" 
                                                             class="d-inline">
                                                             @csrf
                                                             @method('PATCH')
                                                             
-                                                            <button class="btn btn-sm btn-primary btn-wave"
+                                                            <button class="btn btn-sm btn-primary"
                                                                 type="submit"
                                                                 data-bs-toggle="tooltip" data-bs-placement="top" title="Set as Base Currency">
                                                                 <i class="ti ti-star"></i>
                                                             </button>
                                                         </form>
-                                                    @endif
+                                                    @endif --}}
 
-                                                    <a class="btn btn-sm btn-success btn-wave"
+                                                    <a class="btn btn-sm btn-success"
                                                         href="{{ route('admin.settings.currencies.edit', $currency->currency_code) }}"
                                                         data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                                         <i class="ti ti-pencil"></i>
@@ -149,14 +155,14 @@
                                                             @csrf
                                                             @method('DELETE')
                                                             
-                                                            <button class="btn btn-sm btn-danger btn-wave"
+                                                            <button class="btn btn-sm btn-danger"
                                                                 type="submit"
                                                                 data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
                                                                 <i class="ti ti-trash"></i>
                                                             </button>
                                                         </form>
                                                     @else
-                                                        <button class="btn btn-sm btn-danger btn-wave"
+                                                        <button class="btn btn-sm btn-danger"
                                                             type="button"
                                                             data-bs-toggle="tooltip" data-bs-placement="top" title="Cannot delete base currency">
                                                             <i class="ti ti-trash"></i>

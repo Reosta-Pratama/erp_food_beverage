@@ -162,6 +162,7 @@ class CurrencyController extends Controller
                 'symbol' => $currency->symbol,
                 'exchange_rate' => $currency->exchange_rate,
                 'is_base_currency' => $currency->is_base_currency,
+                'updated_at' => $currency->updated_at,
             ];
 
             // If this is set as base currency, unset others

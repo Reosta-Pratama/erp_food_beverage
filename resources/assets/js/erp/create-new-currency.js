@@ -27,4 +27,30 @@ document.addEventListener('DOMContentLoaded', function () {
     // Run on change
     baseCurrencyCheckbox.addEventListener('change', updateExchangeRateState);
     
+
+    const btnSetBase = document.getElementById('btnSetBase');
+    if (btnSetBase) {
+
+        btnSetBase.addEventListener('click', function () {
+            const form = document.getElementById('setBaseForm');
+            const currencyCode = btnSetBase.dataset.code; 
+
+            Swal.fire({
+                icon: 'warning',
+                title: 'Set as Base Currency?',
+                text: `This will set ${currencyCode} as the system's base currency.`,
+                showCancelButton: true,
+                reverseButtons: true,
+                confirmButtonText: 'Yes, set as base',
+                cancelButtonText: 'Cancel',
+                confirmButtonColor: '#985ffd',
+                cancelButtonColor: '#faf8fd'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    }
+
 });
