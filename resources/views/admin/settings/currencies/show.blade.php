@@ -44,15 +44,11 @@
         </div>
     </div>
 
-
-<div class="container-fluid">
-
-    <div class="row">
+    <div class="row g-4">
         <div class="col-lg-8">
-            <!-- Currency Information -->
-            <div class="card mb-4">
+            <div class="card custom">
                 <div class="card-header">
-                    <h5 class="mb-0">Currency Information</h5>
+                    <div class="card-title">Currency Information</div>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -62,7 +58,7 @@
                                 <h3 class="mb-0 text-primary">{{ $currency->currency_code }}</h3>
                                 @if($currency->is_base_currency)
                                     <span class="badge bg-success ms-2">
-                                        <i class="bi bi-star-fill me-1"></i>Base
+                                        <i class="ti ti-star-filled me-1"></i>Base
                                     </span>
                                 @endif
                             </div>
@@ -96,28 +92,22 @@
                     </div>
 
                     @if($currency->is_base_currency)
-                    <div class="alert alert-info mb-0">
-                        <i class="bi bi-info-circle me-2"></i>
-                        This is the <strong>base currency</strong> for your system. All other currencies are calculated relative to this one.
-                    </div>
+                        <div class="alert alert-info mb-0">
+                            <i class="ti ti-info-circle me-2"></i>
+                            This is the <strong>base currency</strong> for your system. All other currencies are calculated relative to this one.
+                        </div>
                     @endif
                 </div>
             </div>
 
-            <!-- Usage Example -->
-            <div class="card mb-4">
+            <div class="card custom">
                 <div class="card-header">
-                    <h5 class="mb-0">
-                        <i class="bi bi-calculator me-2"></i>Conversion Example
-                    </h5>
+                    <div class="card-title">Conversion Example</div>
                 </div>
-                <div class="card-body">
-                    @if($currency->is_base_currency)
-                        <p class="mb-3">
-                            As the base currency, <strong>1.00 {{ $currency->currency_code }}</strong> equals <strong>1.00</strong> in the system.
-                        </p>
+                <div class="card-body p-0">
+                    @if ($currency->is_base_currency)
                         <div class="table-responsive">
-                            <table class="table table-sm table-bordered">
+                            <table class="table last-border-none">
                                 <thead class="table-light">
                                     <tr>
                                         <th>{{ $currency->currency_code }}</th>
@@ -145,12 +135,8 @@
                             </table>
                         </div>
                     @else
-                        <p class="mb-3">
-                            <strong>1.00 Base Currency</strong> = 
-                            <strong>{{ number_format($currency->exchange_rate, 2) }} {{ $currency->currency_code }}</strong>
-                        </p>
                         <div class="table-responsive">
-                            <table class="table table-sm table-bordered">
+                            <table class="table">
                                 <thead class="table-light">
                                     <tr>
                                         <th>Base Currency</th>
@@ -177,22 +163,22 @@
                                 </tbody>
                             </table>
                         </div>
-                        <p class="text-muted small mb-0">
-                            <i class="bi bi-info-circle me-1"></i>
+
+                        <p class="text-muted small p-3 mb-0">
+                            <i class="ti ti-info-circle me-1"></i>
                             Conversions are approximate and may vary based on current exchange rates.
                         </p>
                     @endif
                 </div>
             </div>
 
-            <!-- Metadata -->
-            <div class="card">
+            <div class="card custom">
                 <div class="card-header">
-                    <h5 class="mb-0">Metadata</h5>
+                    <div class="card-title">Metadata</div>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
+                    <div class="row g-3">
+                        <div class="col-md-4">
                             <label class="text-muted small">Created At</label>
                             <div>
                                 {{ \Carbon\Carbon::parse($currency->created_at)->format('d M Y, H:i') }}
@@ -202,7 +188,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4">
                             <label class="text-muted small">Last Updated</label>
                             <div>
                                 {{ \Carbon\Carbon::parse($currency->updated_at)->format('d M Y, H:i') }}
@@ -212,7 +198,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-12">
+                        <div class="col-md-4">
                             <label class="text-muted small">Currency ID</label>
                             <div><code>{{ $currency->currency_id }}</code></div>
                         </div>
@@ -221,111 +207,118 @@
             </div>
         </div>
 
-        <!-- Sidebar -->
         <div class="col-lg-4">
-            <!-- Quick Actions -->
             @canUpdate('settings')
-            <div class="card mb-3">
-                <div class="card-header">
-                    <h5 class="mb-0">Quick Actions</h5>
-                </div>
-                <div class="card-body">
-                    <div class="d-grid gap-2">
-                        <a href="{{ route('admin.settings.currencies.edit', $currency->currency_code) }}" 
-                           class="btn btn-outline-warning">
-                            <i class="bi bi-pencil me-2"></i>Edit Currency
-                        </a>
-                        
-                        @if(!$currency->is_base_currency)
-                        <form action="{{ route('admin.settings.currencies.set-base', $currency->currency_code) }}" 
-                              method="POST">
-                            @csrf
-                            @method('PATCH')
-                            <button type="submit" 
-                                    class="btn btn-outline-success w-100"
-                                    onclick="return confirm('Set {{ $currency->currency_code }} as base currency?\n\nThis will change the exchange rate to 1.0 and unset the current base currency.')">
-                                <i class="bi bi-star me-2"></i>Set as Base Currency
-                            </button>
-                        </form>
-                        @endif
+                <div class="card custom">
+                    <div class="card-header">
+                        <div class="card-title">Quick Actions</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <a href="{{ route('admin.settings.currencies.edit', $currency->currency_code) }}" 
+                                class="btn btn-outline-warning">
+                                <i class="ti ti-pencil me-2"></i>
+                                Edit Currency
+                            </a>
+
+                            @if(!$currency->is_base_currency)
+                                <form action="{{ route('admin.settings.currencies.set-base', $currency->currency_code) }}" 
+                                    method="POST">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" 
+                                            class="btn btn-outline-success w-100"
+                                            onclick="return confirm('Set {{ $currency->currency_code }} as base currency?\n\nThis will change the exchange rate to 1.0 and unset the current base currency.')">
+                                        <i class="ti ti-star me-2"></i>
+                                        Set as Base Currency
+                                    </button>
+                                </form>
+                            @endif
+                        </div>
                     </div>
                 </div>
-            </div>
             @endcanUpdate
 
-            <!-- Status Card -->
-            <div class="card mb-3">
+            <div class="card custom">
                 <div class="card-header">
-                    <h5 class="mb-0">Status</h5>
+                    <div class="card-title">Status</div>
                 </div>
                 <div class="card-body">
-                    @if($currency->is_base_currency)
-                        <div class="text-center py-3">
-                            <i class="bi bi-star-fill text-warning fs-1 d-block mb-2"></i>
+                    @if ($currency->is_base_currency)
+                        <div class="text-center">
+                            <i class="bi bi-star-fill d-block text-warning fs-1 mb-2"></i>
                             <strong class="text-success">Base Currency</strong>
                             <p class="text-muted small mb-0 mt-2">
-                                This is the reference currency for all exchange rates in the system
+                                This is the reference currency for all exchange rates
                             </p>
                         </div>
                     @else
-                        <div class="text-center py-3">
-                            <i class="bi bi-currency-exchange fs-1 d-block mb-2 text-primary"></i>
+                        <div class="text-center">
+                            <i class="bi bi-currency-exchange d-block text-secondary fs-1 mb-2"></i>
                             <strong>Secondary Currency</strong>
                             <p class="text-muted small mb-0 mt-2">
-                                Exchange rate is relative to the base currency
+                                Exchange rate relative to base currency
                             </p>
                         </div>
                     @endif
                 </div>
             </div>
 
-            <!-- Info Card -->
-            <div class="card bg-light">
-                <div class="card-body">
-                    <h6 class="card-title">
-                        <i class="bi bi-lightbulb text-warning me-2"></i>Currency Information
-                    </h6>
-                    <ul class="small mb-0">
-                        <li class="mb-2">ISO 4217 standard code format</li>
-                        <li class="mb-2">Used across all financial transactions</li>
-                        <li class="mb-2">Exchange rates can be updated anytime</li>
-                        <li class="mb-2">Changes don't affect past transactions</li>
-                        <li>Regular updates recommended for accuracy</li>
-                    </ul>
+            <div class="card custom">
+                <div class="card-header">
+                    <div class="card-title">Currency Guidlines</div>
+                </div>
+                <div class="card-body p-0">
+                    <ol class="list-group list-group-flush list-group-numbered small">
+                        <li class="list-group-item">Use ISO 4217 standard currency codes (3 letters)</li>
+                        <li class="list-group-item">Only one currency can be set as base currency</li>
+                        <li class="list-group-item">Base currency always has exchange rate of 1.0</li>
+                        <li class="list-group-item">Exchange rates should be updated regularly</li>
+                        <li class="list-group-item">Currency symbol is optional but recommended</li>
+                    </ol>
                 </div>
             </div>
 
-            <!-- Usage Statistics (Optional - can be expanded) -->
-            <div class="card mt-3">
+            <div class="card custom">
                 <div class="card-header">
-                    <h5 class="mb-0">
-                        <i class="bi bi-graph-up me-2"></i>Usage Info
-                    </h5>
+                    <div class="card-title">Currency Guidlines</div>
                 </div>
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span class="text-muted small">Currency ID:</span>
-                        <strong><code>{{ $currency->currency_id }}</code></strong>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span class="text-muted small">Code Length:</span>
-                        <strong>{{ strlen($currency->currency_code) }} chars</strong>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="text-muted small">Has Symbol:</span>
-                        <strong>
-                            @if($currency->symbol)
-                                <span class="text-success"><i class="bi bi-check-circle"></i> Yes</span>
-                            @else
-                                <span class="text-muted"><i class="bi bi-x-circle"></i> No</span>
-                            @endif
-                        </strong>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table last-border-none mb-0">
+                            <tbody>
+                                <tr>
+                                    <td class="text-muted">Currency ID:</td>
+                                    <td class="fw-bold"><code>{{ $currency->currency_id }}</code></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Code Length:</td>
+                                    <td class="fw-bold">{{ strlen($currency->currency_code) }} chars</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Has Symbol:</td>
+                                    <td class="fw-bold">
+                                        @if($currency->symbol)
+                                            <span class="text-success">
+                                                <i class="ti ti-circle-check"></i> 
+                                                Yes
+                                            </span>
+                                        @else
+                                            <span class="text-muted">
+                                                <i class="ti ti-circle-x"></i> 
+                                                No
+                                            </span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+
 @endsection
 
 @section('scripts')

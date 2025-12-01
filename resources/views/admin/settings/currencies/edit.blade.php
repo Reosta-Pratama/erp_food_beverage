@@ -251,7 +251,7 @@
                     <div class="card-body">
                         <div class="d-grid gap-2">
                             <a href="{{ route('admin.settings.currencies.show', $currency->currency_code) }}" 
-                            class="btn btn-outline-primary">
+                                class="btn btn-outline-primary">
                                 <i class="ti ti-eye me-2"></i>
                                 Currency Details
                             </a>

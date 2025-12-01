@@ -37,7 +37,6 @@ Route::middleware('auth')->group(function () {
     /*
     |--------------------------------------------------------------------------
     | LOAD SPRINT ROUTES
-    | Each sprint has its own route file for better organization
     |--------------------------------------------------------------------------
     */
     
