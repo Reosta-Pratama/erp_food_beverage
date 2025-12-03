@@ -51,8 +51,8 @@
                     <div class="card-title">Currency Information</div>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6 mb-4">
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
                             <label class="text-muted small">Currency Code</label>
                             <div class="d-flex align-items-center">
                                 <h3 class="mb-0 text-primary">{{ $currency->currency_code }}</h3>
@@ -64,12 +64,12 @@
                             </div>
                         </div>
                         
-                        <div class="col-md-6 mb-4">
+                        <div class="col-md-6">
                             <label class="text-muted small">Currency Name</label>
                             <div><strong>{{ $currency->currency_name }}</strong></div>
                         </div>
 
-                        <div class="col-md-6 mb-4">
+                        <div class="col-md-6">
                             <label class="text-muted small">Symbol</label>
                             <div>
                                 @if($currency->symbol)
@@ -80,7 +80,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6 mb-4">
+                        <div class="col-md-6">
                             <label class="text-muted small">Exchange Rate</label>
                             <div>
                                 <code class="fs-5">{{ number_format($currency->exchange_rate, 6) }}</code>
@@ -246,7 +246,7 @@
                 <div class="card-body">
                     @if ($currency->is_base_currency)
                         <div class="text-center">
-                            <i class="bi bi-star-fill d-block text-warning fs-1 mb-2"></i>
+                            <i class="bi bi-star-fill d-block text-warning display-3 mb-2"></i>
                             <strong class="text-success">Base Currency</strong>
                             <p class="text-muted small mb-0 mt-2">
                                 This is the reference currency for all exchange rates
@@ -254,7 +254,7 @@
                         </div>
                     @else
                         <div class="text-center">
-                            <i class="bi bi-currency-exchange d-block text-secondary fs-1 mb-2"></i>
+                            <i class="bi bi-currency-exchange d-block text-secondary display-3 mb-2"></i>
                             <strong>Secondary Currency</strong>
                             <p class="text-muted small mb-0 mt-2">
                                 Exchange rate relative to base currency

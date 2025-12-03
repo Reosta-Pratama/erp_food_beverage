@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers\Settings;
 
+use App\Helpers\CodeGeneratorHelper;
 use App\Http\Controllers\Controller;
+use App\LogsActivity;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class TaxRateController extends Controller
 {
+    use LogsActivity;
+
     //
     /**
      * List tax rates
@@ -37,6 +42,13 @@ class TaxRateController extends Controller
      */
     public function store(Request $request)
     {
+        if ($request->filled('flatpick-date')) {
+            $effectiveDate = Carbon::parse($request->input('flatpick-date'));
+            $request->merge([
+                'effective_date' => $effectiveDate
+            ]);
+        }
+
         $validated = $request->validate([
             'tax_name' => ['required', 'string', 'max:100', 'unique:tax_rates,tax_name'],
             'tax_percentage' => ['required', 'numeric', 'min:0', 'max:100'],
@@ -56,16 +68,21 @@ class TaxRateController extends Controller
 
         DB::beginTransaction();
         try {
-            DB::table('tax_rates')->insert([
-                'tax_code' => strtoupper(Str::random(10)),
+            $taxCode = CodeGeneratorHelper::generateTaxRateCode();
+
+            $taxRateId = DB::table('tax_rates')->insertGetId([
+                'tax_code' => $taxCode,
                 'tax_name' => $validated['tax_name'],
                 'tax_percentage' => $validated['tax_percentage'],
                 'tax_type' => $validated['tax_type'],
                 'effective_date' => $validated['effective_date'],
-                'is_active' => $request->boolean('is_active', true),
+                'is_active' => $request->boolean('is_active'),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+
+            // Log CREATE
+            $this->logCreate('Settings - Tax Rates', 'tax_rates', $taxRateId, $validated);
 
             DB::commit();
             

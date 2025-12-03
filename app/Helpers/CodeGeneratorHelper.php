@@ -138,6 +138,14 @@ class CodeGeneratorHelper
     }
 
     /**
+     * Generate Tax Rate Code
+     */
+    public static function generateTaxRateCode(): string
+    {
+        return self::generate('tax_rates', 'tax_code', 'TXR');
+    }
+
+    /**
      * Generate BOM Code
      */
     public static function generateBOMCode(): string

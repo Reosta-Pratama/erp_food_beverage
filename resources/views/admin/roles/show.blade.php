@@ -233,7 +233,7 @@
                     </div>
                 @empty
                     <div class="alert alert-warning">
-                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <i class="ti ti-database-off me-2"></i>
                         No permissions assigned to this role yet.
                     </div>
                 @endforelse

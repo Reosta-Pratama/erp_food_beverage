@@ -117,7 +117,7 @@
                                         </td>
                                         <td class="text-center">
                                             <div class="d-grid gap-2 d-md-block">
-                                                <a class="btn btn-sm btn-primary"
+                                                <a class="btn btn-sm btn-outline-primary"
                                                     href="{{ route('admin.settings.currencies.show', $currency->currency_code) }}"
                                                     data-bs-toggle="tooltip" data-bs-placement="top" title="Detail">
                                                     <i class="ti ti-eye"></i>
@@ -139,7 +139,7 @@
                                                         </form>
                                                     @endif --}}
 
-                                                    <a class="btn btn-sm btn-success"
+                                                    <a class="btn btn-sm btn-outline-success"
                                                         href="{{ route('admin.settings.currencies.edit', $currency->currency_code) }}"
                                                         data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                                         <i class="ti ti-pencil"></i>
@@ -155,14 +155,14 @@
                                                             @csrf
                                                             @method('DELETE')
                                                             
-                                                            <button class="btn btn-sm btn-danger"
+                                                            <button class="btn btn-sm btn-outline-danger"
                                                                 type="submit"
                                                                 data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
                                                                 <i class="ti ti-trash"></i>
                                                             </button>
                                                         </form>
                                                     @else
-                                                        <button class="btn btn-sm btn-danger"
+                                                        <button class="btn btn-sm btn-outline-danger"
                                                             type="button"
                                                             data-bs-toggle="tooltip" data-bs-placement="top" title="Cannot delete base currency">
                                                             <i class="ti ti-trash"></i>
