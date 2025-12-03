@@ -143,6 +143,13 @@ class TaxRateController extends Controller
             abort(404, 'Tax rate not found');
         }
 
+        if ($request->filled('flatpick-date')) {
+            $effectiveDate = Carbon::parse($request->input('flatpick-date'));
+            $request->merge([
+                'effective_date' => $effectiveDate
+            ]);
+        }
+
         $validated = $request->validate([
             'tax_name' => ['required', 'string', 'max:100', 'unique:tax_rates,tax_name,' . $taxRate->tax_id . ',tax_id'],
             'tax_percentage' => ['required', 'numeric', 'min:0', 'max:100'],
@@ -161,6 +168,16 @@ class TaxRateController extends Controller
 
         DB::beginTransaction();
         try {
+            // Capture old data
+            $oldData = [
+                'tax_name' => $taxRate->tax_name,
+                'tax_percentage' => $taxRate->tax_percentage,
+                'tax_type' => $taxRate->tax_type,
+                'effective_date' => $taxRate->effective_date,
+                'is_active' => $taxRate->is_active,
+                'updated_at' => $taxRate->updated_at,
+            ];
+
             DB::table('tax_rates')
                 ->where('tax_id', $taxRate->tax_id)
                 ->update([
@@ -171,6 +188,9 @@ class TaxRateController extends Controller
                     'is_active' => $request->boolean('is_active'),
                     'updated_at' => now(),
                 ]);
+
+            // Log UPDATE
+            $this->logUpdate('Settings - Tax Rates', 'tax_rates', $taxRate->tax_id, $oldData, $validated);
 
             DB::commit();
             

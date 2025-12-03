@@ -33,7 +33,8 @@
             @canUpdate('settings')
                 <a href="{{ route('admin.settings.tax-rates.edit', $taxRate->tax_code) }}" 
                     class="btn btn-warning">
-                    <i class="ti ti-pencil me-2"></i>Edit
+                    <i class="ti ti-pencil me-2"></i>
+                    Edit
                 </a>
             @endcanUpdate
 
