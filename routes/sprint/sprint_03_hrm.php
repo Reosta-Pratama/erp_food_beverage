@@ -120,18 +120,11 @@ Route::middleware('role:admin,finance_hr')
 |--------------------------------------------------------------------------
 */
 Route::prefix('employee')->name('employee.')->group(function () {
-    Route::get('/dashboard', [EmployeeSelfServiceController::class, 'dashboard'])
-        ->name('dashboard');
-    Route::get('/profile', [EmployeeSelfServiceController::class, 'profile'])
-        ->name('profile');
-    Route::put('/profile', [EmployeeSelfServiceController::class, 'updateProfile'])
-        ->name('profile.update');
-    Route::get('/attendance', [EmployeeSelfServiceController::class, 'attendance'])
-        ->name('attendance');
-    Route::get('/leaves', [EmployeeSelfServiceController::class, 'leaves'])
-        ->name('leaves');
-    Route::post('/leaves/request', [EmployeeSelfServiceController::class, 'requestLeave'])
-        ->name('leaves.request');
-    Route::get('/payslips', [EmployeeSelfServiceController::class, 'payslips'])
-        ->name('payslips');
+    Route::get('/dashboard', [EmployeeSelfServiceController::class, 'dashboard'])->name('dashboard');
+    Route::get('/profile', [EmployeeSelfServiceController::class, 'profile'])->name('profile');
+    Route::put('/profile', [EmployeeSelfServiceController::class, 'updateProfile'])->name('profile.update');
+    Route::get('/attendance', [EmployeeSelfServiceController::class, 'attendance'])->name('attendance');
+    Route::get('/leaves', [EmployeeSelfServiceController::class, 'leaves'])->name('leaves');
+    Route::post('/leaves/request', [EmployeeSelfServiceController::class, 'requestLeave'])->name('leaves.request');
+    Route::get('/payslips', [EmployeeSelfServiceController::class, 'payslips'])->name('payslips');
 });

@@ -234,20 +234,27 @@ class EmployeeSelfServiceController extends Controller
                 'shifts.shift_name'
             );
 
-        // Filter by month
-        if ($request->filled('month') && $request->filled('year')) {
-            $query->whereMonth('attendance.attendance_date', $request->month)
-                  ->whereYear('attendance.attendance_date', $request->year);
+        // Filter by month and year
+        $month = $request->get('month', now()->month);
+        $year = $request->get('year', now()->year);
+        
+        $query->whereMonth('attendance.attendance_date', $month)
+            ->whereYear('attendance.attendance_date', $year);
+
+        // Sorting
+        $sortBy = $request->get('sort_by', 'attendance_date');
+        $sortOrder = $request->get('sort_order', 'desc');
+        
+        $allowedSortFields = ['attendance_date', 'check_in_time', 'check_out_time', 'status'];
+        if (in_array($sortBy, $allowedSortFields)) {
+            $query->orderBy('attendance.' . $sortBy, $sortOrder);
         } else {
-            // Default to current month
-            $query->whereMonth('attendance.attendance_date', now()->month)
-                  ->whereYear('attendance.attendance_date', now()->year);
+            $query->orderByDesc('attendance.attendance_date');
         }
 
-        $attendances = $query->orderByDesc('attendance.attendance_date')
-            ->get();
+        $attendances = $query->get();
 
-        return view('employee.attendance', compact('attendances'));
+        return view('employee.attendance', compact('attendances', 'month', 'year'));
     }
 
     /**
@@ -270,6 +277,7 @@ class EmployeeSelfServiceController extends Controller
             ->select(
                 'leaves.*',
                 'leave_types.leave_type_name',
+                'leave_types.leave_type_id',
                 DB::raw('CONCAT(approver.first_name, " ", approver.last_name) as approver_name')
             );
 
@@ -277,19 +285,40 @@ class EmployeeSelfServiceController extends Controller
         if ($request->filled('status')) {
             $query->where('leaves.status', $request->status);
         }
+        
+        // Filter by leave type
+        if ($request->filled('leave_type_id')) {
+            $query->where('leaves.leave_type_id', $request->leave_type_id);
+        }
+        
+        // Filter by year
+        if ($request->filled('year')) {
+            $query->whereYear('leaves.start_date', $request->year);
+        }
 
-        $leaves = $query->orderByDesc('leaves.created_at')
-            ->paginate(20);
+        // Sorting
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+        
+        $allowedSortFields = ['created_at', 'start_date', 'end_date', 'total_days', 'status'];
+        if (in_array($sortBy, $allowedSortFields)) {
+            $query->orderBy('leaves.' . $sortBy, $sortOrder);
+        } else {
+            $query->orderByDesc('leaves.created_at');
+        }
+
+        $leaves = $query->paginate(15)->withQueryString();
 
         // Get leave balance summary
         $leaveBalance = DB::table('leave_types')
             ->leftJoin('leaves', function($join) use ($user) {
                 $join->on('leave_types.leave_type_id', '=', 'leaves.leave_type_id')
-                     ->where('leaves.employee_id', '=', $user->employee_id)
-                     ->where('leaves.status', '=', 'Approved')
-                     ->whereYear('leaves.start_date', '=', now()->year);
+                    ->where('leaves.employee_id', '=', $user->employee_id)
+                    ->where('leaves.status', '=', 'Approved')
+                    ->whereYear('leaves.start_date', '=', now()->year);
             })
             ->select(
+                'leave_types.leave_type_id',
                 'leave_types.leave_type_name',
                 'leave_types.max_days_per_year',
                 DB::raw('COALESCE(SUM(leaves.total_days), 0) as days_taken'),
@@ -319,10 +348,12 @@ class EmployeeSelfServiceController extends Controller
             'reason' => ['nullable', 'string', 'max:500'],
         ], [
             'leave_type_id.required' => 'Leave type is required.',
+            'leave_type_id.exists' => 'Selected leave type is invalid.',
             'start_date.required' => 'Start date is required.',
             'start_date.after_or_equal' => 'Start date must be today or later.',
             'end_date.required' => 'End date is required.',
             'end_date.after_or_equal' => 'End date must be after or equal to start date.',
+            'reason.max' => 'Reason must not exceed 500 characters.',
         ]);
 
         DB::beginTransaction();
@@ -332,7 +363,47 @@ class EmployeeSelfServiceController extends Controller
             $endDate = new \DateTime($validated['end_date']);
             $totalDays = $endDate->diff($startDate)->days + 1;
 
-            $leaveId = DB::table('leaves')->insertGetId([
+            // Check leave balance
+            $leaveType = DB::table('leave_types')
+                ->where('leave_type_id', $validated['leave_type_id'])
+                ->first();
+
+            $usedDays = DB::table('leaves')
+                ->where('employee_id', $user->employee_id)
+                ->where('leave_type_id', $validated['leave_type_id'])
+                ->where('status', 'Approved')
+                ->whereYear('start_date', now()->year)
+                ->sum('total_days');
+
+            $remainingDays = $leaveType->max_days_per_year - $usedDays;
+
+            if ($totalDays > $remainingDays) {
+                return back()
+                    ->withInput()
+                    ->with('error', "Insufficient leave balance. You have only {$remainingDays} day(s) remaining for {$leaveType->leave_type_name}.");
+            }
+            
+            // Check for overlapping leaves
+            $overlapping = DB::table('leaves')
+                ->where('employee_id', $user->employee_id)
+                ->whereIn('status', ['Pending', 'Approved'])
+                ->where(function($query) use ($validated) {
+                    $query->whereBetween('start_date', [$validated['start_date'], $validated['end_date']])
+                        ->orWhereBetween('end_date', [$validated['start_date'], $validated['end_date']])
+                        ->orWhere(function($q) use ($validated) {
+                            $q->where('start_date', '<=', $validated['start_date'])
+                                ->where('end_date', '>=', $validated['end_date']);
+                        });
+                })
+                ->exists();
+                
+            if ($overlapping) {
+                return back()
+                    ->withInput()
+                    ->with('error', 'You already have a leave request for overlapping dates.');
+            }
+
+            DB::table('leaves')->insert([
                 'employee_id' => $user->employee_id,
                 'leave_type_id' => $validated['leave_type_id'],
                 'start_date' => $validated['start_date'],
@@ -349,13 +420,14 @@ class EmployeeSelfServiceController extends Controller
             // Log leave request
             $this->logActivity(
                 'Leave Requested',
-                "Requested leave from {$validated['start_date']} to {$validated['end_date']} ({$totalDays} days)",
+                "Requested {$leaveType->leave_type_name} from {$validated['start_date']} to {$validated['end_date']} ({$totalDays} days)",
                 'Employee Self Service'
             );
 
             DB::commit();
             
-            return back()->with('success', 'Leave request submitted successfully');
+            return redirect()->route('employee.leaves')
+                ->with('success', "Leave request submitted successfully. Your request for {$totalDays} day(s) is pending approval.");
                 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -395,16 +467,34 @@ class EmployeeSelfServiceController extends Controller
             );
 
         // Filter by year
-        if ($request->filled('year')) {
-            $query->where('year', $request->year);
-        } else {
-            $query->where('year', now()->year);
+        $year = $request->get('year', now()->year);
+        $query->where('year', $year);
+
+        // Filter by status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+        
+        // Filter by month
+        if ($request->filled('month')) {
+            $query->where('month', $request->month);
         }
 
-        $payslips = $query->orderByDesc('year')
-            ->orderByDesc('month')
-            ->get();
+        // Sorting
+        $sortBy = $request->get('sort_by', 'year');
+        $sortOrder = $request->get('sort_order', 'desc');
+        
+        if ($sortBy === 'year' || $sortBy === 'month') {
+            $query->orderBy('year', $sortOrder)
+                ->orderBy('month', $sortOrder);
+        } elseif (in_array($sortBy, ['gross_salary', 'net_salary', 'payment_date'])) {
+            $query->orderBy($sortBy, $sortOrder);
+        } else {
+            $query->orderByDesc('year')->orderByDesc('month');
+        }
 
-        return view('employee.payslips', compact('payslips'));
+        $payslips = $query->get();
+
+        return view('employee.payslips', compact('payslips', 'year'));
     }
 }
