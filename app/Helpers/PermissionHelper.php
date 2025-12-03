@@ -221,7 +221,15 @@ class PermissionHelper
         }
 
         $permission = self::getPermission($permissionCode);
-        return $permission && $permission->can_create;
+        $result = $permission && $permission->can_create;
+        
+        // self::debugWithCounter("canCreate: {$permissionCode}", [
+        //     'permission_code' => $permissionCode,
+        //     'result' => $result,
+        //     'reason' => !$permission ? 'permission not found' : (!$permission->can_create ? 'can_create = false' : 'allowed')
+        // ]);
+        
+        return $result;
     }
 
     /**
@@ -230,7 +238,7 @@ class PermissionHelper
     public static function canRead(string $permissionCode): bool
     {
         $roleCode = self::getUserRoleCode();
-
+        
         if (!$roleCode) {
             return false;
         }
@@ -240,7 +248,15 @@ class PermissionHelper
         }
 
         $permission = self::getPermission($permissionCode);
-        return $permission && $permission->can_read;
+        $result = $permission && $permission->can_read;
+        
+        // self::debugWithCounter("canRead: {$permissionCode}", [
+        //     'permission_code' => $permissionCode,
+        //     'result' => $result,
+        //     'reason' => !$permission ? 'permission not found' : (!$permission->can_read ? 'can_read = false' : 'allowed')
+        // ]);
+        
+        return $result;
     }
 
     /**
@@ -259,7 +275,15 @@ class PermissionHelper
         }
 
         $permission = self::getPermission($permissionCode);
-        return $permission && $permission->can_update;
+        $result = $permission && $permission->can_update;
+        
+        // self::debugWithCounter("canUpdate: {$permissionCode}", [
+        //     'permission_code' => $permissionCode,
+        //     'result' => $result,
+        //     'reason' => !$permission ? 'permission not found' : (!$permission->can_update ? 'can_update = false' : 'allowed')
+        // ]);
+        
+        return $result;
     }
 
     /**
@@ -278,7 +302,15 @@ class PermissionHelper
         }
 
         $permission = self::getPermission($permissionCode);
-        return $permission && $permission->can_delete;
+        $result = $permission && $permission->can_delete;
+        
+        // self::debugWithCounter("canDelete: {$permissionCode}", [
+        //     'permission_code' => $permissionCode,
+        //     'result' => $result,
+        //     'reason' => !$permission ? 'permission not found' : (!$permission->can_delete ? 'can_delete = false' : 'allowed')
+        // ]);
+        
+        return $result;
     }
 
     /**
@@ -315,6 +347,25 @@ class PermissionHelper
         if ($userId) {
             Cache::forget("user_role_{$userId}");
             Cache::forget("user_permissions_{$userId}");
+            
+            // self::debug('clearCache', [
+            //     'user_id' => $userId,
+            //     'cleared_keys' => [
+            //         "user_role_{$userId}",
+            //         "user_permissions_{$userId}"
+            //     ]
+            // ]);
         }
+    }
+
+    /**
+     * Get debug summary
+     */
+    public static function getDebugSummary(): array
+    {
+        return [
+            'call_counts' => self::$debugCallCounter,
+            'total_calls' => array_sum(self::$debugCallCounter),
+        ];
     }
 }
