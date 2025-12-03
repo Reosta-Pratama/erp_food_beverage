@@ -88,32 +88,39 @@
                                     <li class="menu-profile">
                                         <ul>
                                             <li>
-                                                <a class="active" href="">
+                                                <a class="{{ request()->routeIs('employee.profile') ? 'active' : '' }}" 
+                                                    href="{{ route('employee.profile') }}">
                                                     <i class="ti ti-id"></i>
-                                                    <span>My Account</span>
+                                                    <span>Profile</span>
                                                 </a>
                                             </li>
+
                                             <li>
-                                                <a href="">
+                                                <a class=""
+                                                    href="">
                                                     <i class="ti ti-folders"></i>
-                                                    File Manager
+                                                    Announcements
                                                 </a>
                                             </li>
+
                                             <li>
-                                                <a href="">
+                                                <a class=""
+                                                    href="">
                                                     <i class="ti ti-settings"></i>
                                                     Setting
                                                 </a>
                                             </li>
+
                                             <li>
-                                                <a href="">
+                                                <a class=""
+                                                    href="">
                                                     <i class="ti ti-help"></i>
                                                     Support
                                                 </a>
                                             </li>
                                         </ul>
                                     </li>
-                                    
+
                                     <li class="sign-out-profile">
                                         <form method="POST" action="{{ route('logout') }}">
                                             @csrf

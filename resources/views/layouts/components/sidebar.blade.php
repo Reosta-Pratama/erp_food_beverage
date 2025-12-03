@@ -30,9 +30,42 @@
                         <span class="menu-svg">
                             <i class="ti ti-smart-home"></i>
                         </span>
-                        <span class="menu-label">Dashboard</span>
+                        <span class="menu-label">Main Dashboard</span>
                     </a>
                 </li>
+
+                <!-- ========================================
+                     EMPLOYEE SELF SERVICE (ESS)
+                ========================================= -->
+                    <li class="menu-category">
+                        <span class="category-name">Employee Self Service</span>
+                    </li>
+
+                    <li class="menu-item">
+                        <a href="{{ route('employee.attendance') }}" class="menu-link">
+                            <span class="menu-svg">
+                                <i class="ti ti-calendar-check"></i>
+                            </span>
+                            <span class="menu-label">Attendance</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{ route('employee.leaves') }}" class="menu-link">
+                            <span class="menu-svg">
+                                <i class="ti ti-plane-departure"></i>
+                            </span>
+                            <span class="menu-label">Leave</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{ route('employee.payslips') }}" class="menu-link">
+                            <span class="menu-svg">
+                                <i class="ti ti-receipt-2"></i>
+                            </span>
+                            <span class="menu-label">Payslip</span>
+                        </a>
+                    </li>
+
 
                 <!-- ========================================
                      HUMAN RESOURCE MANAGEMENT (HRM)
