@@ -173,7 +173,7 @@
                             <li class="menu-item menu-label1">
                                 <a href="javascript:void(0)">Product Management</a>
                             </li>
-                            @canRead('products')
+                            @canRead('products.manage')
                                 <li class="menu-item">
                                     <a href="javascript:void(0)" class="menu-link">Products</a>
                                 </li>

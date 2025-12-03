@@ -127,6 +127,21 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
 
+        'permissions' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/permissions.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 7,
+            'permission' => 0664,
+            'formatter' => Monolog\Formatter\LineFormatter::class,
+            'formatter_with' => [
+                'format' => "[%datetime%] %level_name%: %message%\n%context%\n\n",
+                'dateFormat' => 'Y-m-d H:i:s',
+                'allowInlineLineBreaks' => true,
+                'includeStacktraces' => true,
+            ],
+        ],
+
     ],
 
 ];
