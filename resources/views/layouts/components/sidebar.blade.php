@@ -56,17 +56,17 @@
                             </li>
                             @canRead('employees')
                                 <li class="menu-item">
-                                    <a href="javascript:void(0)" class="menu-link">Employee Directory</a>
+                                    <a href="{{ route('hrm.employees.index') }}" class="menu-link">Employee Directory</a>
                                 </li>
                             @endcanRead
                             @canRead('departments')
                                 <li class="menu-item">
-                                    <a href="javascript:void(0)" class="menu-link">Departments</a>
+                                    <a href="{{ route('hrm.departments.index') }}" class="menu-link">Departments</a>
                                 </li>
                             @endcanRead
                             @canRead('positions')
                                 <li class="menu-item">
-                                    <a href="javascript:void(0)" class="menu-link">Positions</a>
+                                    <a href="{{ route('hrm.positions.index') }}" class="menu-link">Positions</a>
                                 </li>
                             @endcanRead
                         </ul>
