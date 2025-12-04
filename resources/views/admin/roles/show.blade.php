@@ -54,7 +54,7 @@
                         </div>
                         <div class="card-body p-0">
                             <div class="table-responsive">
-                                <table class="table mb-0">
+                                <table class="table last-border-none mb-0">
                                     <tr>
                                         <td class="text-muted">Role Name:</td>
                                         <td class="fw-bold">{{ $role->role_name }}</td>

@@ -24,7 +24,7 @@ class CodeGeneratorHelper
         do {
             // Generate random string (alphanumeric, case-sensitive)
             // Format: PREFIX-XXXXXXXXXX (total 15 chars if prefix is 3 chars)
-            $randomLength = 15 - strlen($prefix) - 1; // -1 for dash separator
+            $randomLength = 15 - \strlen($prefix) - 1; // -1 for dash separator
             
             // Using cryptographically secure random string
             $randomString = strtoupper(substr(
@@ -143,6 +143,14 @@ class CodeGeneratorHelper
     public static function generateTaxRateCode(): string
     {
         return self::generate('tax_rates', 'tax_code', 'TXR');
+    }
+
+    /**
+     * Generate Department Code
+     */
+    public static function generateDepartmentCode(): string
+    {
+        return self::generate('departments', 'department_code', 'DPT');
     }
 
     /**

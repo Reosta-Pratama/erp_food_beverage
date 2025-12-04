@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\HRM;
 
+use App\Helpers\CodeGeneratorHelper;
 use App\Http\Controllers\Controller;
 use App\LogsActivity;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class DepartmentController extends Controller
     /**
      * List departments with employee count
      */
-     public function index(Request $request)
+    public function index(Request $request)
     {
         $this->logView('HRM - Departments', 'Viewed departments list');
 
@@ -48,7 +49,7 @@ class DepartmentController extends Controller
 
         // Search filter
         if ($request->filled('search')) {
-            $search = $request->search;
+            $search = $request->input('search');
             $query->where(function($q) use ($search) {
                 $q->where('departments.department_name', 'like', "%{$search}%")
                   ->orWhere('departments.department_code', 'like', "%{$search}%")
@@ -58,9 +59,9 @@ class DepartmentController extends Controller
 
         // Manager filter
         if ($request->filled('manager')) {
-            if ($request->manager === 'unassigned') {
+            if ($request->input('manager') === 'unassigned') {
                 $query->whereNull('departments.manager_id');
-            } elseif ($request->manager === 'assigned') {
+            } elseif ($request->input('manager') === 'assigned') {
                 $query->whereNotNull('departments.manager_id');
             }
         }
@@ -70,7 +71,7 @@ class DepartmentController extends Controller
         $sortOrder = $request->get('sort_order', 'asc');
         
         $allowedSort = ['department_name', 'department_code', 'manager_name', 'employees_count', 'created_at'];
-        if (in_array($sortBy, $allowedSort)) {
+        if (\in_array($sortBy, $allowedSort)) {
             if ($sortBy === 'manager_name') {
                 $query->orderBy(DB::raw('CONCAT(manager.first_name, " ", manager.last_name)'), $sortOrder);
             } else {
@@ -80,7 +81,7 @@ class DepartmentController extends Controller
 
         $departments = $query->paginate(10)->withQueryString();
         
-        return view('admin.hrm.departments.index', compact('departments'));
+        return view('admin.employee-management.departments.index', compact('departments'));
     }
 
     /**
@@ -99,7 +100,7 @@ class DepartmentController extends Controller
             ->orderBy('first_name')
             ->get();
         
-        return view('admin.hrm.departments.create', compact('employees'));
+        return view('admin.employee-management.departments.create', compact('employees'));
     }
 
     /**
@@ -117,10 +118,13 @@ class DepartmentController extends Controller
             'manager_id.exists' => 'Selected manager is invalid.',
         ]);
 
+
         DB::beginTransaction();
         try {
+            $departmentCode = CodeGeneratorHelper::generateDepartmentCode();
+
             $departmentId = DB::table('departments')->insertGetId([
-                'department_code' => strtoupper(Str::random(10)),
+                'department_code' => $departmentCode,
                 'department_name' => $validated['department_name'],
                 'manager_id' => $validated['manager_id'] ?? null,
                 'description' => $validated['description'] ?? null,
@@ -139,7 +143,7 @@ class DepartmentController extends Controller
             DB::commit();
             
             return redirect()
-                ->route('admin.hrm.departments.index')
+                ->route('hrm.departments.index')
                 ->with('success', 'Department created successfully');
                 
         } catch (\Exception $e) {
@@ -199,7 +203,7 @@ class DepartmentController extends Controller
             ->orderBy('position_name')
             ->get();
         
-        return view('admin.hrm.departments.show', compact('department', 'employees', 'positions'));
+        return view('admin.employee-management.departments.show', compact('department', 'employees', 'positions'));
     }
 
     /**
@@ -226,7 +230,7 @@ class DepartmentController extends Controller
             ->orderBy('first_name')
             ->get();
         
-        return view('admin.hrm.departments.edit', compact('department', 'employees'));
+        return view('admin.employee-management.departments.edit', compact('department', 'employees'));
     }
 
     /**
@@ -282,7 +286,7 @@ class DepartmentController extends Controller
             DB::commit();
             
             return redirect()
-                ->route('admin.hrm.departments.index')
+                ->route('hrm.departments.index')
                 ->with('success', 'Department updated successfully');
                 
         } catch (\Exception $e) {
@@ -301,7 +305,7 @@ class DepartmentController extends Controller
         $department = DB::table('departments')
             ->where('department_code', $departmentCode)
             ->first();
-        
+
         if (!$department) {
             abort(404, 'Department not found');
         }
@@ -349,7 +353,7 @@ class DepartmentController extends Controller
             DB::commit();
             
             return redirect()
-                ->route('admin.hrm.departments.index')
+                ->route('hrm.departments.index')
                 ->with('success', 'Department deleted successfully');
                 
         } catch (\Exception $e) {
