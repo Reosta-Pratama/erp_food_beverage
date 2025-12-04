@@ -31,9 +31,9 @@
 
         <div class="d-flex align-items-center gap-2">
             <a href="{{ route('admin.settings.tax-rates.edit', $taxRate->tax_code) }}" 
-                class="btn btn-warning">
+                class="btn btn-primary">
                 <i class="ti ti-pencil me-2"></i>
-                Edit
+                Edit Tax Rate
             </a>
 
             <a href="{{ route('admin.settings.tax-rates.index') }}"

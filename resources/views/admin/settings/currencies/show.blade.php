@@ -31,7 +31,7 @@
 
         <div class="d-flex align-items-center gap-2">
             <a href="{{ route('admin.settings.currencies.edit', $currency->currency_code) }}"
-                class="btn btn-warning">
+                class="btn btn-primary">
                 <i class="ti ti-pencil me-2"></i>
                 Edit Currency
             </a>
@@ -208,19 +208,13 @@
         </div>
 
         <div class="col-lg-4">
-            <div class="card custom">
-                <div class="card-header">
-                    <div class="card-title">Quick Actions</div>
-                </div>
-                <div class="card-body">
-                    <div class="d-grid gap-2">
-                        <a href="{{ route('admin.settings.currencies.edit', $currency->currency_code) }}" 
-                            class="btn btn-outline-warning">
-                            <i class="ti ti-pencil me-2"></i>
-                            Edit Currency
-                        </a>
-
-                        @if(!$currency->is_base_currency)
+            @if(!$currency->is_base_currency)
+                <div class="card custom">
+                    <div class="card-header">
+                        <div class="card-title">Quick Actions</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
                             <form action="{{ route('admin.settings.currencies.set-base', $currency->currency_code) }}" 
                                 method="POST">
                                 @csrf
@@ -232,10 +226,10 @@
                                     Set as Base Currency
                                 </button>
                             </form>
-                        @endif
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endif
 
             <div class="card custom">
                 <div class="card-header">
