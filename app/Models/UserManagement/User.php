@@ -2,7 +2,6 @@
 
 namespace App\Models\UserManagement;
 
-use App\Models\HRM\Employee;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
