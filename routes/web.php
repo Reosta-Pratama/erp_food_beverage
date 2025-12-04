@@ -57,6 +57,9 @@ Route::middleware('auth')->group(function () {
     
     // SPRINT 6: Warehouse & Inventory
     require __DIR__.'/sprint/sprint_06_inventory.php';
+
+    // SPRINT 7: Quality Control
+    require __DIR__.'/sprint/sprint_07_quality_control.php';
     
     // ROLE-BASED DASHBOARDS
     require __DIR__.'/sprint/dashboards.php';
