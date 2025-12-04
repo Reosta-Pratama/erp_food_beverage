@@ -123,48 +123,40 @@
 
                                         <td class="text-center">
                                             <div class="d-grid gap-2 d-md-block">
-                                                @canUpdate('settings')
-                                                    <form action="{{ route('admin.settings.tax-rates.toggle-status', $tax->tax_code) }}" 
-                                                        method="POST" 
-                                                        class="d-inline">
-                                                        @csrf
-                                                        @method('PATCH')
-                                                        <button type="submit" 
-                                                                class="btn btn-sm btn-outline-{{ $tax->is_active ? 'success' : 'danger' }}" 
-                                                                title="{{ $tax->is_active ? 'Deactivate' : 'Activate' }}">
-                                                            <i class="bi bi-toggle-{{ $tax->is_active ? 'on' : 'off' }}"></i>
-                                                        </button>
-                                                    </form>
-                                                @endcanUpdate
+                                                <form action="{{ route('admin.settings.tax-rates.toggle-status', $tax->tax_code) }}" 
+                                                    method="POST" 
+                                                    class="d-inline">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <button type="submit" 
+                                                            class="btn btn-sm btn-outline-{{ $tax->is_active ? 'success' : 'danger' }}" 
+                                                            title="{{ $tax->is_active ? 'Deactivate' : 'Activate' }}">
+                                                        <i class="bi bi-toggle-{{ $tax->is_active ? 'on' : 'off' }}"></i>
+                                                    </button>
+                                                </form>
                                             </div>
                                         </td>
 
                                         <td class="text-center">
                                             <div class="d-grid gap-2 d-md-block">
-                                                @canRead('settings')
-                                                    <a href="{{ route('admin.settings.tax-rates.show', $tax->tax_code) }}" 
-                                                        class="btn btn-sm btn-outline-primary" 
-                                                        data-bs-toggle="tooltip" data-bs-placement="top" title="View Detail">
-                                                        <i class="ti ti-eye"></i>
-                                                    </a>
-                                                @endcanRead
+                                                <a href="{{ route('admin.settings.tax-rates.show', $tax->tax_code) }}" 
+                                                    class="btn btn-sm btn-outline-primary" 
+                                                    data-bs-toggle="tooltip" data-bs-placement="top" title="View Detail">
+                                                    <i class="ti ti-eye"></i>
+                                                </a>
 
-                                                @canUpdate('settings')
-                                                    <a href="{{ route('admin.settings.tax-rates.edit', $tax->tax_code) }}" 
-                                                        class="btn btn-sm btn-outline-warning" 
-                                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
-                                                        <i class="ti ti-pencil"></i>
-                                                    </a>
-                                                @endcanUpdate
+                                                <a href="{{ route('admin.settings.tax-rates.edit', $tax->tax_code) }}" 
+                                                    class="btn btn-sm btn-outline-warning" 
+                                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                                    <i class="ti ti-pencil"></i>
+                                                </a>
 
-                                                @canDelete('settings')
-                                                    <button type="button" 
-                                                            class="btn btn-sm btn-outline-danger" 
-                                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"
-                                                            onclick="confirmDelete('{{ $tax->tax_code }}', '{{ $tax->tax_name }}')">
-                                                        <i class="ti ti-trash"></i>
-                                                    </button>
-                                                @endcanDelete
+                                                <button type="button" 
+                                                        class="btn btn-sm btn-outline-danger" 
+                                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"
+                                                        onclick="confirmDelete('{{ $tax->tax_code }}', '{{ $tax->tax_name }}')">
+                                                    <i class="ti ti-trash"></i>
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>

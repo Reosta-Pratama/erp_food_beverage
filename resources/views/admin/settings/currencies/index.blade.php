@@ -123,52 +123,48 @@
                                                     <i class="ti ti-eye"></i>
                                                 </a>
                                                 
-                                                @canUpdate('settings')
-                                                    {{-- @if (!$currency->is_base_currency)
-                                                        <form action="{{ route('admin.settings.currencies.set-base', $currency->currency_code) }}" 
-                                                            method="POST" 
-                                                            class="d-inline">
-                                                            @csrf
-                                                            @method('PATCH')
-                                                            
-                                                            <button class="btn btn-sm btn-primary"
-                                                                type="submit"
-                                                                data-bs-toggle="tooltip" data-bs-placement="top" title="Set as Base Currency">
-                                                                <i class="ti ti-star"></i>
-                                                            </button>
-                                                        </form>
-                                                    @endif --}}
+                                                {{-- @if (!$currency->is_base_currency)
+                                                    <form action="{{ route('admin.settings.currencies.set-base', $currency->currency_code) }}" 
+                                                        method="POST" 
+                                                        class="d-inline">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        
+                                                        <button class="btn btn-sm btn-primary"
+                                                            type="submit"
+                                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Set as Base Currency">
+                                                            <i class="ti ti-star"></i>
+                                                        </button>
+                                                    </form>
+                                                @endif --}}
 
-                                                    <a class="btn btn-sm btn-outline-success"
-                                                        href="{{ route('admin.settings.currencies.edit', $currency->currency_code) }}"
-                                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
-                                                        <i class="ti ti-pencil"></i>
-                                                    </a>
-                                                @endcanUpdate
+                                                <a class="btn btn-sm btn-outline-success"
+                                                    href="{{ route('admin.settings.currencies.edit', $currency->currency_code) }}"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                                    <i class="ti ti-pencil"></i>
+                                                </a>
 
-                                                @canDelete('settings')
-                                                    @if (!$currency->is_base_currency)
-                                                        <form action="{{ route('admin.settings.currencies.destroy', $currency->currency_code) }}" 
-                                                            method="POST" 
-                                                            class="d-inline"
-                                                            onsubmit="return confirm('Are you sure you want to delete this currency?');">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            
-                                                            <button class="btn btn-sm btn-outline-danger"
-                                                                type="submit"
-                                                                data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
-                                                                <i class="ti ti-trash"></i>
-                                                            </button>
-                                                        </form>
-                                                    @else
+                                                @if (!$currency->is_base_currency)
+                                                    <form action="{{ route('admin.settings.currencies.destroy', $currency->currency_code) }}" 
+                                                        method="POST" 
+                                                        class="d-inline"
+                                                        onsubmit="return confirm('Are you sure you want to delete this currency?');">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        
                                                         <button class="btn btn-sm btn-outline-danger"
-                                                            type="button"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Cannot delete base currency">
+                                                            type="submit"
+                                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
                                                             <i class="ti ti-trash"></i>
                                                         </button>
-                                                    @endif
-                                                @endcanDelete
+                                                    </form>
+                                                @else
+                                                    <button class="btn btn-sm btn-outline-danger"
+                                                        type="button"
+                                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Cannot delete base currency">
+                                                        <i class="ti ti-trash"></i>
+                                                    </button>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>

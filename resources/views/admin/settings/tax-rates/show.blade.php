@@ -30,13 +30,11 @@
         <h2 class="fs-22 mb-0">Tax Rate Details - {{ $taxRate->tax_name }}</h2>
 
         <div class="d-flex align-items-center gap-2">
-            @canUpdate('settings')
-                <a href="{{ route('admin.settings.tax-rates.edit', $taxRate->tax_code) }}" 
-                    class="btn btn-warning">
-                    <i class="ti ti-pencil me-2"></i>
-                    Edit
-                </a>
-            @endcanUpdate
+            <a href="{{ route('admin.settings.tax-rates.edit', $taxRate->tax_code) }}" 
+                class="btn btn-warning">
+                <i class="ti ti-pencil me-2"></i>
+                Edit
+            </a>
 
             <a href="{{ route('admin.settings.tax-rates.index') }}"
                 class="btn btn-outline-secondary">
@@ -197,27 +195,25 @@
             </div>
         </div>
         <div class="col-lg-4">
-            @canUpdate('settings')
-                <div class="card custom">
-                    <div class="card-header">
-                        <div class="card-title">Quick Actions</div>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-grid gap-2">
-                            <form action="{{ route('admin.settings.tax-rates.toggle-status', $taxRate->tax_code) }}" 
-                                method="POST">
-                                @csrf
-                                @method('PATCH')
-                                <button type="submit" 
-                                        class="btn btn-outline-{{ $taxRate->is_active ? 'danger' : 'success' }} w-100">
-                                    <i class="bi bi-toggle-{{ $taxRate->is_active ? 'off' : 'on' }} me-2"></i>
-                                    {{ $taxRate->is_active ? 'Deactivate' : 'Activate' }} Tax Rate
-                                </button>
-                            </form>
-                        </div>
+            <div class="card custom">
+                <div class="card-header">
+                    <div class="card-title">Quick Actions</div>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <form action="{{ route('admin.settings.tax-rates.toggle-status', $taxRate->tax_code) }}" 
+                            method="POST">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit" 
+                                    class="btn btn-outline-{{ $taxRate->is_active ? 'danger' : 'success' }} w-100">
+                                <i class="bi bi-toggle-{{ $taxRate->is_active ? 'off' : 'on' }} me-2"></i>
+                                {{ $taxRate->is_active ? 'Deactivate' : 'Activate' }} Tax Rate
+                            </button>
+                        </form>
                     </div>
                 </div>
-            @endcanUpdate
+            </div>
 
             <div class="card custom">
                 <div class="card-header">

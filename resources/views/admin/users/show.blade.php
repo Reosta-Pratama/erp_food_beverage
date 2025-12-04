@@ -30,13 +30,12 @@
         <h2 class="fs-22 mb-0">User Details</h2>
 
         <div class="d-flex align-items-center gap-2">
-            @canUpdate('users')
-                <a href="{{ route('admin.users.edit', $user->user_id) }}"
-                    class="btn btn-primary">
-                    <i class="ti ti-pencil me-2"></i>
-                    Edit User
-                </a>
-            @endcanUpdate
+            <a href="{{ route('admin.users.edit', $user->user_id) }}"
+                class="btn btn-primary">
+                <i class="ti ti-pencil me-2"></i>
+                Edit User
+            </a>
+
             <a href="{{ route('admin.users.index') }}"
                 class="btn btn-outline-secondary">
                 <i class="ti ti-arrow-left me-2"></i>
@@ -86,27 +85,25 @@
                             @endif
                         </div>
                         <div class="card-footer">
-                            @canUpdate('users')
-                                <div class="d-grid gap-2">
-                                    <button type="button" 
-                                        class="btn btn-outline-primary btn-sm" 
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#resetPasswordModal">
-                                        <i class="ti ti-key me-2"></i>
-                                        Reset Password
+                            <div class="d-grid gap-2">
+                                <button type="button" 
+                                    class="btn btn-outline-primary btn-sm" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#resetPasswordModal">
+                                    <i class="ti ti-key me-2"></i>
+                                    Reset Password
+                                </button>
+                                <form action="{{ route('admin.users.toggle-status', $user->user_id) }}" 
+                                    method="POST">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" 
+                                        class="btn btn-outline-{{ $user->is_active ? 'danger' : 'success' }} btn-sm w-100">
+                                        <i class="bi bi-toggle-{{ $user->is_active ? 'off' : 'on' }} me-2"></i>
+                                        {{ $user->is_active ? 'Deactivate' : 'Activate' }} Account
                                     </button>
-                                    <form action="{{ route('admin.users.toggle-status', $user->user_id) }}" 
-                                        method="POST">
-                                        @csrf
-                                        @method('PATCH')
-                                        <button type="submit" 
-                                            class="btn btn-outline-{{ $user->is_active ? 'danger' : 'success' }} btn-sm w-100">
-                                            <i class="bi bi-toggle-{{ $user->is_active ? 'off' : 'on' }} me-2"></i>
-                                            {{ $user->is_active ? 'Deactivate' : 'Activate' }} Account
-                                        </button>
-                                    </form>
-                                </div>
-                            @endcanUpdate
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -352,74 +349,72 @@
 @section('modals')
 
     {{-- Reset Password Modal --}}
-    @canUpdate('users')
-        <div class="modal fade" id="resetPasswordModal" 
-            data-bs-backdrop="static" data-bs-keyboard="false"
-            tabindex="-1" aria-labelledby="resetPasswordModal" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <form action="{{ route('admin.users.reset-password', $user->user_id) }}" method="POST"
-                    class="modal-content">
-                    @csrf
+    <div class="modal fade" id="resetPasswordModal" 
+        data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="resetPasswordModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <form action="{{ route('admin.users.reset-password', $user->user_id) }}" method="POST"
+                class="modal-content">
+                @csrf
 
-                    <div class="modal-header d-flex justify-content-between bg-primary">
-                        <h6 class="modal-title text-white">
-                            Reset Password
-                        </h6>
+                <div class="modal-header d-flex justify-content-between bg-primary">
+                    <h6 class="modal-title text-white">
+                        Reset Password
+                    </h6>
 
-                        <button type="button" class="btn btn-icon btn-white-transparent" 
-                            data-bs-dismiss="modal" aria-label="Close">
-                            <i class="ti ti-x"></i>
-                        </button>
+                    <button type="button" class="btn btn-icon btn-white-transparent" 
+                        data-bs-dismiss="modal" aria-label="Close">
+                        <i class="ti ti-x"></i>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="alert alert-warning d-flex align-items-center gap-2">
+                        <i class="ti ti-exclamation-circle"></i>
+                        You are about to reset the password for 
+                        <strong>{{ $user->username }}</strong>
                     </div>
 
-                    <div class="modal-body">
-                        <div class="alert alert-warning d-flex align-items-center gap-2">
-                            <i class="ti ti-exclamation-circle"></i>
-                            You are about to reset the password for 
-                            <strong>{{ $user->username }}</strong>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="new_password" class="form-label">
-                                New Password <span class="text-danger">*</span>
-                            </label>
-                            <input type="password" 
-                                class="form-control" 
-                                id="new_password" 
-                                name="new_password" 
-                                required
-                                minlength="8">
-                            <small class="text-muted">Minimum 8 characters</small>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="new_password_confirmation" class="form-label">
-                                Confirm New Password <span class="text-danger">*</span>
-                            </label>
-                            <input type="password" 
-                                class="form-control" 
-                                id="new_password_confirmation" 
-                                name="new_password_confirmation" 
-                                required
-                                minlength="8">
-                        </div>
+                    <div class="mb-3">
+                        <label for="new_password" class="form-label">
+                            New Password <span class="text-danger">*</span>
+                        </label>
+                        <input type="password" 
+                            class="form-control" 
+                            id="new_password" 
+                            name="new_password" 
+                            required
+                            minlength="8">
+                        <small class="text-muted">Minimum 8 characters</small>
                     </div>
 
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary"
-                            data-bs-dismiss="modal">
-                            Close
-                        </button>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="ti ti-circle-check me-2"></i>
-                            Reset Password
-                        </button>
+                    <div class="mb-3">
+                        <label for="new_password_confirmation" class="form-label">
+                            Confirm New Password <span class="text-danger">*</span>
+                        </label>
+                        <input type="password" 
+                            class="form-control" 
+                            id="new_password_confirmation" 
+                            name="new_password_confirmation" 
+                            required
+                            minlength="8">
                     </div>
+                </div>
 
-                </form>
-            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary"
+                        data-bs-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ti ti-circle-check me-2"></i>
+                        Reset Password
+                    </button>
+                </div>
+
+            </form>
         </div>
-    @endcanUpdate
+    </div>
 
 @endsection
 

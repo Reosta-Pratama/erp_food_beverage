@@ -208,36 +208,34 @@
         </div>
 
         <div class="col-lg-4">
-            @canUpdate('settings')
-                <div class="card custom">
-                    <div class="card-header">
-                        <div class="card-title">Quick Actions</div>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-grid gap-2">
-                            <a href="{{ route('admin.settings.currencies.edit', $currency->currency_code) }}" 
-                                class="btn btn-outline-warning">
-                                <i class="ti ti-pencil me-2"></i>
-                                Edit Currency
-                            </a>
+            <div class="card custom">
+                <div class="card-header">
+                    <div class="card-title">Quick Actions</div>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{{ route('admin.settings.currencies.edit', $currency->currency_code) }}" 
+                            class="btn btn-outline-warning">
+                            <i class="ti ti-pencil me-2"></i>
+                            Edit Currency
+                        </a>
 
-                            @if(!$currency->is_base_currency)
-                                <form action="{{ route('admin.settings.currencies.set-base', $currency->currency_code) }}" 
-                                    method="POST">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button type="submit" 
-                                            class="btn btn-outline-success w-100"
-                                            onclick="return confirm('Set {{ $currency->currency_code }} as base currency?\n\nThis will change the exchange rate to 1.0 and unset the current base currency.')">
-                                        <i class="ti ti-star me-2"></i>
-                                        Set as Base Currency
-                                    </button>
-                                </form>
-                            @endif
-                        </div>
+                        @if(!$currency->is_base_currency)
+                            <form action="{{ route('admin.settings.currencies.set-base', $currency->currency_code) }}" 
+                                method="POST">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit" 
+                                        class="btn btn-outline-success w-100"
+                                        onclick="return confirm('Set {{ $currency->currency_code }} as base currency?\n\nThis will change the exchange rate to 1.0 and unset the current base currency.')">
+                                    <i class="ti ti-star me-2"></i>
+                                    Set as Base Currency
+                                </button>
+                            </form>
+                        @endif
                     </div>
                 </div>
-            @endcanUpdate
+            </div>
 
             <div class="card custom">
                 <div class="card-header">

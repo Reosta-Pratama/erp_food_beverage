@@ -211,37 +211,31 @@
 
                                             <td class="text-center">
                                                 <div class="d-grid gap-2 d-md-block">
-                                                    @canRead('users')
-                                                        <a class="btn btn-sm btn-primary btn-wave"
-                                                            href="{{ route('admin.users.show', $user->user_id) }}"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top" title="View Details">
-                                                            <i class="ti ti-eye"></i>
-                                                        </a>
-                                                    @endcanRead
+                                                    <a class="btn btn-sm btn-primary btn-wave"
+                                                        href="{{ route('admin.users.show', $user->user_id) }}"
+                                                        data-bs-toggle="tooltip" data-bs-placement="top" title="View Details">
+                                                        <i class="ti ti-eye"></i>
+                                                    </a>
 
-                                                    @canUpdate('users')
-                                                        <a class="btn btn-sm btn-success btn-wave"
-                                                            href="{{ route('admin.users.edit', $user->user_id) }}"
-                                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
-                                                            <i class="ti ti-pencil"></i>
-                                                        </a>
-                                                    @endcanUpdate
+                                                    <a class="btn btn-sm btn-success btn-wave"
+                                                        href="{{ route('admin.users.edit', $user->user_id) }}"
+                                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                                        <i class="ti ti-pencil"></i>
+                                                    </a>
 
-                                                    @canDelete('users')
-                                                        <form action="{{ route('admin.users.destroy', $user->user_id) }}" 
-                                                            method="POST" 
-                                                            data-username="{{ $user->username }}"
-                                                            class="d-inline delete-user-form">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            
-                                                            <button class="btn btn-sm btn-danger btn-wave"
-                                                                type="submit"
-                                                                data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
-                                                                <i class="ti ti-trash"></i>
-                                                            </button>
-                                                        </form>
-                                                    @endcanDelete
+                                                    <form action="{{ route('admin.users.destroy', $user->user_id) }}" 
+                                                        method="POST" 
+                                                        data-username="{{ $user->username }}"
+                                                        class="d-inline delete-user-form">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        
+                                                        <button class="btn btn-sm btn-danger btn-wave"
+                                                            type="submit"
+                                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                                            <i class="ti ti-trash"></i>
+                                                        </button>
+                                                    </form>
                                                 </div>
                                             </td>
                                         </tr>                                        

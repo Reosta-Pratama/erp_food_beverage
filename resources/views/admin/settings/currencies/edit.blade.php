@@ -243,39 +243,37 @@
             </div>
         </form>
         <div class="col-lg-4">
-            @canUpdate('settings')
-                <div class="card custom">
-                    <div class="card-header">
-                        <div class="card-title">Quick Actions</div>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-grid gap-2">
-                            <a href="{{ route('admin.settings.currencies.show', $currency->currency_code) }}" 
-                                class="btn btn-outline-primary">
-                                <i class="ti ti-eye me-2"></i>
-                                Currency Details
-                            </a>
-                            
-                            @if(!$currency->is_base_currency)
-                                <form action="{{ route('admin.settings.currencies.set-base', $currency->currency_code) }}" 
-                                    method="POST"
-                                    id="setBaseForm">
-                                    @csrf
-                                    @method('PATCH')
+            <div class="card custom">
+                <div class="card-header">
+                    <div class="card-title">Quick Actions</div>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{{ route('admin.settings.currencies.show', $currency->currency_code) }}" 
+                            class="btn btn-outline-primary">
+                            <i class="ti ti-eye me-2"></i>
+                            Currency Details
+                        </a>
+                        
+                        @if(!$currency->is_base_currency)
+                            <form action="{{ route('admin.settings.currencies.set-base', $currency->currency_code) }}" 
+                                method="POST"
+                                id="setBaseForm">
+                                @csrf
+                                @method('PATCH')
 
-                                    <button type="button" 
-                                            class="btn btn-outline-success w-100"
-                                            id="btnSetBase"
-                                            data-code="{{ $currency->currency_code }}">
-                                        <i class="ti ti-star me-2"></i>
-                                        Set as Base Currency
-                                    </button>
-                                </form>
-                            @endif
-                        </div>
+                                <button type="button" 
+                                        class="btn btn-outline-success w-100"
+                                        id="btnSetBase"
+                                        data-code="{{ $currency->currency_code }}">
+                                    <i class="ti ti-star me-2"></i>
+                                    Set as Base Currency
+                                </button>
+                            </form>
+                        @endif
                     </div>
                 </div>
-            @endcanUpdate
+            </div>
 
             <div class="card custom">
                 <div class="card-header">
