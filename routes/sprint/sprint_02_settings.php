@@ -14,109 +14,71 @@ use Illuminate\Support\Facades\Route;
 | - Currencies (CRUD, Set Base Currency)
 | - Tax Rates (CRUD, Toggle Status)
 |
-| Access: Admin Only
+| Access: Admin ONLY (Operator & Finance_HR = No Access)
 |--------------------------------------------------------------------------
 */
 
-Route::middleware('role:admin')
+Route::middleware(['role:admin', 'permission:settings.manage'])
     ->prefix('admin/settings')
     ->name('admin.settings.')
     ->group(function () {
         
-        // Company Profile
+        /*
+        |----------------------------------------------------------------------
+        | COMPANY PROFILE
+        |----------------------------------------------------------------------
+        */
         Route::prefix('company-profile')->name('company-profile.')->group(function () {
-            Route::get('/', [CompanyProfileController::class, 'index'])
-                ->middleware('permission:settings.read')
-                ->name('index');
-            Route::get('/edit', [CompanyProfileController::class, 'edit'])
-                ->middleware('permission:settings.update')
-                ->name('edit');
-            Route::put('/', [CompanyProfileController::class, 'update'])
-                ->middleware('permission:settings.update')
-                ->name('update');
-            Route::delete('/logo', [CompanyProfileController::class, 'deleteLogo'])
-                ->middleware('permission:settings.delete')
-                ->name('delete-logo');
+            Route::get('/', [CompanyProfileController::class, 'index'])->name('index');
+            Route::get('/edit', [CompanyProfileController::class, 'edit'])->name('edit');
+            Route::put('/', [CompanyProfileController::class, 'update'])->name('update');
+            Route::delete('/logo', [CompanyProfileController::class, 'deleteLogo'])->name('delete-logo');
         });
         
-        // Units of Measure
+        /*
+        |----------------------------------------------------------------------
+        | UNITS OF MEASURE
+        |----------------------------------------------------------------------
+        */
         Route::prefix('uom')->name('uom.')->group(function () {
-            Route::get('/', [UnitOfMeasureController::class, 'index'])
-                ->middleware('permission:settings.read')
-                ->name('index');
-            Route::get('/create', [UnitOfMeasureController::class, 'create'])
-                ->middleware('permission:settings.create')
-                ->name('create');
-            Route::post('/', [UnitOfMeasureController::class, 'store'])
-                ->middleware('permission:settings.create')
-                ->name('store');
-            Route::get('/{uom}', [UnitOfMeasureController::class, 'show'])
-                ->middleware('permission:settings.read')
-                ->name('show');
-            Route::get('/{uom}/edit', [UnitOfMeasureController::class, 'edit'])
-                ->middleware('permission:settings.update')
-                ->name('edit');
-            Route::put('/{uom}', [UnitOfMeasureController::class, 'update'])
-                ->middleware('permission:settings.update')
-                ->name('update');
-            Route::delete('/{uom}', [UnitOfMeasureController::class, 'destroy'])
-                ->middleware('permission:settings.delete')
-                ->name('destroy');
+            Route::get('/', [UnitOfMeasureController::class, 'index'])->name('index');
+            Route::get('/create', [UnitOfMeasureController::class, 'create'])->name('create');
+            Route::post('/', [UnitOfMeasureController::class, 'store'])->name('store');
+            Route::get('/{uom}', [UnitOfMeasureController::class, 'show'])->name('show');
+            Route::get('/{uom}/edit', [UnitOfMeasureController::class, 'edit'])->name('edit');
+            Route::put('/{uom}', [UnitOfMeasureController::class, 'update'])->name('update');
+            Route::delete('/{uom}', [UnitOfMeasureController::class, 'destroy'])->name('destroy');
         });
         
-        // Currencies
+        /*
+        |----------------------------------------------------------------------
+        | CURRENCIES
+        |----------------------------------------------------------------------
+        */
         Route::prefix('currencies')->name('currencies.')->group(function () {
-            Route::get('/', [CurrencyController::class, 'index'])
-                ->middleware('permission:settings.read')
-                ->name('index');
-            Route::get('/create', [CurrencyController::class, 'create'])
-                ->middleware('permission:settings.create')
-                ->name('create');
-            Route::post('/', [CurrencyController::class, 'store'])
-                ->middleware('permission:settings.create')
-                ->name('store');
-            Route::get('/{currency}', [CurrencyController::class, 'show'])
-                ->middleware('permission:settings.read')
-                ->name('show');
-            Route::get('/{currency}/edit', [CurrencyController::class, 'edit'])
-                ->middleware('permission:settings.update')
-                ->name('edit');
-            Route::put('/{currency}', [CurrencyController::class, 'update'])
-                ->middleware('permission:settings.update')
-                ->name('update');
-            Route::delete('/{currency}', [CurrencyController::class, 'destroy'])
-                ->middleware('permission:settings.delete')
-                ->name('destroy');
-            Route::patch('/{currency}/set-base', [CurrencyController::class, 'setBase'])
-                ->middleware('permission:settings.update')
-                ->name('set-base');
+            Route::get('/', [CurrencyController::class, 'index'])->name('index');
+            Route::get('/create', [CurrencyController::class, 'create'])->name('create');
+            Route::post('/', [CurrencyController::class, 'store'])->name('store');
+            Route::get('/{currency}', [CurrencyController::class, 'show'])->name('show');
+            Route::get('/{currency}/edit', [CurrencyController::class, 'edit'])->name('edit');
+            Route::put('/{currency}', [CurrencyController::class, 'update'])->name('update');
+            Route::delete('/{currency}', [CurrencyController::class, 'destroy'])->name('destroy');
+            Route::patch('/{currency}/set-base', [CurrencyController::class, 'setBase'])->name('set-base');
         });
         
-        // Tax Rates
+        /*
+        |----------------------------------------------------------------------
+        | TAX RATES
+        |----------------------------------------------------------------------
+        */
         Route::prefix('tax-rates')->name('tax-rates.')->group(function () {
-            Route::get('/', [TaxRateController::class, 'index'])
-                ->middleware('permission:settings.read')
-                ->name('index');
-            Route::get('/create', [TaxRateController::class, 'create'])
-                ->middleware('permission:settings.create')
-                ->name('create');
-            Route::post('/', [TaxRateController::class, 'store'])
-                ->middleware('permission:settings.create')
-                ->name('store');
-            Route::get('/{taxRate}', [TaxRateController::class, 'show'])
-                ->middleware('permission:settings.read')
-                ->name('show');
-            Route::get('/{taxRate}/edit', [TaxRateController::class, 'edit'])
-                ->middleware('permission:settings.update')
-                ->name('edit');
-            Route::put('/{taxRate}', [TaxRateController::class, 'update'])
-                ->middleware('permission:settings.update')
-                ->name('update');
-            Route::delete('/{taxRate}', [TaxRateController::class, 'destroy'])
-                ->middleware('permission:settings.delete')
-                ->name('destroy');
-            Route::patch('/{taxRate}/toggle-status', [TaxRateController::class, 'toggleStatus'])
-                ->middleware('permission:settings.update')
-                ->name('toggle-status');
+            Route::get('/', [TaxRateController::class, 'index'])->name('index');
+            Route::get('/create', [TaxRateController::class, 'create'])->name('create');
+            Route::post('/', [TaxRateController::class, 'store'])->name('store');
+            Route::get('/{taxRate}', [TaxRateController::class, 'show'])->name('show');
+            Route::get('/{taxRate}/edit', [TaxRateController::class, 'edit'])->name('edit');
+            Route::put('/{taxRate}', [TaxRateController::class, 'update'])->name('update');
+            Route::delete('/{taxRate}', [TaxRateController::class, 'destroy'])->name('destroy');
+            Route::patch('/{taxRate}/toggle-status', [TaxRateController::class, 'toggleStatus'])->name('toggle-status');
         });
     });
