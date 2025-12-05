@@ -84,7 +84,7 @@ class PositionController extends Controller
             $query->orderBy('position_name', 'asc');
         }
 
-        $positions = $query->paginate(15)->withQueryString();
+        $positions = $query->paginate(10)->withQueryString();
 
         // Get departments for filter
         $departments = DB::table('departments')

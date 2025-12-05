@@ -32,6 +32,7 @@ export default defineConfig({
                         'resources/assets/js/erp/edit-role.js',
                         'resources/assets/js/erp/edit-user.js',
                         'resources/assets/js/erp/department-init.js',
+                        'resources/assets/js/erp/position-init.js',
 
                         'resources/assets/js/custom/alert-custom.js',
                         'resources/assets/js/custom/auto-complete-custom.js',

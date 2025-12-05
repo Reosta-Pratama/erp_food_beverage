@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Create Form
+    // Create & Update Form
     const departmentForm = document.getElementById('departmentForm');
     if (departmentForm) {
         departmentForm.addEventListener('submit', async function (e) {
@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
+    // Assigned Manager Form
     const assignedManagerForm = document.getElementById('assignedManagerForm');
     if (assignedManagerForm) {
         assignedManagerForm.addEventListener('submit', async function (e) {

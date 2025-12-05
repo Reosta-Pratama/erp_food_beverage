@@ -167,7 +167,7 @@
                 <div class="card-body p-0">
                     @if ($departments->count() > 0)
                         <div class="table-responsive">
-                            <table class="table text-nowrap table-borderless mb-0">
+                            <table class="table text-nowrap table-borderless table-hover mb-0">
                                 <thead>
                                     <th scope="col">Code</th>
                                     <th scope="col">Department Name</th>
