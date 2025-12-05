@@ -162,6 +162,14 @@ class CodeGeneratorHelper
     }
 
     /**
+     * Generate Employee Code
+     */
+    public static function generateEmployeeCode(): string
+    {
+        return self::generate('employees', 'employee_code', 'EPY');
+    }
+
+    /**
      * Generate BOM Code
      */
     public static function generateBOMCode(): string

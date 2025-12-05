@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\HRM;
 
+use App\Helpers\CodeGeneratorHelper;
 use App\Http\Controllers\Controller;
 use App\LogsActivity;
 use Illuminate\Http\Request;
@@ -42,7 +43,7 @@ class EmployeeController extends Controller
 
         // Search - UPDATED
         if ($request->filled('search')) {
-            $search = $request->search;
+            $search = $request->input('search');
             $query->where(function($q) use ($search) {
                 $q->where('employees.first_name', 'like', "%{$search}%")
                 ->orWhere('employees.last_name', 'like', "%{$search}%")
@@ -54,30 +55,30 @@ class EmployeeController extends Controller
 
         // Filter by department
         if ($request->filled('department_id')) {
-            $query->where('employees.department_id', $request->department_id);
+            $query->where('employees.department_id', $request->input('department_id'));
         }
 
         // Filter by position
         if ($request->filled('position_id')) {
-            $query->where('employees.position_id', $request->position_id);
+            $query->where('employees.position_id', $request->input('position_id'));
         }
 
         // Filter by employment status
         if ($request->filled('employment_status')) {
-            $query->where('employees.employment_status', $request->employment_status);
+            $query->where('employees.employment_status', $request->input('employment_status'));
         }
 
         // NEW: Filter by gender
         if ($request->filled('gender')) {
-            $query->where('employees.gender', $request->gender);
+            $query->where('employees.gender', $request->input('gender'));
         }
 
         // NEW: Filter by join date range
         if ($request->filled('join_date_from')) {
-            $query->whereDate('employees.join_date', '>=', $request->join_date_from);
+            $query->whereDate('employees.join_date', '>=', $request->input('join_date_from'));
         }
         if ($request->filled('join_date_to')) {
-            $query->whereDate('employees.join_date', '<=', $request->join_date_to);
+            $query->whereDate('employees.join_date', '<=', $request->input('join_date_to'));
         }
 
         // NEW: Sorting
@@ -85,7 +86,7 @@ class EmployeeController extends Controller
         $sortOrder = $request->get('sort_order', 'asc');
         
         $allowedSort = ['first_name', 'last_name', 'employee_code', 'department_name', 'position_name', 'employment_status', 'join_date', 'base_salary'];
-        if (in_array($sortBy, $allowedSort)) {
+        if (\in_array($sortBy, $allowedSort)) {
             $query->orderBy($sortBy, $sortOrder);
         }
 
@@ -98,7 +99,7 @@ class EmployeeController extends Controller
         }
 
         // NEW: Pagination with query string
-        $employees = $query->paginate(20)->withQueryString();
+        $employees = $query->paginate(10)->withQueryString();
 
         // Get filter options
         $departments = DB::table('departments')
@@ -118,7 +119,7 @@ class EmployeeController extends Controller
 
         $employmentStatuses = ['Probation', 'Permanent', 'Contract', 'Intern', 'Resigned'];
         
-        return view('admin.hrm.employees.index', compact('employees', 'departments', 'positions', 'employmentStatuses'));
+        return view('admin.employee-management.employees.index', compact('employees', 'departments', 'positions', 'employmentStatuses'));
     }
 
     /**
@@ -141,7 +142,7 @@ class EmployeeController extends Controller
             ->orderBy('positions.position_name')
             ->get();
         
-        return view('admin.hrm.employees.create', compact('departments', 'positions'));
+        return view('admin.employee-management.employees.create', compact('departments', 'positions'));
     }
 
     /**
@@ -181,8 +182,10 @@ class EmployeeController extends Controller
 
         DB::beginTransaction();
         try {
+            $employeeCode = CodeGeneratorHelper::generateEmployeeCode();
+
             $employeeId = DB::table('employees')->insertGetId([
-                'employee_code' => strtoupper(Str::random(10)),
+                'employee_code' => $employeeCode,
                 'first_name' => $validated['first_name'],
                 'last_name' => $validated['last_name'],
                 'email' => $validated['email'] ?? null,
@@ -216,7 +219,7 @@ class EmployeeController extends Controller
             DB::commit();
             
             return redirect()
-                ->route('admin.hrm.employees.index')
+                ->route('hrm.employees.index')
                 ->with('success', 'Employee created successfully');
                 
         } catch (\Exception $e) {
@@ -285,7 +288,7 @@ class EmployeeController extends Controller
             ->groupBy('leave_types.leave_type_id', 'leave_types.leave_type_name')
             ->get();
         
-        return view('admin.hrm.employees.show', compact('employee', 'userAccount', 'attendanceSummary', 'leaveBalance'));
+        return view('admin.employee-management.employees.show', compact('employee', 'userAccount', 'attendanceSummary', 'leaveBalance'));
     }
 
     /**
@@ -316,7 +319,7 @@ class EmployeeController extends Controller
             ->orderBy('positions.position_name')
             ->get();
         
-        return view('admin.hrm.employees.edit', compact('employee', 'departments', 'positions'));
+        return view('admin.employee-management.employees.edit', compact('employee', 'departments', 'positions'));
     }
 
     /**
@@ -346,6 +349,31 @@ class EmployeeController extends Controller
             'join_date' => ['required', 'date'],
             'employment_status' => ['required', 'in:Probation,Permanent,Contract,Intern,Resigned'],
             'base_salary' => ['nullable', 'numeric', 'min:0', 'max:9999999999999.99'],
+        ], [
+            'first_name.required' => 'First name is required.',
+            'first_name.max' => 'First name may not be longer than 100 characters.',
+            'last_name.required' => 'Last name is required.',
+            'last_name.max' => 'Last name may not be longer than 100 characters.',
+            'email.email' => 'Please provide a valid email address.',
+            'email.max' => 'Email may not be longer than 150 characters.',
+            'email.unique' => 'This email is already registered.',
+            'phone.max' => 'Phone number may not be longer than 20 characters.',
+            'date_of_birth.date' => 'Date of birth must be a valid date.',
+            'date_of_birth.before' => 'Date of birth must be before today.',
+            'gender.required' => 'Please select a gender.',
+            'gender.in' => 'Selected gender is invalid.',
+            'id_number.max' => 'ID Number may not be longer than 50 characters.',
+            'department_id.required' => 'Please select a department.',
+            'department_id.exists' => 'Selected department does not exist.',
+            'position_id.required' => 'Please select a position.',
+            'position_id.exists' => 'Selected position does not exist.',
+            'join_date.required' => 'Join date is required.',
+            'join_date.date' => 'Join date must be a valid date.',
+            'employment_status.required' => 'Please select an employment status.',
+            'employment_status.in' => 'Employment status selection is invalid.',
+            'base_salary.numeric' => 'Base salary must be a numeric value.',
+            'base_salary.min' => 'Base salary must not be less than 0.',
+            'base_salary.max' => 'Base salary exceeds the allowed limit.',
         ]);
 
         DB::beginTransaction();
@@ -395,7 +423,7 @@ class EmployeeController extends Controller
             DB::commit();
             
             return redirect()
-                ->route('admin.hrm.employees.index')
+                ->route('hrm.employees.index')
                 ->with('success', 'Employee updated successfully');
                 
         } catch (\Exception $e) {
@@ -465,7 +493,7 @@ class EmployeeController extends Controller
             DB::commit();
             
             return redirect()
-                ->route('admin.hrm.employees.index')
+                ->route('hrm.employees.index')
                 ->with('success', 'Employee deleted successfully');
                 
         } catch (\Exception $e) {
