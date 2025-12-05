@@ -43,8 +43,8 @@ class BOMController extends Controller
             $search = $request->search;
             $query->where(function($q) use ($search) {
                 $q->where('bom.bom_code', 'like', "%{$search}%")
-                  ->orWhere('p.product_name', 'like', "%{$search}%")
-                  ->orWhere('p.product_code', 'like', "%{$search}%");
+                ->orWhere('p.product_name', 'like', "%{$search}%")
+                ->orWhere('p.product_code', 'like', "%{$search}%");
             });
         }
         
@@ -58,8 +58,31 @@ class BOMController extends Controller
             $query->where('bom.is_active', $request->status === 'active' ? 1 : 0);
         }
         
-        $boms = $query->orderByDesc('bom.created_at')
-            ->paginate(20);
+        // Sorting
+        $sort = $request->get('sort', 'created_at_desc');
+        switch ($sort) {
+            case 'created_at_asc':
+                $query->orderBy('bom.created_at', 'asc');
+                break;
+            case 'bom_code_asc':
+                $query->orderBy('bom.bom_code', 'asc');
+                break;
+            case 'bom_code_desc':
+                $query->orderBy('bom.bom_code', 'desc');
+                break;
+            case 'product_name_asc':
+                $query->orderBy('p.product_name', 'asc');
+                break;
+            case 'product_name_desc':
+                $query->orderBy('p.product_name', 'desc');
+                break;
+            case 'created_at_desc':
+            default:
+                $query->orderByDesc('bom.created_at');
+                break;
+        }
+        
+        $boms = $query->paginate(20)->appends($request->except('page'));
         
         return view('inventory.bom.index', compact('boms'));
     }
@@ -515,10 +538,116 @@ class BOMController extends Controller
     /**
      * Export BOM to CSV/Excel
      */
-    public function export()
+    public function export(Request $request)
     {
         $this->logExport('Inventory - BOM', 'Exported BOM list');
         
-        // Your export logic here
+        $query = DB::table('bill_of_materials as bom')
+            ->join('products as p', 'bom.product_id', '=', 'p.product_id')
+            ->leftJoin('units_of_measure as uom', 'p.uom_id', '=', 'uom.uom_id')
+            ->select(
+                'bom.bom_code',
+                'bom.bom_version',
+                'p.product_code',
+                'p.product_name',
+                'p.product_type',
+                'uom.uom_code',
+                'bom.effective_date',
+                'bom.is_active',
+                DB::raw('(SELECT COUNT(*) FROM bom_items WHERE bom_id = bom.bom_id) as items_count'),
+                'bom.notes',
+                'bom.created_at'
+            );
+        
+        // Apply same filters as index
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('bom.bom_code', 'like', "%{$search}%")
+                ->orWhere('p.product_name', 'like', "%{$search}%")
+                ->orWhere('p.product_code', 'like', "%{$search}%");
+            });
+        }
+        
+        if ($request->filled('product_type')) {
+            $query->where('p.product_type', $request->product_type);
+        }
+        
+        if ($request->filled('status')) {
+            $query->where('bom.is_active', $request->status === 'active' ? 1 : 0);
+        }
+        
+        // Apply same sorting as index
+        $sort = $request->get('sort', 'created_at_desc');
+        switch ($sort) {
+            case 'created_at_asc':
+                $query->orderBy('bom.created_at', 'asc');
+                break;
+            case 'bom_code_asc':
+                $query->orderBy('bom.bom_code', 'asc');
+                break;
+            case 'bom_code_desc':
+                $query->orderBy('bom.bom_code', 'desc');
+                break;
+            case 'product_name_asc':
+                $query->orderBy('p.product_name', 'asc');
+                break;
+            case 'product_name_desc':
+                $query->orderBy('p.product_name', 'desc');
+                break;
+            case 'created_at_desc':
+            default:
+                $query->orderByDesc('bom.created_at');
+                break;
+        }
+        
+        $boms = $query->limit(10000)->get();
+        
+        $filename = 'bom_export_' . now()->format('Y-m-d_His') . '.csv';
+        
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+        ];
+        
+        $callback = function() use ($boms) {
+            $file = fopen('php://output', 'w');
+            
+            // Header CSV
+            fputcsv($file, [
+                'BOM Code',
+                'Version',
+                'Product Code',
+                'Product Name',
+                'Product Type',
+                'UOM',
+                'Effective Date',
+                'Status',
+                'Items Count',
+                'Notes',
+                'Created At'
+            ]);
+            
+            // Data rows
+            foreach ($boms as $bom) {
+                fputcsv($file, [
+                    $bom->bom_code,
+                    $bom->bom_version,
+                    $bom->product_code,
+                    $bom->product_name,
+                    $bom->product_type,
+                    $bom->uom_code,
+                    $bom->effective_date,
+                    $bom->is_active ? 'Active' : 'Inactive',
+                    $bom->items_count,
+                    $bom->notes ?? '-',
+                    $bom->created_at,
+                ]);
+            }
+            
+            fclose($file);
+        };
+        
+        return response()->stream($callback, 200, $headers);
     }
 }
