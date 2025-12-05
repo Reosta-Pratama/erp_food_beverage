@@ -42,4 +42,35 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
+    const assignedManagerForm = document.getElementById('assignedManagerForm');
+    if (assignedManagerForm) {
+        assignedManagerForm.addEventListener('submit', async function (e) {
+            const managerSelect = document.getElementById('modal_manager_id');
+            const selectedManager = managerSelect?.value.trim() ?? '';
+
+            if (!selectedManager) {
+                e.preventDefault();
+
+                await Swal.fire({
+                    icon: 'warning',
+                    title: 'Validation',
+                    text: 'Please select a manager first.',
+                    confirmButtonText: 'OK'
+                });
+
+                managerSelect?.focus();
+                return;
+            }
+
+            // Show loading state
+            const submitBtn = this.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = `
+                    <span class="spinner-border spinner-border-sm me-1"></span> Saving...
+                `;
+            }
+        });
+    }
+
 });

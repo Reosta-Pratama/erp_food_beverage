@@ -115,7 +115,22 @@
                 </div>
                 <div class="card-body">
                     @if ($department->manager_name)
-                        
+                        <div class="text-center">
+                            <div class="avatar avatar-lg bg-primary text-white rounded-circle 
+                                d-inline-flex align-items-center justify-content-center mb-3">
+                                <span class="fs-22 mb-0">
+                                    {{ substr($department->manager_name, 0, 1) }}
+                                </span>
+                            </div>
+                            <h5 class="mb-1">{{ $department->manager_name }}</h5>
+                            <p class="text-muted mb-2">{{ $department->manager_code }}</p>
+                            @if($department->manager_email)
+                                <p class="text-muted small mb-0">
+                                    <i class="ti ti-mail me-1"></i> 
+                                    {{ $department->manager_email }}
+                                </p>
+                            @endif
+                        </div>
                     @else
                         <div class="text-center py-3">
                             <i class="ti ti-database-off text-muted display-3"></i>
@@ -181,9 +196,68 @@
                 </div>
                 <div class="card-body p-0">
                     @if ($employees->count() > 0)
-                        
+                        <div class="table-responsive">
+                            <table class="table table-hover last-border-none text-nowrap mb-0">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Employee</th>
+                                        <th scope="col">Position</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Join Data</th>
+                                        <th scope="col">Contact</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($employees as $employee)
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar avatar-sm bg-primary text-white rounded-circle 
+                                                        d-flex align-items-center justify-content-center me-2">
+                                                        {{ substr($employee->first_name, 0, 1) }}
+                                                    </div>
+                                                    <div>
+                                                        <div class="fw-bold">
+                                                            {{ $employee->first_name }} {{ $employee->last_name }}
+                                                        </div>
+                                                        <small class="text-muted">{{ $employee->employee_code }}</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                            <td>{{ $employee->position_name }}</td>
+
+                                            <td>
+                                                @if($employee->employment_status === 'Active')
+                                                    <span class="badge bg-success">Active</span>
+                                                @elseif($employee->employment_status === 'Probation')
+                                                    <span class="badge bg-warning">Probation</span>
+                                                @else
+                                                    <span class="badge bg-secondary">{{ $employee->employment_status }}</span>
+                                                @endif
+                                            </td>
+
+                                            <td>
+                                                <small>{{ \Carbon\Carbon::parse($employee->join_date)->format('d M Y') }}</small>
+                                            </td>
+                                            
+                                            <td>
+                                                @if($employee->email)
+                                                    <small>{{ $employee->email }}</small>
+                                                @else
+                                                    <small class="text-muted">No email</small>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     @else
-                        
+                        <div class="text-center py-5">
+                            <i class="ti ti-database-off text-muted display-1"></i>
+                            <h5 class="text-muted mt-3">No employees in this department</h5>
+                        </div>
                     @endif
                 </div>
             </div>
@@ -194,163 +268,51 @@
                 </div>
                 <div class="card-body p-0">
                     @if ($positions->count() > 0)
-                        
+                        <div class="table-responsive">
+                            <table class="table table-hover last-border-none text-nowrap mb-0">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Position Code</th>
+                                        <th scope="col">Position Name</th>
+                                        <th scope="col">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($positions as $position)
+                                        <tr>
+                                            <td>
+                                                <span class="badge bg-primary">
+                                                    {{ $position->position_code }}
+                                                </span>
+                                            </td>
+                                            
+                                            <td>
+                                                <strong>{{ $position->position_name }}</strong>
+                                            </td>
+
+                                            <td>
+                                                @if($position->job_description)
+                                                    {{ Str::limit($position->job_description, 80) }}
+                                                @else
+                                                    <span class="text-muted">No description</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     @else
-                        
+                        <div class="text-center py-5">
+                            <i class="ti ti-database-off text-muted display-1"></i>
+                            <h5 class="text-muted mt-3">No positions defined for this department</h5>
+                        </div>
                     @endif
                 </div>
             </div>
         </div>
     </div>
     <!-- Container -->
-
-
-
-
-
-
-
-
-<div class="container-fluid">
-
-    <!-- Alert Messages -->
-    @if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="bi bi-check-circle me-2"></i>
-        {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    @endif
-
-    @if(session('error'))
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <i class="bi bi-exclamation-triangle me-2"></i>
-        {{ session('error') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    @endif
-
-    <div class="row">
-        <!-- Main Content -->
-        <div class="col-lg-8">
-            
-
-            <!-- Employees Table -->
-            <div class="card shadow-sm mb-4">
-                <div class="card-header bg-white py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">
-                        <i class="bi bi-people me-1"></i> Employees ({{ $employees->count() }})
-                    </h6>
-                </div>
-                <div class="card-body">
-                    @if($employees->count() > 0)
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Employee</th>
-                                    <th>Position</th>
-                                    <th>Status</th>
-                                    <th>Join Date</th>
-                                    <th>Contact</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($employees as $employee)
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2">
-                                                {{ substr($employee->first_name, 0, 1) }}
-                                            </div>
-                                            <div>
-                                                <div class="fw-bold">
-                                                    {{ $employee->first_name }} {{ $employee->last_name }}
-                                                </div>
-                                                <small class="text-muted">{{ $employee->employee_code }}</small>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>{{ $employee->position_name }}</td>
-                                    <td>
-                                        @if($employee->employment_status === 'Active')
-                                        <span class="badge bg-success">Active</span>
-                                        @elseif($employee->employment_status === 'Probation')
-                                        <span class="badge bg-warning">Probation</span>
-                                        @else
-                                        <span class="badge bg-secondary">{{ $employee->employment_status }}</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <small>{{ \Carbon\Carbon::parse($employee->join_date)->format('d M Y') }}</small>
-                                    </td>
-                                    <td>
-                                        @if($employee->email)
-                                        <small>{{ $employee->email }}</small>
-                                        @else
-                                        <small class="text-muted">No email</small>
-                                        @endif
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    @else
-                    <div class="text-center text-muted py-4">
-                        <i class="bi bi-inbox display-4"></i>
-                        <p class="mt-2">No employees in this department</p>
-                    </div>
-                    @endif
-                </div>
-            </div>
-
-            <!-- Positions Table -->
-            <div class="card shadow-sm">
-                <div class="card-header bg-white py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">
-                        <i class="bi bi-briefcase me-1"></i> Positions ({{ $positions->count() }})
-                    </h6>
-                </div>
-                <div class="card-body">
-                    @if($positions->count() > 0)
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Position Code</th>
-                                    <th>Position Name</th>
-                                    <th>Description</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($positions as $position)
-                                <tr>
-                                    <td><span class="badge bg-secondary">{{ $position->position_code }}</span></td>
-                                    <td><strong>{{ $position->position_name }}</strong></td>
-                                    <td>
-                                        @if($position->job_description)
-                                        {{ Str::limit($position->job_description, 80) }}
-                                        @else
-                                        <span class="text-muted">No description</span>
-                                        @endif
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    @else
-                    <div class="text-center text-muted py-4">
-                        <i class="bi bi-inbox display-4"></i>
-                        <p class="mt-2">No positions defined for this department</p>
-                    </div>
-                    @endif
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
     <!-- Delete Confirmation Form -->
     <form id="deleteForm" method="POST" style="display: none;">
@@ -363,39 +325,59 @@
 
 @section('modals')
 
-    <div class="modal fade" id="assignManagerModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form method="POST" action="{{ route('hrm.departments.assign-manager', $department->department_code) }}">
-                    @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title">Assign Department Manager</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="modal_manager_id" class="form-label">Select Manager</label>
-                            <select class="form-select" id="modal_manager_id" name="manager_id" required>
-                                <option value="">-- Select Manager --</option>
-                                @foreach($employees as $employee)
+    {{-- Assigned Manager --}}
+    <div class="modal fade" id="assignManagerModal" 
+        data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="assignManagerModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <form method="POST" action="{{ route('hrm.departments.assign-manager', $department->department_code) }}"
+                id="assignedManagerForm" class="modal-content">
+                @csrf
+
+                <div class="modal-header d-flex justify-content-between bg-primary">
+                    <h6 class="modal-title text-white">
+                        Assign Department Manager
+                    </h6>
+
+                    <button type="button" class="btn btn-icon btn-white-transparent" 
+                        data-bs-dismiss="modal" aria-label="Close">
+                        <i class="ti ti-x"></i>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="modal_manager_id" class="form-label">Select Manager</label>
+                        <select class="form-select single-select" 
+                            id="modal_manager_id" name="manager_id">
+                            <option value="">-- Select Manager --</option>
+                            @foreach($employees as $employee)
                                 <option value="{{ $employee->employee_id }}" 
                                         {{ $department->manager_id == $employee->employee_id ? 'selected' : '' }}>
                                     {{ $employee->first_name }} {{ $employee->last_name }} ({{ $employee->employee_code }})
                                 </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="alert alert-info small mb-0">
-                            <i class="bi bi-info-circle me-1"></i>
-                            Only active employees from this department are shown
-                        </div>
+                            @endforeach
+                        </select>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Assign Manager</button>
+
+                    <div class="alert alert-info">
+                        <i class="ti ti-circle-info me-2"></i>
+                        Only active employees from this department are shown
                     </div>
-                </form>
-            </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary"
+                        data-bs-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ti ti-check me-2"></i>
+                        Assign Manager
+                    </button>
+                </div>
+
+            </form>
         </div>
     </div>
 
@@ -405,6 +387,8 @@
 
     <!-- Sweetalerts JS -->
     <script src="{{ asset('assets/plugin/sweetalert2/sweetalert2.min.js') }}"></script>
+
+    @vite(['resources/assets/js/erp/department-init.js'])
 
     <script>
         function confirmDelete(departmentCode, departmentName) {
