@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\HRM;
 
+use App\Helpers\CodeGeneratorHelper;
 use App\Http\Controllers\Controller;
 use App\LogsActivity;
 use Illuminate\Http\Request;
@@ -47,7 +48,7 @@ class PositionController extends Controller
 
         // Search filter
         if ($request->filled('search')) {
-            $search = $request->search;
+            $search = $request->input('search');
             $query->where(function($q) use ($search) {
                 $q->where('positions.position_name', 'like', "%{$search}%")
                   ->orWhere('positions.position_code', 'like', "%{$search}%")
@@ -57,14 +58,14 @@ class PositionController extends Controller
 
         // Filter by department
         if ($request->filled('department_id')) {
-            $query->where('positions.department_id', $request->department_id);
+            $query->where('positions.department_id', $request->input('department_id'));
         }
 
         // Employee count filter
         if ($request->filled('employee_status')) {
-            if ($request->employee_status === 'empty') {
+            if ($request->input('employee_status') === 'empty') {
                 $query->havingRaw('COUNT(DISTINCT employees.employee_id) = 0');
-            } elseif ($request->employee_status === 'filled') {
+            } elseif ($request->input('employee_status') === 'filled') {
                 $query->havingRaw('COUNT(DISTINCT employees.employee_id) > 0');
             }
         }
@@ -74,7 +75,7 @@ class PositionController extends Controller
         $sortOrder = $request->get('sort_order', 'asc');
         
         $allowedSort = ['position_name', 'position_code', 'department_name', 'employees_count', 'created_at'];
-        if (in_array($sortBy, $allowedSort)) {
+        if (\in_array($sortBy, $allowedSort)) {
             $query->orderBy($sortBy, $sortOrder);
         }
 
@@ -90,7 +91,7 @@ class PositionController extends Controller
             ->orderBy('department_name')
             ->get();
         
-        return view('admin.hrm.positions.index', compact('positions', 'departments'));
+        return view('admin.employee-management.positions.index', compact('positions', 'departments'));
     }
 
     /**
@@ -102,7 +103,7 @@ class PositionController extends Controller
             ->orderBy('department_name')
             ->get();
         
-        return view('admin.hrm.positions.create', compact('departments'));
+        return view('admin.employee-management.positions.create', compact('departments'));
     }
 
     /**
@@ -123,8 +124,10 @@ class PositionController extends Controller
 
         DB::beginTransaction();
         try {
+            $positionCode = CodeGeneratorHelper::generatePositionCode();
+
             $positionId = DB::table('positions')->insertGetId([
-                'position_code' => strtoupper(Str::random(10)),
+                'position_code' => $positionCode,
                 'position_name' => $validated['position_name'],
                 'department_id' => $validated['department_id'],
                 'job_description' => $validated['job_description'] ?? null,
@@ -143,7 +146,7 @@ class PositionController extends Controller
             DB::commit();
             
             return redirect()
-                ->route('admin.hrm.positions.index')
+                ->route('hrm.positions.index')
                 ->with('success', 'Position created successfully');
                 
         } catch (\Exception $e) {
@@ -195,7 +198,7 @@ class PositionController extends Controller
             ->orderBy('first_name')
             ->get();
         
-        return view('admin.hrm.positions.show', compact('position', 'employees'));
+        return view('admin.employee-management.positions.show', compact('position', 'employees'));
     }
 
     /**
@@ -215,7 +218,7 @@ class PositionController extends Controller
             ->orderBy('department_name')
             ->get();
         
-        return view('admin.hrm.positions.edit', compact('position', 'departments'));
+        return view('admin.employee-management.positions.edit', compact('position', 'departments'));
     }
 
     /**
@@ -272,7 +275,7 @@ class PositionController extends Controller
             DB::commit();
             
             return redirect()
-                ->route('admin.hrm.positions.index')
+                ->route('hrm.positions.index')
                 ->with('success', 'Position updated successfully');
                 
         } catch (\Exception $e) {
@@ -330,7 +333,7 @@ class PositionController extends Controller
             DB::commit();
             
             return redirect()
-                ->route('admin.hrm.positions.index')
+                ->route('hrm.positions.index')
                 ->with('success', 'Position deleted successfully');
                 
         } catch (\Exception $e) {

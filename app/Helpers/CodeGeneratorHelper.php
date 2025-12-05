@@ -154,6 +154,14 @@ class CodeGeneratorHelper
     }
 
     /**
+     * Generate Position Code
+     */
+    public static function generatePositionCode(): string
+    {
+        return self::generate('positions', 'position_code', 'PST');
+    }
+
+    /**
      * Generate BOM Code
      */
     public static function generateBOMCode(): string

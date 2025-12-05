@@ -46,6 +46,8 @@ return new class extends Migration
         DB::statement('ALTER TABLE spare_parts              MODIFY part_code        CHAR(15) NOT NULL');
         DB::statement('ALTER TABLE tax_rates                MODIFY tax_code         CHAR(15) NOT NULL');
         DB::statement('ALTER TABLE departments              MODIFY department_code  CHAR(15) NOT NULL');
+        DB::statement('ALTER TABLE positions                MODIFY position_code    CHAR(15) NOT NULL');
+
     }
 
     /**
@@ -88,5 +90,6 @@ return new class extends Migration
         DB::statement('ALTER TABLE spare_parts MODIFY part_code CHAR(10) NOT NULL');
         DB::statement('ALTER TABLE tax_rates                MODIFY tax_code         CHAR(10) NOT NULL');
         DB::statement('ALTER TABLE departments              MODIFY department_code  CHAR(10) NOT NULL');
+        DB::statement('ALTER TABLE positions                MODIFY position_code    CHAR(10) NOT NULL');
     }
 };
