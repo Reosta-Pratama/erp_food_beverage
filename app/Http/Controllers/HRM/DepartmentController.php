@@ -15,7 +15,7 @@ class DepartmentController extends Controller
     use LogsActivity;
 
     /**
-     * List departments with employee count
+     * List departments 
      */
     public function index(Request $request)
     {
