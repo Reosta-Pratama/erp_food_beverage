@@ -80,45 +80,6 @@ Route::middleware(['role:admin,finance_hr', 'permission:employees.manage'])
 
 /*
 |--------------------------------------------------------------------------
-| ATTENDANCE MANAGEMENT (Admin + Finance_HR)
-|--------------------------------------------------------------------------
-*/
-Route::middleware(['role:admin,finance_hr', 'permission:attendance.manage'])
-    ->prefix('hrm/attendance')
-    ->name('hrm.attendance.')
-    ->group(function () {
-        // Attendance routes will be added in Sprint 18
-        // Placeholder untuk future implementation
-    });
-
-/*
-|--------------------------------------------------------------------------
-| LEAVE MANAGEMENT (Admin + Finance_HR)
-|--------------------------------------------------------------------------
-*/
-Route::middleware(['role:admin,finance_hr', 'permission:leave.manage'])
-    ->prefix('hrm/leave')
-    ->name('hrm.leave.')
-    ->group(function () {
-        // Leave routes will be added in Sprint 19
-        // Placeholder untuk future implementation
-    });
-
-/*
-|--------------------------------------------------------------------------
-| PAYROLL MANAGEMENT (Admin + Finance_HR)
-|--------------------------------------------------------------------------
-*/
-Route::middleware(['role:admin,finance_hr', 'permission:payroll.manage'])
-    ->prefix('hrm/payroll')
-    ->name('hrm.payroll.')
-    ->group(function () {
-        // Payroll routes will be added in Sprint 18
-        // Placeholder untuk future implementation
-    });
-
-/*
-|--------------------------------------------------------------------------
 | EMPLOYEE SELF SERVICE (All Authenticated Users)
 |--------------------------------------------------------------------------
 */
