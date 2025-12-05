@@ -61,6 +61,9 @@ Route::middleware('auth')->group(function () {
     // SPRINT 7: Quality Control
     require __DIR__.'/sprint/sprint_07_quality_control.php';
     
+    // SPRINT 8: Expiry Management
+    require __DIR__.'/sprint/sprint_08_expiry_management.php';
+
     // ROLE-BASED DASHBOARDS
     require __DIR__.'/sprint/dashboards.php';
     
