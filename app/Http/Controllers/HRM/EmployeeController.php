@@ -15,7 +15,7 @@ class EmployeeController extends Controller
     use LogsActivity;
 
     /**
-     * List employees with advanced filtering
+     * List employees 
      */
     public function index(Request $request)
     {
@@ -41,7 +41,7 @@ class EmployeeController extends Controller
                 'positions.position_code'
             );
 
-        // Search - UPDATED
+        // Search 
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function($q) use ($search) {
@@ -68,12 +68,12 @@ class EmployeeController extends Controller
             $query->where('employees.employment_status', $request->input('employment_status'));
         }
 
-        // NEW: Filter by gender
+        // Filter by gender
         if ($request->filled('gender')) {
             $query->where('employees.gender', $request->input('gender'));
         }
 
-        // NEW: Filter by join date range
+        // Filter by join date range
         if ($request->filled('join_date_from')) {
             $query->whereDate('employees.join_date', '>=', $request->input('join_date_from'));
         }
@@ -81,7 +81,7 @@ class EmployeeController extends Controller
             $query->whereDate('employees.join_date', '<=', $request->input('join_date_to'));
         }
 
-        // NEW: Sorting
+        // Sorting
         $sortBy = $request->get('sort_by', 'first_name');
         $sortOrder = $request->get('sort_order', 'asc');
         
@@ -98,7 +98,7 @@ class EmployeeController extends Controller
             $query->orderBy('last_name', 'asc');
         }
 
-        // NEW: Pagination with query string
+        // Pagination with query string
         $employees = $query->paginate(10)->withQueryString();
 
         // Get filter options
