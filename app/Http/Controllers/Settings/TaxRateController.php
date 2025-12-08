@@ -110,6 +110,12 @@ class TaxRateController extends Controller
         if (!$taxRate) {
             abort(404, 'Tax rate not found');
         }
+
+        // Log VIEW
+        $this->logView(
+            'Setting - Tax Rate',
+            "Viewed tax rate: {$taxRate->tax_name} (Code: {$taxCode})"
+        );
         
         return view('admin.settings.tax-rates.show', compact('taxRate'));
     }
