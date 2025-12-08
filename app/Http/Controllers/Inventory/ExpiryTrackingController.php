@@ -671,4 +671,280 @@ class ExpiryTrackingController extends Controller
 
         return view('inventory.expiry-tracking.critical-alerts', compact('criticalAlerts'));
     }
+
+    /**
+     * Show near expiry items
+     */
+    public function nearExpiry(Request $request)
+    {
+        $this->logView('Inventory - Expiry Management', 'Viewed near expiry items');
+
+        $days = $request->input('days', 30); // Default 30 days
+
+        $nearExpiryItems = DB::table('expiry_tracking as et')
+            ->join('products as p', 'et.product_id', '=', 'p.product_id')
+            ->join('lots as l', 'et.lot_id', '=', 'l.lot_id')
+            ->join('warehouses as w', 'et.warehouse_id', '=', 'w.warehouse_id')
+            ->leftJoin('units_of_measure as uom', 'p.uom_id', '=', 'uom.uom_id')
+            ->whereRaw("DATEDIFF(et.expiry_date, CURDATE()) BETWEEN 0 AND {$days}")
+            ->where('et.status', '!=', 'Disposed')
+            ->select(
+                'et.*',
+                'p.product_code',
+                'p.product_name',
+                'l.lot_code',
+                'w.warehouse_name',
+                'uom.uom_name',
+                DB::raw('DATEDIFF(et.expiry_date, CURDATE()) as days_until_expiry')
+            )
+            ->orderBy('days_until_expiry')
+            ->paginate(50);
+            
+            return view('inventory.expiry-tracking.near-expiry', compact('nearExpiryItems', 'days'));
+    }
+
+    /**
+     * Show expired items
+     */
+    public function expired()
+    {
+        $this->logView('Inventory - Expiry Management', 'Viewed expired items');
+
+        $expiredItems = DB::table('expiry_tracking as et')
+            ->join('products as p', 'et.product_id', '=', 'p.product_id')
+            ->join('lots as l', 'et.lot_id', '=', 'l.lot_id')
+            ->join('warehouses as w', 'et.warehouse_id', '=', 'w.warehouse_id')
+            ->leftJoin('units_of_measure as uom', 'p.uom_id', '=', 'uom.uom_id')
+            ->whereRaw('et.expiry_date < CURDATE()')
+            ->where('et.status', '!=', 'Disposed')
+            ->select(
+                'et.*',
+                'p.product_code',
+                'p.product_name',
+                'l.lot_code',
+                'w.warehouse_name',
+                'uom.uom_name',
+                DB::raw('ABS(DATEDIFF(et.expiry_date, CURDATE())) as days_expired')
+            )
+            ->orderByDesc('days_expired')
+            ->paginate(50);
+
+        return view('inventory.expiry-tracking.expired', compact('expiredItems'));
+    }
+
+    /**
+     * Bulk dispose expired items
+     */
+    public function bulkDispose(Request $request)
+    {
+        $validated = $request->validate([
+            'expiry_ids' => ['required', 'array', 'min:1'],
+            'expiry_ids.*' => ['exists:expiry_tracking,expiry_id'],
+            'disposal_notes' => ['nullable', 'string'],
+        ], [
+            'expiry_ids.required' => 'Please select at least one item to dispose.',
+            'expiry_ids.array' => 'Invalid selection format.',
+            'expiry_ids.min' => 'Please select at least one item.',
+            'expiry_ids.*.exists' => 'One or more selected items are invalid.',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $disposedCount = 0;
+
+            foreach ($validated['expiry_ids'] as $expiryId) {
+                DB::table('expiry_tracking')
+                    ->where('expiry_id', $expiryId)
+                    ->update([
+                        'status' => 'Disposed',
+                        'updated_at' => now(),
+                    ]);
+
+                $disposedCount++;
+            }
+
+            // Log bulk disposal
+            $this->logActivity(
+                'Bulk Disposal',
+                "Disposed {$disposedCount} expired items. Notes: " . ($validated['disposal_notes'] ?? 'N/A'),
+                'Inventory - Expiry Management'
+            );
+
+            DB::commit();
+
+            return back()->with('success', "Successfully disposed {$disposedCount} items.");
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Failed to dispose items: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Bulk set alert date
+     */
+    public function bulkSetAlert(Request $request)
+    {
+        $validated = $request->validate([
+            'expiry_ids' => ['required', 'array', 'min:1'],
+            'expiry_ids.*' => ['exists:expiry_tracking,expiry_id'],
+            'alert_days' => ['required', 'integer', 'min:1', 'max:365'],
+        ], [
+            'expiry_ids.required' => 'Please select at least one item.',
+            'expiry_ids.array' => 'Invalid selection format.',
+            'expiry_ids.min' => 'Please select at least one item.',
+            'expiry_ids.*.exists' => 'One or more selected items are invalid.',
+            'alert_days.required' => 'Alert days is required.',
+            'alert_days.integer' => 'Alert days must be a number.',
+            'alert_days.min' => 'Alert days must be at least 1 day.',
+            'alert_days.max' => 'Alert days cannot exceed 365 days.',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $updatedCount = 0;
+
+            foreach ($validated['expiry_ids'] as $expiryId) {
+                $expiry = DB::table('expiry_tracking')
+                    ->where('expiry_id', $expiryId)
+                    ->first();
+
+                if ($expiry) {
+                    $alertDate = Carbon::parse($expiry->expiry_date)->subDays($validated['alert_days']);
+
+                    DB::table('expiry_tracking')
+                        ->where('expiry_id', $expiryId)
+                        ->update([
+                            'alert_date' => $alertDate,
+                            'updated_at' => now(),
+                        ]);
+
+                    $updatedCount++;
+                }
+            }
+
+            // Log bulk alert update
+            $this->logActivity(
+                'Bulk Alert Update',
+                "Updated alert date for {$updatedCount} items to {$validated['alert_days']} days before expiry.",
+                'Inventory - Expiry Management'
+            );
+
+            DB::commit();
+
+            return back()->with('success', "Successfully updated alerts for {$updatedCount} items.");
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Failed to update alerts: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Export expiry tracking to CSV
+     */
+    public function export(Request $request)
+    {
+        $this->logExport('Inventory - Expiry Management', 'Exported expiry tracking to CSV');
+
+        $query = DB::table('expiry_tracking as et')
+            ->join('products as p', 'et.product_id', '=', 'p.product_id')
+            ->join('lots as l', 'et.lot_id', '=', 'l.lot_id')
+            ->join('warehouses as w', 'et.warehouse_id', '=', 'w.warehouse_id')
+            ->leftJoin('units_of_measure as uom', 'p.uom_id', '=', 'uom.uom_id')
+            ->select(
+                'et.expiry_id',
+                'p.product_code',
+                'p.product_name',
+                'l.lot_code',
+                'l.manufacture_date',
+                'w.warehouse_code',
+                'w.warehouse_name',
+                'et.expiry_date',
+                'et.alert_date',
+                'et.quantity',
+                'uom.uom_code',
+                'et.status',
+                DB::raw('DATEDIFF(et.expiry_date, CURDATE()) as days_until_expiry'),
+                'et.created_at'
+            );
+
+        // Apply filters
+        if ($request->filled('status')) {
+            $query->where('et.status', $request->status);
+        }
+        if ($request->filled('warehouse_id')) {
+            $query->where('et.warehouse_id', $request->warehouse_id);
+        }
+        if ($request->filled('days_range')) {
+            switch ($request->days_range) {
+                case 'expired':
+                    $query->whereRaw('et.expiry_date < CURDATE()');
+                    break;
+                case '7':
+                    $query->whereRaw('DATEDIFF(et.expiry_date, CURDATE()) BETWEEN 0 AND 7');
+                    break;
+                case '30':
+                    $query->whereRaw('DATEDIFF(et.expiry_date, CURDATE()) BETWEEN 0 AND 30');
+                    break;
+            }
+        }
+
+        $items = $query->orderBy('et.expiry_date')
+            ->limit(10000)
+            ->get();
+
+        $filename = 'expiry_tracking_' . now()->format('Y-m-d_His') . '.csv';
+
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+        ];
+
+        $callback = function() use ($items) {
+            $file = fopen('php://output', 'w');
+
+            // Header
+            fputcsv($file, [
+                'Expiry ID',
+                'Product Code',
+                'Product Name',
+                'Lot Code',
+                'Manufacture Date',
+                'Warehouse Code',
+                'Warehouse Name',
+                'Expiry Date',
+                'Alert Date',
+                'Quantity',
+                'UOM',
+                'Status',
+                'Days Until Expiry',
+                'Created At'
+            ]);
+
+            // Data
+            foreach ($items as $item) {
+                fputcsv($file, [
+                    $item->expiry_id,
+                    $item->product_code,
+                    $item->product_name,
+                    $item->lot_code,
+                    $item->manufacture_date,
+                    $item->warehouse_code,
+                    $item->warehouse_name,
+                    $item->expiry_date,
+                    $item->alert_date,
+                    $item->quantity,
+                    $item->uom_code ?? '-',
+                    $item->status,
+                    $item->days_until_expiry,
+                    $item->created_at,
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
 }
