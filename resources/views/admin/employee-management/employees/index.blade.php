@@ -7,137 +7,158 @@
     <!-- Sweetalerts CSS -->
     <link rel="stylesheet" href="{{ asset('assets/plugin/sweetalert2/sweetalert2.min.css') }}">
 
+    <!-- FlatPickr CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/plugin/flatpickr/flatpickr.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/plugin/flatpickr/flatpickr.min.css') }}">
+
 @endsection
 
 @section('content')
 
-
-
-<div class="container-fluid">
     <!-- Page Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div
+        class="d-flex align-items-center justify-content-between page-header-breadcrumb flex-wrap gap-2">
         <div>
-            <h1 class="h3 mb-1 text-gray-800">Employee Directory</h1>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-0 bg-transparent p-0">
-                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item"><a href="#">HRM</a></li>
-                    <li class="breadcrumb-item active">Employees</li>
+            <nav>
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item">
+                        <a href="javascript:void(0);">Employee Management</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Employees</li>
                 </ol>
             </nav>
         </div>
-        <div>
-            @canCreate('hrm')
-            <a href="{{ route('hrm.employees.export') }}{{ request()->getQueryString() ? '?' . request()->getQueryString() : '' }}" 
-               class="btn btn-success me-2">
-                <i class="bi bi-download me-1"></i> Export CSV
-            </a>
-            <a href="{{ route('hrm.employees.create') }}" class="btn btn-primary">
-                <i class="bi bi-plus-circle me-1"></i> Add Employee
-            </a>
-            @endcanCreate
-        </div>
     </div>
+    <!-- Page Header -->
 
-    <!-- Alert Messages -->
     @if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="bi bi-check-circle me-2"></i>
-        {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
+        <div class="alert alert-success alert-dismissible d-flex align-items-center d-flex align-items-center fade show mb-3" role="alert">
+            <i class="ti ti-circle-check fs-18 me-2"></i>
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert">
+                <i class="ti ti-x"></i>
+            </button>
+        </div>
     @endif
 
     @if(session('error'))
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <i class="bi bi-exclamation-triangle me-2"></i>
-        {{ session('error') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
+        <div class="alert alert-danger alert-dismissible d-flex align-items-center fade show mb-3" role="alert">
+            <i class="ti ti-exclamation-circle fs-18 me-2"></i>
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert">
+                <i class="ti ti-x"></i>
+            </button>
+        </div>
     @endif
 
     <!-- Statistics Cards -->
-    <div class="row mb-4">
-        <div class="col-md-3">
-            <div class="card border-left-primary shadow-sm h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Total Employees
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                {{ $employees->total() }}
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="bi bi-people-fill display-4 text-gray-300"></i>
-                        </div>
+    <div class="row">
+        <div class="col-md-6 col-lg-3">
+            <div class="card custom">
+                <div class="card-body d-flex align-items-center">
+                    <div class="avatar avatar-xxl svg-primary bg-primary bg-opacity-10 rounded-circle border-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-users-group"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 13a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M8 21v-1a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v1" /><path d="M15 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M17 10h2a2 2 0 0 1 2 2v1" /><path d="M5 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M3 13v-1a2 2 0 0 1 2 -2h2" /></svg>
+                    </div>
+                    <div class="ms-3">
+                        <h4 class="text-primary fs-24 mb-1">{{ number_format($employees->total()) }}</h4>
+                        <span class="fs-base fw-semibold">Total Employees</span>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div class="col-md-3">
-            <div class="card border-left-success shadow-sm h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Active
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                {{ $employees->where('employment_status', '!=', 'Resigned')->count() }}
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="bi bi-check-circle-fill display-4 text-gray-300"></i>
-                        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="card custom">
+                <div class="card-body d-flex align-items-center">
+                    <div class="avatar avatar-xxl svg-success bg-success bg-opacity-10 rounded-circle border-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4" /><path d="M15 19l2 2l4 -4" /></svg>
+                    </div>
+                    <div class="ms-3">
+                        <h4 class="text-success fs-24 mb-1">{{ $employees->where('employment_status', '!=', 'Resigned')->count() }}</h4>
+                        <span class="fs-base fw-semibold">Active Users</span>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div class="col-md-3">
-            <div class="card border-left-warning shadow-sm h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Probation
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                {{ $employees->where('employment_status', 'Probation')->count() }}
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="bi bi-hourglass-split display-4 text-gray-300"></i>
-                        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="card custom">
+                <div class="card-body d-flex align-items-center">
+                    <div class="avatar avatar-xxl svg-secondary bg-secondary bg-opacity-10 rounded-circle border-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-hourglass"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6.5 7h11" /><path d="M6.5 17h11" /><path d="M6 20v-2a6 6 0 1 1 12 0v2a1 1 0 0 1 -1 1h-10a1 1 0 0 1 -1 -1z" /><path d="M6 4v2a6 6 0 1 0 12 0v-2a1 1 0 0 0 -1 -1h-10a1 1 0 0 0 -1 1z" /></svg>
+                    </div>
+                    <div class="ms-3">
+                        <h4 class="text-secondary fs-24 mb-1">{{ $employees->where('employment_status', 'Probation')->count() }}</h4>
+                        <span class="fs-base fw-semibold">Probation</span>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div class="col-md-3">
-            <div class="card border-left-danger shadow-sm h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                Resigned
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                {{ $employees->where('employment_status', 'Resigned')->count() }}
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="bi bi-x-circle-fill display-4 text-gray-300"></i>
-                        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="card custom">
+                <div class="card-body d-flex align-items-center">
+                    <div class="avatar avatar-xxl svg-danger bg-danger bg-opacity-10 rounded-circle border-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h3.5" /><path d="M22 22l-5 -5" /><path d="M17 22l5 -5" /></svg>
+                    </div>
+                    <div class="ms-3">
+                        <h4 class="text-danger fs-24 mb-1">{{ $employees->where('employment_status', 'Resigned')->count() }}</h4>
+                        <span class="fs-base fw-semibold">Resigned</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <!-- Statistics Cards -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fs-22 mb-1">Employees</h2>
+            <p class="text-muted mb-0"></p>
+        </div>
+        <div class="d-flex align-items-center">
+            <a href="{{ route('hrm.employees.export') }}{{ request()->getQueryString() ? '?' . request()->getQueryString() : '' }}" 
+               class="btn btn-outline-success me-2">
+                <i class="ti ti-download me-2"></i> 
+                Export CSV
+            </a>
+            <a href="{{ route('hrm.employees.create') }}" class="btn btn-primary">
+                <i class="ti ti-plus me-2"></i>
+                Create New Employee
+            </a>
+        </div>
+    </div>
+
+    <!-- Container -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card custom">
+                <div class="card-header">
+                    <div class="card-title">Filter & Search</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="card custom">
+                <div class="card-header justify-content-between align-items-center">
+                    <div class="card-title d-flex align-items-center">
+                        Employee List
+                        <span class="badge bg-primary ms-2">{{ $employees->total() }}</span>
+                    </div>
+                    <div class="text-muted small">
+                        Showing {{ $employees->firstItem() ?? 0 }} - {{ $employees->lastItem() ?? 0 }} of {{ $employees->total() }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Container -->
+
+
+
+
+
+
+
+<div class="container-fluid">
+    
 
     <!-- Filters Card -->
     <div class="card shadow-sm mb-4">
@@ -433,6 +454,9 @@
 
     <!-- Sweetalerts JS -->
     <script src="{{ asset('assets/plugin/sweetalert2/sweetalert2.min.js') }}"></script>
+
+    <!-- FlatPickr JS -->
+    <script src="{{ asset('assets/plugin/flatpickr/flatpickr.min.js') }}"></script>
 
     @vite(['resources/assets/js/erp/employee-init.js'])
 
