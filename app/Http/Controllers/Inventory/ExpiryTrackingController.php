@@ -18,8 +18,6 @@ class ExpiryTrackingController extends Controller
      */
     public function index(Request $request)
     {
-        $this->logView('Inventory - Expiry Management', 'Viewed expiry tracking list');
-
         $query = DB::table('expiry_tracking as et')
             ->join('products as p', 'et.product_id', '=', 'p.product_id')
             ->join('lots as l', 'et.lot_id', '=', 'l.lot_id')
@@ -571,8 +569,6 @@ class ExpiryTrackingController extends Controller
      */
     public function alerts()
     {
-        $this->logView('Inventory - Expiry Management', 'Viewed expiry alerts dashboard');
-
         // Get critical alerts (expired items)
         $expired = DB::table('expiry_tracking as et')
             ->join('products as p', 'et.product_id', '=', 'p.product_id')
@@ -639,8 +635,6 @@ class ExpiryTrackingController extends Controller
      */
     public function criticalAlerts()
     {
-        $this->logView('Inventory - Expiry Management', 'Viewed critical expiry alerts');
-
         $criticalAlerts = DB::table('expiry_tracking as et')
             ->join('products as p', 'et.product_id', '=', 'p.product_id')
             ->join('lots as l', 'et.lot_id', '=', 'l.lot_id')
@@ -677,8 +671,6 @@ class ExpiryTrackingController extends Controller
      */
     public function nearExpiry(Request $request)
     {
-        $this->logView('Inventory - Expiry Management', 'Viewed near expiry items');
-
         $days = $request->input('days', 30); // Default 30 days
 
         $nearExpiryItems = DB::table('expiry_tracking as et')
@@ -708,8 +700,6 @@ class ExpiryTrackingController extends Controller
      */
     public function expired()
     {
-        $this->logView('Inventory - Expiry Management', 'Viewed expired items');
-
         $expiredItems = DB::table('expiry_tracking as et')
             ->join('products as p', 'et.product_id', '=', 'p.product_id')
             ->join('lots as l', 'et.lot_id', '=', 'l.lot_id')

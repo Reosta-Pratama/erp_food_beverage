@@ -18,8 +18,6 @@ class BatchController extends Controller
      */
     public function index(Request $request)
     {
-        $this->logView('Production - Batches', 'Viewed batch tracking list');
-        
         $query = DB::table('batches as b')
             ->join('products as p', 'b.product_id', '=', 'p.product_id')
             ->leftJoin('work_orders as wo', 'b.work_order_id', '=', 'wo.work_order_id')

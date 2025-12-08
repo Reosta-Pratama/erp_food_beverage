@@ -19,8 +19,6 @@ class DepartmentController extends Controller
      */
     public function index(Request $request)
     {
-        $this->logView('HRM - Departments', 'Viewed departments list');
-
         $query = DB::table('departments')
             ->leftJoin('employees as manager', 'departments.manager_id', '=', 'manager.employee_id')
             ->leftJoin('employees', 'departments.department_id', '=', 'employees.department_id')

@@ -17,8 +17,6 @@ class PermissionController extends Controller
      */
     public function index(Request $request)
     {
-        $this->logView('User Management - Permissions', 'Viewed permissions list');
-
         $query = DB::table('permissions')
             ->leftJoin('role_permissions', 'permissions.permission_id', '=', 'role_permissions.permission_id')
             ->select(

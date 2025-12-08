@@ -18,8 +18,6 @@ class WorkOrderController extends Controller
      */
     public function index(Request $request)
     {
-        $this->logView('Production - Work Orders', 'Viewed work orders list');
-        
         $query = DB::table('work_orders as wo')
             ->join('products as p', 'wo.product_id', '=', 'p.product_id')
             ->leftJoin('bill_of_materials as bom', 'wo.bom_id', '=', 'bom.bom_id')

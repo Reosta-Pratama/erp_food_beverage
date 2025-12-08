@@ -19,8 +19,6 @@ class StockMovementController extends Controller
      */
     public function index(Request $request)
     {
-        $this->logView('Inventory - Stock Movements', 'Viewed stock movements list');
-        
         $query = DB::table('stock_movements as sm')
             ->join('products as p', 'sm.product_id', '=', 'p.product_id')
             ->join('units_of_measure as uom', 'sm.uom_id', '=', 'uom.uom_id')

@@ -18,8 +18,6 @@ class RecipeController extends Controller
      */
     public function index(Request $request)
     {
-        $this->logView('Inventory - Recipe', 'Viewed recipe list');
-        
         $query = DB::table('recipes as r')
             ->join('products as p', 'r.product_id', '=', 'p.product_id')
             ->join('units_of_measure as uom', 'r.uom_id', '=', 'uom.uom_id')
@@ -73,42 +71,41 @@ class RecipeController extends Controller
         }
         
         // Sorting
-        $sort = $request->get('sort', 'created_at_desc');
-        switch ($sort) {
-            case 'created_at_asc':
-                $query->orderBy('r.created_at', 'asc');
-                break;
-            case 'recipe_code_asc':
-                $query->orderBy('r.recipe_code', 'asc');
-                break;
-            case 'recipe_code_desc':
-                $query->orderBy('r.recipe_code', 'desc');
-                break;
-            case 'recipe_name_asc':
-                $query->orderBy('r.recipe_name', 'asc');
-                break;
-            case 'recipe_name_desc':
-                $query->orderBy('r.recipe_name', 'desc');
-                break;
-            case 'product_name_asc':
-                $query->orderBy('p.product_name', 'asc');
-                break;
-            case 'product_name_desc':
-                $query->orderBy('p.product_name', 'desc');
-                break;
-            case 'total_time_asc':
-                $query->orderByRaw('(COALESCE(r.preparation_time, 0) + COALESCE(r.cooking_time, 0)) asc');
-                break;
-            case 'total_time_desc':
-                $query->orderByRaw('(COALESCE(r.preparation_time, 0) + COALESCE(r.cooking_time, 0)) desc');
-                break;
-            case 'created_at_desc':
-            default:
-                $query->orderByDesc('r.created_at');
-                break;
+        $sortBy = $request->get('sort_by', 'recipe_name');
+        $sortOrder = $request->get('sort_order', 'asc');
+        
+        // Validate sort order
+        $sortOrder = in_array(strtolower($sortOrder), ['asc', 'desc']) ? strtolower($sortOrder) : 'desc';
+        
+        // Whitelist allowed sort columns
+        $allowedSort = [
+            'recipe_code',
+            'recipe_name', 
+            'product_name',
+            'total_time',
+            'ingredients_count',
+            'created_at'
+        ];
+        
+        if (in_array($sortBy, $allowedSort)) {
+            if ($sortBy === 'total_time') {
+                $query->orderByRaw("(COALESCE(r.preparation_time, 0) + COALESCE(r.cooking_time, 0)) {$sortOrder}");
+            } elseif ($sortBy === 'product_name') {
+                $query->orderBy('p.product_name', $sortOrder);
+            } elseif ($sortBy === 'recipe_code') {
+                $query->orderBy('r.recipe_code', $sortOrder);
+            } elseif ($sortBy === 'recipe_name') {
+                $query->orderBy('r.recipe_name', $sortOrder);
+            } elseif ($sortBy === 'created_at') {
+                $query->orderBy('r.created_at', $sortOrder);
+            } else {
+                $query->orderBy($sortBy, $sortOrder);
+            }
+        } else {
+            $query->orderByDesc('r.created_at');
         }
         
-        $recipes = $query->paginate(20)->appends($request->except('page'));
+        $recipes = $query->paginate(20)->withQueryString();
         
         return view('inventory.recipes.index', compact('recipes'));
     }
@@ -314,7 +311,7 @@ class RecipeController extends Controller
         // Log VIEW
         $this->logView(
             'Inventory - Recipe',
-            "Viewed recipe: {$recipe->recipe_code} - {$recipe->recipe_name}"
+            "Viewed recipe: {$recipe->recipe_name} (Code: {$recipe->recipe_name})"
         );
         
         // Get Recipe ingredients with material details

@@ -24,8 +24,6 @@ class EmployeeSelfServiceController extends Controller
             abort(403, 'You are not linked to an employee record');
         }
 
-        $this->logView('Employee Self Service', 'Viewed self service dashboard');
-
         $employee = DB::table('employees')
             ->join('departments', 'employees.department_id', '=', 'departments.department_id')
             ->join('positions', 'employees.position_id', '=', 'positions.position_id')
@@ -103,8 +101,6 @@ class EmployeeSelfServiceController extends Controller
         if (!$user->employee_id) {
             abort(403, 'You are not linked to an employee record');
         }
-
-        $this->logView('Employee Self Service', 'Viewed personal profile');
 
         $employee = DB::table('employees')
             ->join('departments', 'employees.department_id', '=', 'departments.department_id')
@@ -224,8 +220,6 @@ class EmployeeSelfServiceController extends Controller
             abort(403, 'You are not linked to an employee record');
         }
 
-        $this->logView('Employee Self Service', 'Viewed attendance history');
-
         $query = DB::table('attendance')
             ->leftJoin('shifts', 'attendance.shift_id', '=', 'shifts.shift_id')
             ->where('attendance.employee_id', $user->employee_id)
@@ -267,8 +261,6 @@ class EmployeeSelfServiceController extends Controller
         if (!$user->employee_id) {
             abort(403, 'You are not linked to an employee record');
         }
-
-        $this->logView('Employee Self Service', 'Viewed leave history');
 
         $query = DB::table('leaves')
             ->join('leave_types', 'leaves.leave_type_id', '=', 'leave_types.leave_type_id')
@@ -447,8 +439,6 @@ class EmployeeSelfServiceController extends Controller
         if (!$user->employee_id) {
             abort(403, 'You are not linked to an employee record');
         }
-
-        $this->logView('Employee Self Service', 'Viewed payslips');
 
         $query = DB::table('payroll')
             ->where('employee_id', $user->employee_id)

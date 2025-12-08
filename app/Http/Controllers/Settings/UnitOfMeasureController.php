@@ -19,9 +19,6 @@ class UnitOfMeasureController extends Controller
      */
     public function index()
     {
-        // Log viewing the list
-        $this->logView('Settings - Units of Measure', 'Viewed units of measure list');
-
         $uoms = DB::table('units_of_measure')
             ->leftJoin('products', 'units_of_measure.uom_id', '=', 'products.uom_id')
             ->select(

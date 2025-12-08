@@ -18,8 +18,6 @@ class SupplierController extends Controller
      */
     public function index(Request $request)
     {
-        $this->logView('Purchase Management - Suppliers', 'Viewed suppliers list');
-
         $query = DB::table('suppliers as s')
             ->leftJoin('purchase_orders as po', 's.supplier_id', '=', 'po.supplier_id')
             ->select(

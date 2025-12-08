@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\LogsActivity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class EmployeeController extends Controller
 {
@@ -19,8 +18,6 @@ class EmployeeController extends Controller
      */
     public function index(Request $request)
     {
-        $this->logView('HRM - Employees', 'Viewed employees directory');
-
         $query = DB::table('employees')
             ->join('departments', 'employees.department_id', '=', 'departments.department_id')
             ->join('positions', 'employees.position_id', '=', 'positions.position_id')

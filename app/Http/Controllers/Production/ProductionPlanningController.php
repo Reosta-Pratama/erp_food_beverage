@@ -19,8 +19,6 @@ class ProductionPlanningController extends Controller
      */
     public function index(Request $request)
     {
-        $this->logView('Production - Planning', 'Viewed production planning list');
-        
         $query = DB::table('production_planning as pp')
             ->leftJoin('users as u', 'pp.created_by', '=', 'u.user_id')
             ->select(

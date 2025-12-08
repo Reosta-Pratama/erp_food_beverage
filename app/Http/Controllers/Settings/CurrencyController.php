@@ -17,8 +17,6 @@ class CurrencyController extends Controller
      */
     public function index()
     {
-        $this->logView('Settings - Currencies', 'Viewed currencies list');
-        
         $currencies = DB::table('currencies')
             ->orderByDesc('is_base_currency')
             ->orderBy('currency_code')
@@ -104,6 +102,12 @@ class CurrencyController extends Controller
         if (!$currency) {
             abort(404, 'Currency not found');
         }
+
+        // Log VIEW
+        $this->logView(
+            'Settings - Currency',
+            "Viewed currency: {$currency->currency_name} (Code: {$currencyCode})"
+        );
         
         return view('admin.settings.currencies.show', compact('currency'));
     }

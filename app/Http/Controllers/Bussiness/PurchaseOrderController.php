@@ -19,8 +19,6 @@ class PurchaseOrderController extends Controller
      */
     public function index(Request $request)
     {
-        $this->logView('Purchase Management - Purchase Orders', 'Viewed purchase orders list');
-
         $query = DB::table('purchase_orders as po')
             ->join('suppliers as s', 'po.supplier_id', '=', 's.supplier_id')
             ->join('users as u', 'po.created_by', '=', 'u.user_id')

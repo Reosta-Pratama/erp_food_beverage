@@ -18,8 +18,6 @@ class LotController extends Controller
      */
     public function index(Request $request)
     {
-        $this->logView('Inventory - Lot Tracking', 'Viewed lot tracking list');
-        
         $query = DB::table('lots as l')
             ->join('products as p', 'l.product_id', '=', 'p.product_id')
             ->leftJoin('suppliers as s', 'l.supplier_id', '=', 's.supplier_id')
@@ -272,7 +270,7 @@ class LotController extends Controller
         // Log VIEW
         $this->logView(
             'Inventory - Lot Tracking',
-            "Viewed lot: {$lot->lot_code} for {$lot->product_name}"
+            "Viewed lot: {$lot->product_name} (Code: {$lot->product_name})"
         );
         
         // Get inventory locations for this lot

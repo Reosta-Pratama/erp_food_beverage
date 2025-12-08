@@ -18,8 +18,6 @@ class ProductCategoryController extends Controller
      */
     public function index()
     {
-        $this->logView('Products - Categories', 'Viewed product categories list');
-
         $categories = DB::table('product_categories as pc')
             ->leftJoin('product_categories as parent', 'pc.parent_category_id', '=', 'parent.category_id')
             ->leftJoin('products', 'pc.category_id', '=', 'products.category_id')

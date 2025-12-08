@@ -18,8 +18,6 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $this->logView('Products - Management', 'Viewed products list');
-
         $query = DB::table('products')
             ->join('product_categories', 'products.category_id', '=', 'product_categories.category_id')
             ->join('units_of_measure', 'products.uom_id', '=', 'units_of_measure.uom_id')

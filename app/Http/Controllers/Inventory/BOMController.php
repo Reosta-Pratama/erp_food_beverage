@@ -14,12 +14,10 @@ class BOMController extends Controller
     use LogsActivity;
 
     /**
-     * Display a listing of BOMs
+     * List BOMs
      */
     public function index(Request $request)
-    {
-        $this->logView('Inventory - BOM', 'Viewed BOM list');
-        
+    {        
         $query = DB::table('bill_of_materials as bom')
             ->join('products as p', 'bom.product_id', '=', 'p.product_id')
             ->leftJoin('units_of_measure as uom', 'p.uom_id', '=', 'uom.uom_id')

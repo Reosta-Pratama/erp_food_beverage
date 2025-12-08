@@ -18,8 +18,6 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $this->logView('User Management - Roles', 'Viewed roles list');
-
         $roles = DB::table('roles')
             ->leftJoin('users', 'roles.role_id', '=', 'users.role_id')
             ->leftJoin('role_permissions', 'roles.role_id', '=', 'role_permissions.role_id')

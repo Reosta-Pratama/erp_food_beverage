@@ -18,8 +18,6 @@ class WarehouseController extends Controller
      */
     public function index(Request $request)
     {
-        $this->logView('Inventory - Warehouses', 'Viewed warehouses list');
-        
         $query = DB::table('warehouses as w')
             ->leftJoin('employees as e', 'w.manager_id', '=', 'e.employee_id')
             ->select(
@@ -194,7 +192,7 @@ class WarehouseController extends Controller
         // Log VIEW
         $this->logView(
             'Inventory - Warehouses',
-            "Viewed warehouse: {$warehouse->warehouse_name} ({$warehouse->warehouse_code})"
+            "Viewed warehouse: {$warehouse->warehouse_name} (Code: {$warehouse->warehouse_code})"
         );
         
         // Get warehouse locations

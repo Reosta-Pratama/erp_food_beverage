@@ -15,12 +15,10 @@ class PositionController extends Controller
     use LogsActivity;
 
     /**
-     * List positions grouped by department
+     * List positions 
      */
     public function index(Request $request)
     {
-        $this->logView('HRM - Positions', 'Viewed positions list');
-
         $query = DB::table('positions')
             ->join('departments', 'positions.department_id', '=', 'departments.department_id')
             ->leftJoin('employees', 'positions.position_id', '=', 'employees.position_id')

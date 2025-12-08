@@ -17,8 +17,6 @@ class InventoryController extends Controller
      */
     public function index(Request $request)
     {
-        $this->logView('Inventory - Stock Tracking', 'Viewed inventory list');
-        
         $query = DB::table('inventory as inv')
             ->join('products as p', 'inv.product_id', '=', 'p.product_id')
             ->join('warehouses as w', 'inv.warehouse_id', '=', 'w.warehouse_id')
@@ -325,8 +323,6 @@ class InventoryController extends Controller
      */
     public function lowStockReport()
     {
-        $this->logView('Inventory - Stock Tracking', 'Viewed low stock report');
-        
         $lowStockItems = DB::table('inventory as inv')
             ->join('products as p', 'inv.product_id', '=', 'p.product_id')
             ->join('warehouses as w', 'inv.warehouse_id', '=', 'w.warehouse_id')
@@ -355,8 +351,6 @@ class InventoryController extends Controller
      */
     public function valuationReport()
     {
-        $this->logView('Inventory - Stock Tracking', 'Viewed stock valuation report');
-        
         $valuation = DB::table('inventory as inv')
             ->join('products as p', 'inv.product_id', '=', 'p.product_id')
             ->join('product_categories as pc', 'p.category_id', '=', 'pc.category_id')

@@ -18,8 +18,6 @@ class QualityControlController extends Controller
      */
     public function index(Request $request)
     {
-        $this->logView('Quality Control', 'Viewed QC inspections list');
-
         $query = DB::table('quality_control as qc')
             ->join('products as p', 'qc.product_id', '=', 'p.product_id')
             ->join('employees as e', 'qc.inspector_id', '=', 'e.employee_id')

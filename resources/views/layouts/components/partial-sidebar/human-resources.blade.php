@@ -11,12 +11,12 @@
                 <span class="menu-svg">
                     <i class="ti ti-user-circle"></i>
                 </span>
-                <span class="menu-label">Employee Management</span>
+                <span class="menu-label">Employees</span>
                 <i class="ri-arrow-right-s-line menu-icon"></i>
             </a>
             <ul class="menu-item-child child1">
                 <li class="menu-item menu-label1">
-                    <a href="javascript:void(0)">Employee Management</a>
+                    <a href="javascript:void(0)">Employees</a>
                 </li>
                 <li class="menu-item {{ request()->routeIs('hrm.employees.*') ? 'active' : '' }}">
                     <a href="{{ route('hrm.employees.index') }}" class="menu-link">Employee Directory</a>
@@ -91,12 +91,12 @@
             <span class="menu-svg">
                 <i class="ti ti-certificate"></i>
             </span>
-            <span class="menu-label">Training & Performance</span>
+            <span class="menu-label">Performance</span>
             <i class="ri-arrow-right-s-line menu-icon"></i>
         </a>
         <ul class="menu-item-child child1">
             <li class="menu-item menu-label1">
-                <a href="javascript:void(0)">Training & Performance</a>
+                <a href="javascript:void(0)">Performance</a>
             </li>
             <li class="menu-item">
                 <a href="javascript:void(0)" class="menu-link">Training Programs</a>
