@@ -38,7 +38,7 @@ class RecipeController extends Controller
                 'p.product_name',
                 'uom.uom_code',
                 DB::raw('(SELECT COUNT(*) FROM recipe_ingredients WHERE recipe_id = r.recipe_id) as ingredients_count'),
-                DB::raw('(r.preparation_time + r.cooking_time) as total_time')
+                DB::raw('(COALESCE(r.preparation_time, 0) + COALESCE(r.cooking_time, 0)) as total_time')
             );
         
         // Search
@@ -46,9 +46,9 @@ class RecipeController extends Controller
             $search = $request->search;
             $query->where(function($q) use ($search) {
                 $q->where('r.recipe_code', 'like', "%{$search}%")
-                  ->orWhere('r.recipe_name', 'like', "%{$search}%")
-                  ->orWhere('p.product_name', 'like', "%{$search}%")
-                  ->orWhere('p.product_code', 'like', "%{$search}%");
+                ->orWhere('r.recipe_name', 'like', "%{$search}%")
+                ->orWhere('p.product_name', 'like', "%{$search}%")
+                ->orWhere('p.product_code', 'like', "%{$search}%");
             });
         }
         
@@ -57,8 +57,58 @@ class RecipeController extends Controller
             $query->where('r.is_active', $request->status === 'active' ? 1 : 0);
         }
         
-        $recipes = $query->orderByDesc('r.created_at')
-            ->paginate(20);
+        // Filter by time range
+        if ($request->filled('time_filter')) {
+            switch ($request->time_filter) {
+                case 'quick': // Under 30 mins
+                    $query->havingRaw('(COALESCE(r.preparation_time, 0) + COALESCE(r.cooking_time, 0)) < 30');
+                    break;
+                case 'medium': // 30-60 mins
+                    $query->havingRaw('(COALESCE(r.preparation_time, 0) + COALESCE(r.cooking_time, 0)) BETWEEN 30 AND 60');
+                    break;
+                case 'long': // Over 60 mins
+                    $query->havingRaw('(COALESCE(r.preparation_time, 0) + COALESCE(r.cooking_time, 0)) > 60');
+                    break;
+            }
+        }
+        
+        // Sorting
+        $sort = $request->get('sort', 'created_at_desc');
+        switch ($sort) {
+            case 'created_at_asc':
+                $query->orderBy('r.created_at', 'asc');
+                break;
+            case 'recipe_code_asc':
+                $query->orderBy('r.recipe_code', 'asc');
+                break;
+            case 'recipe_code_desc':
+                $query->orderBy('r.recipe_code', 'desc');
+                break;
+            case 'recipe_name_asc':
+                $query->orderBy('r.recipe_name', 'asc');
+                break;
+            case 'recipe_name_desc':
+                $query->orderBy('r.recipe_name', 'desc');
+                break;
+            case 'product_name_asc':
+                $query->orderBy('p.product_name', 'asc');
+                break;
+            case 'product_name_desc':
+                $query->orderBy('p.product_name', 'desc');
+                break;
+            case 'total_time_asc':
+                $query->orderByRaw('(COALESCE(r.preparation_time, 0) + COALESCE(r.cooking_time, 0)) asc');
+                break;
+            case 'total_time_desc':
+                $query->orderByRaw('(COALESCE(r.preparation_time, 0) + COALESCE(r.cooking_time, 0)) desc');
+                break;
+            case 'created_at_desc':
+            default:
+                $query->orderByDesc('r.created_at');
+                break;
+        }
+        
+        $recipes = $query->paginate(20)->appends($request->except('page'));
         
         return view('inventory.recipes.index', compact('recipes'));
     }
