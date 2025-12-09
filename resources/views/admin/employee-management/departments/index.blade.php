@@ -194,7 +194,8 @@
                                             <td>
                                                 @if($department->manager_name)
                                                     <div class="d-flex align-items-center">
-                                                        <div class="avatar avatar-sm bg-primary text-white rounded-circle 
+                                                        <div class="avatar avatar-sm avatar-font
+                                                            bg-primary text-white rounded-circle 
                                                             d-flex align-items-center justify-content-center me-2">
                                                             {{ substr($department->manager_name, 0, 1) }}
                                                         </div>

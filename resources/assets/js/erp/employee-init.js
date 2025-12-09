@@ -29,4 +29,70 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Filter positions by selected department
+    function filterPositions() {
+        const deptSelect = document.getElementById('department_id');
+        const posSelect = document.getElementById('position_id');
+        const selectedDept = deptSelect.options[deptSelect.selectedIndex].text;
+        
+        Array.from(posSelect.options).forEach(option => {
+            if (option.value === '') {
+                option.style.display = 'block';
+                return;
+            }
+            
+            const optionDept = option.getAttribute('data-department');
+            option.style.display = optionDept === selectedDept ? 'block' : 'none';
+        });
+        
+        posSelect.value = '';
+    }
+    window.filterPositions = filterPositions;
+
+    // Create & Update Form
+    const employeeForm = document.getElementById('employeeForm');
+    employeeForm.addEventListener('submit', async function(e) {
+        const required = ['first_name', 'last_name', 'gender', 'department_id', 'position_id', 'join_date', 'employment_status'];
+        let isValid = true;
+
+        required.forEach(fieldName => {
+            const field = document.getElementById(fieldName);
+            let value = field.value;
+
+            if (fieldName === 'first_name' || fieldName === 'last_name') {
+                value = value.trim();
+                field.value = value; 
+            }
+            
+            if (!value) {
+                isValid = false;
+                field.classList.add('is-invalid');
+                lastInvalidField = field.getAttribute('data-name') || fieldName.replace('_', ' ');
+            } else {
+                field.classList.remove('is-invalid');
+            }
+        });
+
+        if (!isValid) {
+            e.preventDefault();
+
+            await Swal.fire({
+                icon: 'warning',
+                title: 'Validation',
+                text: `Please complete the required field: ${lastInvalidField}.`,
+                confirmButtonText: 'OK'
+            });
+
+            return;
+        }
+
+        const submitBtn = this.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `
+                <span class="spinner-border spinner-border-sm me-1"></span> Saving...
+            `;
+        }
+    });
+
 });

@@ -38,6 +38,17 @@ class EmployeeController extends Controller
                 'positions.position_code'
             );
 
+
+        // Extract date_from and date_to from daterange input
+        if ($request->filled('daterange')) {
+            [$dateFrom, $dateTo] = array_map('trim', explode('to', $request->input('daterange') . ' to ')); 
+            
+            $request->merge([
+                'join_date_from' => $dateFrom ?: null,
+                'join_date_to' => $dateTo ?: null,
+            ]);
+        }
+
         // Search 
         if ($request->filled('search')) {
             $search = $request->input('search');
