@@ -90,7 +90,7 @@ class ProductionPlanningController extends Controller
             ->orderBy('full_name')
             ->get();
 
-            // Get s    tatistics
+            // Get statistics
         $stats = [
             'total' => DB::table('production_planning')->count(),
             'draft' => DB::table('production_planning')->where('status', 'Draft')->count(),
