@@ -10,7 +10,7 @@ class AuditLogController extends Controller
 {
     //
     /**
-     * Display audit logs with comprehensive filtering
+     * List audit logs 
      */
     public function index(Request $request)
     {
@@ -166,7 +166,7 @@ class AuditLogController extends Controller
     }
     
     /**
-     * Clear old audit logs (optimized bulk delete)
+     * Clear old audit logs 
      */
     public function clear(Request $request)
     {
@@ -176,7 +176,6 @@ class AuditLogController extends Controller
         
         $cutoffDate = now()->subDays($validated['days']);
         
-        // Use direct SQL for better performance
         $deletedCount = DB::delete(
             'DELETE FROM audit_logs WHERE action_timestamp < ?',
             [$cutoffDate]
