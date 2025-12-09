@@ -810,4 +810,36 @@ class PurchaseOrderController extends Controller
 
         return response()->stream($callback, 200, $headers);
     }
+
+    /**
+     * Print purchase order
+     */
+    public function print($poCode)
+    {
+        $po = DB::table('purchase_orders as po')
+            ->join('suppliers as s', 'po.supplier_id', '=', 's.supplier_id')
+            ->where('po.po_code', $poCode)
+            ->select('po.', 's.')
+            ->first();
+            
+        if (!$po) {
+            abort(404, 'Purchase order not found');
+        }
+
+        // Get items
+        $items = DB::table('purchase_order_items as poi')
+            ->join('products as p', 'poi.product_id', '=', 'p.product_id')
+            ->join('units_of_measure as uom', 'poi.uom_id', '=', 'uom.uom_id')
+            ->where('poi.po_id', $po->po_id)
+            ->select('poi.*', 'p.product_code', 'p.product_name', 'uom.uom_name')
+            ->get();
+
+        // Get company profile
+        $company = DB::table('company_profile')->first();
+
+        // Log PRINT
+        $this->logPrint('Purchase Management - Purchase Orders', "Printed purchase order: {$po->po_code}");
+
+        return view('purchase.orders.print', compact('po', 'items', 'company'));
+    }
 }
