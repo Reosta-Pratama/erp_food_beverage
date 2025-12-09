@@ -55,11 +55,51 @@ class ProductionPlanningController extends Controller
         if ($request->filled('end_date')) {
             $query->where('pp.end_date', '<=', $request->end_date);
         }
+
+        // Filter by created by
+        if ($request->filled('created_by')) {
+            $query->where('pp.created_by', $request->created_by);
+        }
+
+        // Sorting
+        $sortField = $request->get('sort', 'pp.created_at');
+        $sortDirection = $request->get('direction', 'desc');
         
-        $plans = $query->orderByDesc('pp.created_at')
-            ->paginate(20);
+        // Validate sort field
+        $allowedSorts = ['pp.plan_code', 'pp.plan_date', 'pp.start_date', 'pp.end_date', 'pp.status', 'pp.created_at', 'duration_days', 'products_count'];
+        if (!in_array($sortField, $allowedSorts)) {
+            $sortField = 'pp.created_at';
+        }
+
+        // Validate sort direction
+        if (!in_array($sortDirection, ['asc', 'desc'])) {
+            $sortDirection = 'desc';
+        }
+
         
-        return view('production.planning.index', compact('plans'));
+        $plans = $query->paginate(20)->withQueryString();
+        
+        // Get users for filter
+        $users = DB::table('users')
+            ->whereIn('user_id', function($query) {
+                $query->select('created_by')
+                    ->from('production_planning')
+                    ->distinct();
+            })
+            ->select('user_id', 'full_name')
+            ->orderBy('full_name')
+            ->get();
+
+            // Get s    tatistics
+        $stats = [
+            'total' => DB::table('production_planning')->count(),
+            'draft' => DB::table('production_planning')->where('status', 'Draft')->count(),
+            'approved' => DB::table('production_planning')->where('status', 'Approved')->count(),
+            'in_progress' => DB::table('production_planning')->where('status', 'In Progress')->count(),
+            'completed' => DB::table('production_planning')->where('status', 'Completed')->count(),
+        ];
+        
+        return view('production.planning.index', compact('plans', 'users', 'stats'));
     }
 
     /**
