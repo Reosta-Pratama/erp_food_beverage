@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    const singeDate = document.querySelectorAll('.singe-date');
+    const singeDate = document.querySelectorAll('.single-date');
     if (singeDate.length > 0) {
         singeDate.forEach((element) => {
             const date = element.getAttribute('date') || null;
@@ -39,36 +39,46 @@ document.addEventListener('DOMContentLoaded', function () {
                 altFormat: "F j, Y",
                 dateFormat: "Y-m-d",      
                 disableMobile: true,      
-                defaultDate: date 
+                defaultDate: date
             });
         });
     }
+
+    filterPositions();
 
     // Filter positions by selected department
     function filterPositions() {
         const deptSelect = document.getElementById('department_id');
         const posSelect = document.getElementById('position_id');
         const selectedDept = deptSelect.options[deptSelect.selectedIndex].text;
-        
+        const prevPosValue = posSelect.value; 
+
         Array.from(posSelect.options).forEach(option => {
             if (option.value === '') {
-                option.style.display = 'block';
+                option.hidden = false;
                 return;
             }
-            
-            const optionDept = option.getAttribute('data-department');
-            option.style.display = optionDept === selectedDept ? 'block' : 'none';
+
+            const optionDept = option.getAttribute('data-department') || '';
+            const show = optionDept.trim() === selectedDept.trim();
+            option.hidden = !show;
         });
-        
-        posSelect.value = '';
+
+        const stillAvailable = Array.from(posSelect.options).some(o => o.value === prevPosValue && !o.hidden);
+        if (stillAvailable) {
+            posSelect.value = prevPosValue;
+        } else {
+            posSelect.value = ''; 
+        }
     }
     window.filterPositions = filterPositions;
 
     // Create & Update Form
     const employeeForm = document.getElementById('employeeForm');
     employeeForm.addEventListener('submit', async function(e) {
-        const required = ['first_name', 'last_name', 'gender', 'department_id', 'position_id', 'join_date', 'employment_status'];
+        const required = ['first_name', 'last_name', 'gender', 'join_date', 'employment_status'];
         let isValid = true;
+        let lastInvalidField = '';
 
         required.forEach(fieldName => {
             const field = document.getElementById(fieldName);

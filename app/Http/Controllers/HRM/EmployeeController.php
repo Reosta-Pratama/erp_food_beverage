@@ -163,7 +163,7 @@ class EmployeeController extends Controller
             'last_name' => ['required', 'string', 'max:100'],
             'email' => ['nullable', 'email', 'max:150', 'unique:employees,email'],
             'phone' => ['nullable', 'string', 'max:20'],
-            'date_of_birth' => ['nullable', 'date', 'before:today'],
+            'date_of_birth' => ['nullable', 'date', 'before_or_equal:-18 years'],
             'gender' => ['required', 'in:Male,Female'],
             'address' => ['nullable', 'string'],
             'id_number' => ['nullable', 'string', 'max:50'],
@@ -177,7 +177,7 @@ class EmployeeController extends Controller
             'last_name.required' => 'Last name is required.',
             'email.email' => 'Please provide a valid email address.',
             'email.unique' => 'This email is already registered.',
-            'date_of_birth.before' => 'Date of birth must be before today.',
+            'date_of_birth.before_or_equal' => 'Date of birth must be at least 18 years ago.',
             'gender.required' => 'Gender is required.',
             'department_id.required' => 'Department is required.',
             'department_id.exists' => 'Selected department is invalid.',
@@ -348,7 +348,7 @@ class EmployeeController extends Controller
             'last_name' => ['required', 'string', 'max:100'],
             'email' => ['nullable', 'email', 'max:150', 'unique:employees,email,' . $employee->employee_id . ',employee_id'],
             'phone' => ['nullable', 'string', 'max:20'],
-            'date_of_birth' => ['nullable', 'date', 'before:today'],
+            'date_of_birth' => ['nullable', 'date', 'before_or_equal:-18 years'],
             'gender' => ['required', 'in:Male,Female'],
             'address' => ['nullable', 'string'],
             'id_number' => ['nullable', 'string', 'max:50'],
@@ -367,7 +367,7 @@ class EmployeeController extends Controller
             'email.unique' => 'This email is already registered.',
             'phone.max' => 'Phone number may not be longer than 20 characters.',
             'date_of_birth.date' => 'Date of birth must be a valid date.',
-            'date_of_birth.before' => 'Date of birth must be before today.',
+            'date_of_birth.before_or_equal' => 'Date of birth must be at least 18 years ago.',
             'gender.required' => 'Please select a gender.',
             'gender.in' => 'Selected gender is invalid.',
             'id_number.max' => 'ID Number may not be longer than 50 characters.',
@@ -386,7 +386,6 @@ class EmployeeController extends Controller
 
         DB::beginTransaction();
         try {
-            // Capture old data (excluding sensitive info)
             $oldData = [
                 'first_name' => $employee->first_name,
                 'last_name' => $employee->last_name,
