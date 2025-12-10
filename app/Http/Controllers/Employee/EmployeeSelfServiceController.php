@@ -92,7 +92,7 @@ class EmployeeSelfServiceController extends Controller
     }
 
     /**
-     * View personal profile
+     * Show personal profile
      */
     public function profile()
     {
@@ -136,7 +136,7 @@ class EmployeeSelfServiceController extends Controller
             ->orderByDesc('training_programs.start_date')
             ->get();
 
-        return view('employee.profile', compact('employee', 'certifications', 'trainings'));
+        return view('admin.my-workspace.my-profile', compact('employee', 'certifications', 'trainings'));
     }
 
     /**
@@ -210,7 +210,7 @@ class EmployeeSelfServiceController extends Controller
     }
 
     /**
-     * View attendance history
+     * Show attendance history
      */
     public function attendance(Request $request)
     {
@@ -252,7 +252,7 @@ class EmployeeSelfServiceController extends Controller
     }
 
     /**
-     * View leave history
+     * Show leave history
      */
     public function leaves(Request $request)
     {
@@ -430,7 +430,7 @@ class EmployeeSelfServiceController extends Controller
     }
 
     /**
-     * View payslips
+     * Show payslips
      */
     public function payslips(Request $request)
     {
