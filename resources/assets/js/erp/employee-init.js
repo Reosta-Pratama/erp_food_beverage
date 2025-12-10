@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    const dropdownElements = document.querySelectorAll('.single-select');
-    if (dropdownElements.length > 0) {
-        dropdownElements.forEach((dropdown) => {
+    const singleSelect = document.querySelectorAll('.single-select');
+    if (singleSelect.length > 0) {
+        singleSelect.forEach((dropdown) => {
             new Choices(dropdown, {
                 searchEnabled: true,
                 allowHTML: true
@@ -25,6 +25,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 dateFormat: "Y-m-d",      
                 disableMobile: true,      
                 defaultDate: defaultDates 
+            });
+        });
+    }
+
+    const singeDate = document.querySelectorAll('.singe-date');
+    if (singeDate.length > 0) {
+        singeDate.forEach((element) => {
+            const date = element.getAttribute('date') || null;
+
+            flatpickr(element, {
+                altInput: true,
+                altFormat: "F j, Y",
+                dateFormat: "Y-m-d",      
+                disableMobile: true,      
+                defaultDate: date 
             });
         });
     }

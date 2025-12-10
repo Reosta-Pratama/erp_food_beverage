@@ -310,7 +310,7 @@
                                                     <div>
                                                         <div>{{ $employee->first_name }} {{ $employee->last_name }}</div>
                                                         <small class="text-muted">
-                                                            <i class="bi bi-gender-{{ strtolower($employee->gender) }}"></i>
+                                                            <i class="ti ti-gender-{{ strtolower($employee->gender) }}"></i>
                                                             {{ $employee->gender }}
                                                         </small>
                                                     </div>

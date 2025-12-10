@@ -15,36 +15,236 @@
 
 @section('content')
 
+    <!-- Page Header -->
+    <div
+        class="d-flex align-items-center justify-content-between page-header-breadcrumb flex-wrap gap-2">
+        <div>
+            <nav>
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item">
+                        <a href="javascript:void(0);">Employee Management</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{{ route('hrm.employees.index') }}">Employees</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Create New Employee</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <!-- Page Header -->
 
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fs-22 mb-0">Create New Employee</h2>
 
+        <div class="d-flex align-items-center gap-2">
+            <a href="{{ route('hrm.employees.index') }}"
+                class="btn btn-outline-secondary">
+                <i class="ti ti-arrow-left me-2"></i>
+                Back
+            </a>
+        </div>
+    </div>
 
+    {{-- Error Messages --}}
+    @if($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show">
+            <h6 class="d-flex align-items-center">
+                <i class="ti ti-exclamation-circle fs-18 me-2"></i>
+                Please fix the following errors:
+            </h6>
+            <ul class="mb-0">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert">
+                <i class="ti ti-x"></i>
+            </button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible d-flex align-items-center fade show mb-3" role="alert">
+            <i class="ti ti-exclamation-circle fs-18 me-2"></i>
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert">
+                <i class="ti ti-x"></i>
+            </button>
+        </div>
+    @endif
+
+    <!-- Container -->
+    <form method="POST" action="{{ route('hrm.employees.create') }}" 
+        id="employeeForm" class="row">
+        @csrf
+
+        <div class="col-lg-8">
+            <div class="card custom">
+                <div class="card-header">
+                    <div class="card-title">Personal Information</div>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="first_name" class="form-label">
+                                First Name <span class="text-danger">*</span>
+                            </label>
+
+                            <input type="text" 
+                                    class="form-control @error('first_name') is-invalid @enderror" 
+                                    id="first_name" 
+                                    name="first_name" 
+                                    value="{{ old('first_name') }}"
+                                    placeholder="e.g., Reosta"
+                                    required>
+
+                            @error('first_name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="last_name" class="form-label">
+                                Last Name <span class="text-danger">*</span>
+                            </label>
+
+                            <input type="text" 
+                                    class="form-control @error('last_name') is-invalid @enderror" 
+                                    id="last_name" 
+                                    name="last_name" 
+                                    value="{{ old('last_name') }}"
+                                    placeholder="e.g., Pane"
+                                    required>
+
+                            @error('last_name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="email" class="form-label">Email</label>
+
+                            <input type="email" 
+                                    class="form-control @error('email') is-invalid @enderror" 
+                                    id="email" 
+                                    name="email" 
+                                    value="{{ old('email') }}"
+                                    placeholder="e.g., reosta.pane@gmail.com">
+
+                            @error('email')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="phone" class="form-label">Phone</label>
+
+                            <input type="text" 
+                                    class="form-control @error('phone') is-invalid @enderror" 
+                                    id="phone" 
+                                    name="phone" 
+                                    value="{{ old('phone') }}"
+                                    placeholder="e.g., 082169076600">
+
+                            @error('phone')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card custom">
+                <div class="card-header">
+                    <div class="card-title">Employment Information</div>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card custom">
+                <div class="card-header">
+                    <div class="card-title">
+                        Employee Guidlines
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush small">
+                        <li class="list-group-item"> 
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <span class="fs-15 text-success">
+                                        <i class="ti ti-circle-check"></i>
+                                    </span>
+                                </div>
+                                <div class="ms-2">
+                                    Employee code will be auto-generated
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item"> 
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <span class="fs-15 text-success">
+                                        <i class="ti ti-circle-check"></i>
+                                    </span>
+                                </div>
+                                <div class="ms-2">
+                                    Email should be unique if provided
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item"> 
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <span class="fs-15 text-success">
+                                        <i class="ti ti-circle-check"></i>
+                                    </span>
+                                </div>
+                                <div class="ms-2">
+                                    Date of birth must be at least 18 years ago
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item"> 
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <span class="fs-15 text-success">
+                                        <i class="ti ti-circle-check"></i>
+                                    </span>
+                                </div>
+                                <div class="ms-2">
+                                    Base salary can be set later in payroll
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item"> 
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <span class="fs-15 text-success">
+                                        <i class="ti ti-circle-check"></i>
+                                    </span>
+                                </div>
+                                <div class="ms-2">
+                                    New employees typically start on Probation status
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </form>
+    <!-- Container -->
 
 
 
 
 <div class="container-fluid">
-    <!-- Page Header -->
-    <div class="mb-4">
-        <h1 class="h3 mb-1 text-gray-800">Add New Employee</h1>
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0 bg-transparent p-0">
-                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                <li class="breadcrumb-item"><a href="#">HRM</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('hrm.employees.index') }}">Employees</a></li>
-                <li class="breadcrumb-item active">Add New</li>
-            </ol>
-        </nav>
-    </div>
-
-    <!-- Alert Messages -->
-    @if(session('error'))
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <i class="bi bi-exclamation-triangle me-2"></i>
-        {{ session('error') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    @endif
-
     <form method="POST" action="{{ route('hrm.employees.store') }}" id="employeeForm">
         @csrf
         
