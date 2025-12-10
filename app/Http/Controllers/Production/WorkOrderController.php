@@ -46,13 +46,14 @@ class WorkOrderController extends Controller
                 END as completion_percentage')
             );
         
-        // Search
+        // Search filter 
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
                 $q->where('wo.work_order_code', 'like', "%{$search}%")
-                  ->orWhere('p.product_name', 'like', "%{$search}%")
-                  ->orWhere('p.product_code', 'like', "%{$search}%");
+                ->orWhere('p.product_name', 'like', "%{$search}%")
+                ->orWhere('p.product_code', 'like', "%{$search}%")
+                ->orWhere(DB::raw("CONCAT(e.first_name, ' ', e.last_name)"), 'like', "%{$search}%");
             });
         }
         
@@ -66,18 +67,98 @@ class WorkOrderController extends Controller
             $query->where('wo.product_id', $request->product_id);
         }
         
+        // Filter by assigned employee
+        if ($request->filled('assigned_to')) {
+            if ($request->assigned_to === 'unassigned') {
+                $query->whereNull('wo.assigned_to');
+            } elseif ($request->assigned_to === 'assigned') {
+                $query->whereNotNull('wo.assigned_to');
+            }
+        }
+        
         // Filter by date range
-        if ($request->filled('start_date')) {
-            $query->where('wo.scheduled_start', '>=', $request->start_date);
+        if ($request->filled('date_from')) {
+            $query->where('wo.scheduled_start', '>=', $request->date_from);
         }
-        if ($request->filled('end_date')) {
-            $query->where('wo.scheduled_end', '<=', $request->end_date);
+        if ($request->filled('date_to')) {
+            $query->where('wo.scheduled_end', '<=', $request->date_to);
         }
         
-        $workOrders = $query->orderByDesc('wo.created_at')
-            ->paginate(20);
+        // Filter by completion percentage
+        if ($request->filled('completion_filter')) {
+            switch ($request->completion_filter) {
+                case 'not_started': // 0%
+                    $query->where('wo.quantity_produced', 0);
+                    break;
+                case 'in_progress': // 1-99%
+                    $query->whereRaw('wo.quantity_produced > 0 AND wo.quantity_produced < wo.quantity_ordered');
+                    break;
+                case 'completed': // 100%
+                    $query->whereRaw('wo.quantity_produced >= wo.quantity_ordered');
+                    break;
+            }
+        }
         
-        // Get products for filter
+        // Sorting
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+        
+        // Validate sort order
+        $sortOrder = in_array(strtolower($sortOrder), ['asc', 'desc']) ? strtolower($sortOrder) : 'desc';
+        
+        // Whitelist allowed sort columns
+        $allowedSort = [
+            'work_order_code',
+            'product_name',
+            'status',
+            'scheduled_start',
+            'scheduled_end',
+            'quantity_ordered',
+            'quantity_produced',
+            'remaining_quantity',
+            'completion_percentage',
+            'assigned_to_name',
+            'created_at'
+        ];
+        
+        if (in_array($sortBy, $allowedSort)) {
+            if ($sortBy === 'product_name') {
+                $query->orderBy('p.product_name', $sortOrder);
+            } elseif ($sortBy === 'work_order_code') {
+                $query->orderBy('wo.work_order_code', $sortOrder);
+            } elseif ($sortBy === 'status') {
+                $query->orderBy('wo.status', $sortOrder);
+            } elseif ($sortBy === 'scheduled_start') {
+                $query->orderBy('wo.scheduled_start', $sortOrder);
+            } elseif ($sortBy === 'scheduled_end') {
+                $query->orderBy('wo.scheduled_end', $sortOrder);
+            } elseif ($sortBy === 'quantity_ordered') {
+                $query->orderBy('wo.quantity_ordered', $sortOrder);
+            } elseif ($sortBy === 'quantity_produced') {
+                $query->orderBy('wo.quantity_produced', $sortOrder);
+            } elseif ($sortBy === 'created_at') {
+                $query->orderBy('wo.created_at', $sortOrder);
+            } elseif ($sortBy === 'assigned_to_name') {
+                // Computed column - CONCAT
+                $query->orderBy(DB::raw("CONCAT(e.first_name, ' ', e.last_name)"), $sortOrder);
+            } elseif ($sortBy === 'remaining_quantity') {
+                // Computed column - Calculation
+                $query->orderByRaw("(wo.quantity_ordered - wo.quantity_produced) {$sortOrder}");
+            } elseif ($sortBy === 'completion_percentage') {
+                // Computed column - Complex CASE
+                $query->orderByRaw("CASE 
+                    WHEN wo.quantity_ordered > 0 
+                    THEN ROUND((wo.quantity_produced / wo.quantity_ordered) * 100, 2)
+                    ELSE 0 
+                END {$sortOrder}");
+            }
+        } else {
+            // Fallback to default
+            $query->orderByDesc('wo.created_at');
+        }
+        
+        $workOrders = $query->paginate(20)->withQueryString();
+        
         $products = DB::table('products')
             ->where('product_type', 'Finished Goods')
             ->where('is_active', 1)
