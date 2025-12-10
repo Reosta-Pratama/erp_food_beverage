@@ -3,6 +3,11 @@
 ])
 
 @section('styles')
+
+    <!-- FlatPickr CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/plugin/flatpickr/flatpickr.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/plugin/flatpickr/flatpickr.min.css') }}">
+
 @endsection
 
 @section('content')
@@ -30,16 +35,27 @@
         <h2 class="fs-22 mb-0">Employee Profile</h2>
 
         <div class="d-flex align-items-center gap-2">
+            @if ($employee->resign_date)
+                <a href="{{ route('hrm.employees.index') }}"
+                    class="btn btn-outline-secondary">
+                    <i class="ti ti-arrow-left me-2"></i>
+                    Back
+                </a>
+            @endif
+
             <a href="{{ route('hrm.employees.edit', $employee->employee_code) }}" 
                class="btn btn-primary">
                 <i class="ti ti-pencil me-2"></i> 
                 Edit
             </a>
-            <button type="button" class="btn btn-danger" 
-                data-bs-toggle="modal" data-bs-target="#terminateModal">
-                <i class="ti ti-user-x me-2"></i> 
-                Terminate
-            </button>
+            
+            @if (!$employee->resign_date)
+                <button type="button" class="btn btn-danger" 
+                    data-bs-toggle="modal" data-bs-target="#terminateModal">
+                    <i class="ti ti-user-x me-2"></i> 
+                    Terminate
+                </button>
+            @endif
         </div>
     </div>
 
@@ -185,5 +201,93 @@
 
 @endsection
 
+@if (!$employee->resign_date)
+    @section('modals')
+        
+        {{-- Terminate --}}
+        <div class="modal fade" id="terminateModal" 
+            data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="terminateModal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <form method="POST" action="{{ route('hrm.employees.terminate', $employee->employee_code) }}"
+                    class="modal-content">
+                    @csrf
+
+                    <div class="modal-header d-flex justify-content-between bg-danger">
+                        <h6 class="modal-title text-white">
+                            Terminate Employee
+                        </h6>
+
+                        <button type="button" class="btn btn-icon btn-white-transparent" 
+                            data-bs-dismiss="modal" aria-label="Close">
+                            <i class="ti ti-x"></i>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <p>Are you sure you want to terminate 
+                            <strong>{{ $employee->first_name }} {{ $employee->last_name }}</strong>
+                            ?
+                        </p>
+                        <div class="mb-3">
+                            <label for="resign_date" class="form-label">Resignation Date <span class="text-danger">*</span></label>
+    
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-text text-muted"> 
+                                        <i class="ti ti-calendar"></i> 
+                                    </div>
+                                    <input class="form-control single-date @error('resign_date') is-invalid @enderror"
+                                        date=@json(date('Y-m-d'))
+                                        min=@json($employee->join_date)
+                                        id="resign_date"
+                                        name="resign_date"
+                                        type="text"  
+                                        required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary"
+                            data-bs-dismiss="modal">
+                            Close
+                        </button>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="ti ti-user-x me-2"></i>
+                            Terminate Employee
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    @endsection
+@endif
+
 @section('scripts')
+
+    <!-- FlatPickr JS -->
+    <script src="{{ asset('assets/plugin/flatpickr/flatpickr.min.js') }}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const resignDate = document.getElementById('resign_date');
+
+            flatpickr(resignDate, {
+                altInput: true,
+                altFormat: "F j, Y",
+                dateFormat: "Y-m-d",
+                disableMobile: true,
+                defaultDate: resignDate.getAttribute('date'),
+                minDate: resignDate.getAttribute('min') || null,
+            });
+
+        });
+    </script>
+
 @endsection
