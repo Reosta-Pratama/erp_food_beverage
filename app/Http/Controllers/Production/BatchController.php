@@ -14,7 +14,7 @@ class BatchController extends Controller
     use LogsActivity;
     
     /**
-     * Display a listing of batches
+     * Listing of batches
      */
     public function index(Request $request)
     {
@@ -170,7 +170,7 @@ class BatchController extends Controller
     }
 
     /**
-     * Show the form for creating a new batch
+     * Show the form for creating 
      */
     public function create()
     {
@@ -311,7 +311,7 @@ class BatchController extends Controller
     }
 
     /**
-     * Display the specified batch
+     * Show specified batch
      */
     public function show($batchCode)
     {
@@ -382,7 +382,7 @@ class BatchController extends Controller
     }
 
     /**
-     * Show the form for editing the specified batch
+     * Show the form for editing
      */
     public function edit($batchCode)
     {
@@ -605,11 +605,181 @@ class BatchController extends Controller
     /**
      * Export batches
      */
-    public function export()
+    public function export(Request $request)
     {
         $this->logExport('Production - Batches', 'Exported batch tracking list');
         
-        // Your export logic here
+        $query = DB::table('batches as b')
+            ->join('products as p', 'b.product_id', '=', 'p.product_id')
+            ->leftJoin('work_orders as wo', 'b.work_order_id', '=', 'wo.work_order_id')
+            ->select(
+                'b.batch_code',
+                'b.production_date',
+                'p.product_code',
+                'p.product_name',
+                'p.product_type',
+                'wo.work_order_code',
+                'b.quantity_produced',
+                'b.quantity_approved',
+                'b.quantity_rejected',
+                DB::raw('(b.quantity_produced - b.quantity_approved - b.quantity_rejected) as pending_qc'),
+                DB::raw('CASE 
+                    WHEN b.quantity_produced > 0 
+                    THEN ROUND((b.quantity_approved / b.quantity_produced) * 100, 2)
+                    ELSE 0 
+                END as approval_rate'),
+                'b.status',
+                'b.created_at'
+            );
+        
+        // Apply same filters as index
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('b.batch_code', 'like', "%{$search}%")
+                ->orWhere('p.product_name', 'like', "%{$search}%")
+                ->orWhere('p.product_code', 'like', "%{$search}%")
+                ->orWhere('wo.work_order_code', 'like', "%{$search}%");
+            });
+        }
+        
+        if ($request->filled('status')) {
+            $query->where('b.status', $request->status);
+        }
+        
+        if ($request->filled('product_id')) {
+            $query->where('b.product_id', $request->product_id);
+        }
+        
+        if ($request->filled('work_order')) {
+            if ($request->work_order === 'unassigned') {
+                $query->whereNull('b.work_order_id');
+            } elseif ($request->work_order === 'assigned') {
+                $query->whereNotNull('b.work_order_id');
+            }
+        }
+        
+        if ($request->filled('date_from')) {
+            $query->where('b.production_date', '>=', $request->date_from);
+        }
+        if ($request->filled('date_to')) {
+            $query->where('b.production_date', '<=', $request->date_to);
+        }
+        
+        if ($request->filled('qc_filter')) {
+            switch ($request->qc_filter) {
+                case 'pending':
+                    $query->whereRaw('(b.quantity_produced - b.quantity_approved - b.quantity_rejected) > 0');
+                    break;
+                case 'approved':
+                    $query->whereRaw('b.quantity_approved = b.quantity_produced');
+                    break;
+                case 'rejected':
+                    $query->where('b.quantity_rejected', '>', 0);
+                    break;
+                case 'partial':
+                    $query->whereRaw('b.quantity_approved > 0 AND b.quantity_approved < b.quantity_produced');
+                    break;
+            }
+        }
+        
+        // Apply same sorting as index
+        $sortBy = $request->get('sort_by', 'production_date');
+        $sortOrder = $request->get('sort_order', 'desc');
+        $sortOrder = in_array(strtolower($sortOrder), ['asc', 'desc']) ? strtolower($sortOrder) : 'desc';
+        
+        $allowedSort = [
+            'batch_code', 'product_name', 'production_date', 'quantity_produced',
+            'quantity_approved', 'quantity_rejected', 'pending_qc', 'approval_rate',
+            'status', 'created_at'
+        ];
+        
+        if (in_array($sortBy, $allowedSort)) {
+            if ($sortBy === 'product_name') {
+                $query->orderBy('p.product_name', $sortOrder);
+            } elseif ($sortBy === 'batch_code') {
+                $query->orderBy('b.batch_code', $sortOrder);
+            } elseif ($sortBy === 'production_date') {
+                $query->orderBy('b.production_date', $sortOrder);
+            } elseif ($sortBy === 'quantity_produced') {
+                $query->orderBy('b.quantity_produced', $sortOrder);
+            } elseif ($sortBy === 'quantity_approved') {
+                $query->orderBy('b.quantity_approved', $sortOrder);
+            } elseif ($sortBy === 'quantity_rejected') {
+                $query->orderBy('b.quantity_rejected', $sortOrder);
+            } elseif ($sortBy === 'status') {
+                $query->orderBy('b.status', $sortOrder);
+            } elseif ($sortBy === 'created_at') {
+                $query->orderBy('b.created_at', $sortOrder);
+            } elseif ($sortBy === 'pending_qc') {
+                $query->orderByRaw("(b.quantity_produced - b.quantity_approved - b.quantity_rejected) {$sortOrder}");
+            } elseif ($sortBy === 'approval_rate') {
+                $query->orderByRaw("CASE 
+                    WHEN b.quantity_produced > 0 
+                    THEN ROUND((b.quantity_approved / b.quantity_produced) * 100, 2)
+                    ELSE 0 
+                END {$sortOrder}");
+            }
+        } else {
+            $query->orderByDesc('b.production_date')->orderByDesc('b.created_at');
+        }
+        
+        if ($sortBy !== 'created_at' && $sortBy !== 'production_date') {
+            $query->orderByDesc('b.production_date');
+        }
+        
+        $batches = $query->limit(10000)->get();
+        
+        $filename = 'batch_tracking_export_' . now()->format('Y-m-d_His') . '.csv';
+        
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+        ];
+        
+        $callback = function() use ($batches) {
+            $file = fopen('php://output', 'w');
+            
+            // Header CSV
+            fputcsv($file, [
+                'Batch Code',
+                'Production Date',
+                'Product Code',
+                'Product Name',
+                'Product Type',
+                'Work Order',
+                'Qty Produced',
+                'Qty Approved',
+                'Qty Rejected',
+                'Pending QC',
+                'Approval Rate (%)',
+                'Status',
+                'Created At'
+            ]);
+            
+            // Data rows
+            foreach ($batches as $batch) {
+                fputcsv($file, [
+                    $batch->batch_code,
+                    $batch->production_date,
+                    $batch->product_code,
+                    $batch->product_name,
+                    $batch->product_type,
+                    $batch->work_order_code ?? 'Manual Batch',
+                    $batch->quantity_produced,
+                    $batch->quantity_approved,
+                    $batch->quantity_rejected,
+                    $batch->pending_qc,
+                    $batch->approval_rate,
+                    $batch->status,
+                    $batch->created_at,
+                ]);
+            }
+            
+            fclose($file);
+        };
+        
+        return response()->stream($callback, 200, $headers);
     }
     
     /**
