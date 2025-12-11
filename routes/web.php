@@ -70,6 +70,9 @@ Route::middleware('auth')->group(function () {
     // SPRINT 10: Customer & Sales Management
     require __DIR__.'/sprint/sprint_10_sales_management.php';
 
+    // SPRINT 11: Delivery & Distribution
+    require __DIR__.'/sprint/sprint_11_delivery_distribution.php';
+
     // ROLE-BASED DASHBOARDS
     require __DIR__.'/sprint/dashboards.php';
     
