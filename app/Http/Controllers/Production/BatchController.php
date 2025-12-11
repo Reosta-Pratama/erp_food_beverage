@@ -42,14 +42,14 @@ class BatchController extends Controller
                 END as approval_rate')
             );
         
-        // Search
+        // Search filter (multi-column)
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
                 $q->where('b.batch_code', 'like', "%{$search}%")
-                  ->orWhere('p.product_name', 'like', "%{$search}%")
-                  ->orWhere('p.product_code', 'like', "%{$search}%")
-                  ->orWhere('wo.work_order_code', 'like', "%{$search}%");
+                ->orWhere('p.product_name', 'like', "%{$search}%")
+                ->orWhere('p.product_code', 'like', "%{$search}%")
+                ->orWhere('wo.work_order_code', 'like', "%{$search}%");
             });
         }
         
@@ -63,19 +63,102 @@ class BatchController extends Controller
             $query->where('b.product_id', $request->product_id);
         }
         
+        // Filter by work order assignment
+        if ($request->filled('work_order')) {
+            if ($request->work_order === 'unassigned') {
+                $query->whereNull('b.work_order_id');
+            } elseif ($request->work_order === 'assigned') {
+                $query->whereNotNull('b.work_order_id');
+            }
+        }
+        
         // Filter by date range
-        if ($request->filled('start_date')) {
-            $query->where('b.production_date', '>=', $request->start_date);
+        if ($request->filled('date_from')) {
+            $query->where('b.production_date', '>=', $request->date_from);
         }
-        if ($request->filled('end_date')) {
-            $query->where('b.production_date', '<=', $request->end_date);
+        if ($request->filled('date_to')) {
+            $query->where('b.production_date', '<=', $request->date_to);
         }
         
-        $batches = $query->orderByDesc('b.production_date')
-            ->orderByDesc('b.created_at')
-            ->paginate(20);
+        // Filter by QC status
+        if ($request->filled('qc_filter')) {
+            switch ($request->qc_filter) {
+                case 'pending': // Pending QC
+                    $query->whereRaw('(b.quantity_produced - b.quantity_approved - b.quantity_rejected) > 0');
+                    break;
+                case 'approved': // Fully approved
+                    $query->whereRaw('b.quantity_approved = b.quantity_produced');
+                    break;
+                case 'rejected': // Has rejected items
+                    $query->where('b.quantity_rejected', '>', 0);
+                    break;
+                case 'partial': // Partially approved
+                    $query->whereRaw('b.quantity_approved > 0 AND b.quantity_approved < b.quantity_produced');
+                    break;
+            }
+        }
         
-        // Get products for filter
+        // Sorting
+        $sortBy = $request->get('sort_by', 'production_date');
+        $sortOrder = $request->get('sort_order', 'desc');
+        
+        // Validate sort order
+        $sortOrder = in_array(strtolower($sortOrder), ['asc', 'desc']) ? strtolower($sortOrder) : 'desc';
+        
+        // Whitelist allowed sort columns
+        $allowedSort = [
+            'batch_code',
+            'product_name',
+            'production_date',
+            'quantity_produced',
+            'quantity_approved',
+            'quantity_rejected',
+            'pending_qc',
+            'approval_rate',
+            'status',
+            'created_at'
+        ];
+        
+        if (in_array($sortBy, $allowedSort)) {
+            if ($sortBy === 'product_name') {
+                $query->orderBy('p.product_name', $sortOrder);
+            } elseif ($sortBy === 'batch_code') {
+                $query->orderBy('b.batch_code', $sortOrder);
+            } elseif ($sortBy === 'production_date') {
+                $query->orderBy('b.production_date', $sortOrder);
+            } elseif ($sortBy === 'quantity_produced') {
+                $query->orderBy('b.quantity_produced', $sortOrder);
+            } elseif ($sortBy === 'quantity_approved') {
+                $query->orderBy('b.quantity_approved', $sortOrder);
+            } elseif ($sortBy === 'quantity_rejected') {
+                $query->orderBy('b.quantity_rejected', $sortOrder);
+            } elseif ($sortBy === 'status') {
+                $query->orderBy('b.status', $sortOrder);
+            } elseif ($sortBy === 'created_at') {
+                $query->orderBy('b.created_at', $sortOrder);
+            } elseif ($sortBy === 'pending_qc') {
+                // Computed column - Calculation
+                $query->orderByRaw("(b.quantity_produced - b.quantity_approved - b.quantity_rejected) {$sortOrder}");
+            } elseif ($sortBy === 'approval_rate') {
+                // Computed column - Complex CASE
+                $query->orderByRaw("CASE 
+                    WHEN b.quantity_produced > 0 
+                    THEN ROUND((b.quantity_approved / b.quantity_produced) * 100, 2)
+                    ELSE 0 
+                END {$sortOrder}");
+            }
+        } else {
+            // Fallback to default
+            $query->orderByDesc('b.production_date')->orderByDesc('b.created_at');
+        }
+        
+        // Add secondary sort for consistency when dates are same
+        if ($sortBy !== 'created_at' && $sortBy !== 'production_date') {
+            $query->orderByDesc('b.production_date');
+        }
+        
+        $batches = $query->paginate(20)->withQueryString();
+        
         $products = DB::table('products')
             ->where('product_type', 'Finished Goods')
             ->where('is_active', 1)
