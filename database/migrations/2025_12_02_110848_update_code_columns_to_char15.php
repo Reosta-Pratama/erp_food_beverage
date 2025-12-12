@@ -48,6 +48,7 @@ return new class extends Migration
         DB::statement('ALTER TABLE departments              MODIFY department_code  CHAR(15) NOT NULL');
         DB::statement('ALTER TABLE positions                MODIFY position_code    CHAR(15) NOT NULL');
         DB::statement('ALTER TABLE employees                MODIFY employee_code    CHAR(15) NOT NULL');
+        DB::statement('ALTER TABLE product_categories       MODIFY category_code    CHAR(15) NOT NULL');
 
     }
 
@@ -93,6 +94,7 @@ return new class extends Migration
         DB::statement('ALTER TABLE departments              MODIFY department_code  CHAR(10) NOT NULL');
         DB::statement('ALTER TABLE positions                MODIFY position_code    CHAR(10) NOT NULL');
         DB::statement('ALTER TABLE employees                MODIFY employee_code    CHAR(10) NOT NULL');
+        DB::statement('ALTER TABLE product_categories       MODIFY category_code    CHAR(10) NOT NULL');
 
     }
 };

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Products;
 
+use App\Helpers\CodeGeneratorHelper;
 use App\Http\Controllers\Controller;
 use App\LogsActivity;
 use Illuminate\Http\Request;
@@ -14,11 +15,11 @@ class ProductCategoryController extends Controller
      use LogsActivity;
 
     /**
-     * List product categories with hierarchy
+     * List product categories 
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = DB::table('product_categories as pc')
+        $query = DB::table('product_categories as pc')
             ->leftJoin('product_categories as parent', 'pc.parent_category_id', '=', 'parent.category_id')
             ->leftJoin('products', 'pc.category_id', '=', 'products.category_id')
             ->select(
@@ -39,12 +40,103 @@ class ProductCategoryController extends Controller
                 'pc.description',
                 'pc.created_at',
                 'parent.category_name'
-            )
-            ->orderByRaw('COALESCE(pc.parent_category_id, pc.category_id)')
-            ->orderBy('pc.category_name')
+            );
+        
+        // Search filter (multi-column)
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('pc.category_name', 'like', "%{$search}%")
+                ->orWhere('pc.category_code', 'like', "%{$search}%")
+                ->orWhere('pc.description', 'like', "%{$search}%")
+                ->orWhere('parent.category_name', 'like', "%{$search}%");
+            });
+        }
+        
+        // Filter by parent category
+        if ($request->filled('parent')) {
+            if ($request->input('parent') === 'root') {
+                // Root categories (no parent)
+                $query->whereNull('pc.parent_category_id');
+            } elseif ($request->input('parent') === 'child') {
+                // Child categories (has parent)
+                $query->whereNotNull('pc.parent_category_id');
+            } elseif (is_numeric($request->input('parent'))) {
+                // Specific parent category
+                $query->where('pc.parent_category_id', $request->input('parent'));
+            }
+        }
+        
+        // Filter by product count
+        if ($request->filled('product_filter')) {
+            switch ($request->input('product_filter')) {
+                case 'empty': // No products
+                    $query->havingRaw('COUNT(DISTINCT products.product_id) = 0');
+                    break;
+                case 'has_products': // Has products
+                    $query->havingRaw('COUNT(DISTINCT products.product_id) > 0');
+                    break;
+                case 'active': // Has 5+ products (active category)
+                    $query->havingRaw('COUNT(DISTINCT products.product_id) >= 5');
+                    break;
+            }
+        }
+        
+        // Sorting
+        $sortBy = $request->get('sort_by', 'hierarchy');
+        $sortOrder = $request->get('sort_order', 'asc');
+        
+        // Validate sort order
+        $sortOrder = \in_array(strtolower($sortOrder), ['asc', 'desc']) ? strtolower($sortOrder) : 'asc';
+        
+        // Whitelist allowed sort columns
+        $allowedSort = [
+            'category_code',
+            'category_name',
+            'parent_name',
+            'products_count',
+            'created_at',
+            'hierarchy'
+        ];
+        
+        if (\in_array($sortBy, $allowedSort)) {
+            if ($sortBy === 'hierarchy') {
+                // Special: Hierarchical sorting (parent first, then children)
+                $query->orderByRaw('COALESCE(pc.parent_category_id, pc.category_id)')
+                    ->orderBy('pc.category_name', 'asc');
+            } elseif ($sortBy === 'category_code') {
+                $query->orderBy('pc.category_code', $sortOrder);
+            } elseif ($sortBy === 'category_name') {
+                $query->orderBy('pc.category_name', $sortOrder);
+            } elseif ($sortBy === 'parent_name') {
+                // Computed column - NULL handling
+                $query->orderBy(DB::raw('COALESCE(parent.category_name, "")'), $sortOrder);
+            } elseif ($sortBy === 'products_count') {
+                // Aggregated column
+                $query->orderByRaw("COUNT(DISTINCT products.product_id) {$sortOrder}");
+            } elseif ($sortBy === 'created_at') {
+                $query->orderBy('pc.created_at', $sortOrder);
+            }
+        } else {
+            // Fallback to default hierarchical sorting
+            $query->orderByRaw('COALESCE(pc.parent_category_id, pc.category_id)')
+                ->orderBy('pc.category_name', 'asc');
+        }
+        
+        // Add secondary sort for consistency
+        if ($sortBy !== 'hierarchy' && $sortBy !== 'category_name') {
+            $query->orderBy('pc.category_name', 'asc');
+        }
+        
+        $categories = $query->paginate(10)->withQueryString();
+        
+        $parentCategories = DB::table('product_categories')
+            ->whereNull('parent_category_id')
+            ->select('category_id', 'category_code', 'category_name')
+            ->orderBy('category_name')
             ->get();
         
-        return view('admin.products.categories.index', compact('categories'));
+        return view('admin.products-materials.categories.index', compact('categories', 'parentCategories'));
     }
 
     /**
@@ -52,13 +144,13 @@ class ProductCategoryController extends Controller
      */
     public function create()
     {
-        // Get root categories for parent selection
         $parentCategories = DB::table('product_categories')
             ->whereNull('parent_category_id')
+            ->select('category_id', 'category_code', 'category_name')
             ->orderBy('category_name')
             ->get();
         
-        return view('admin.products.categories.create', compact('parentCategories'));
+        return view('admin.products-materials.categories.create', compact('parentCategories'));
     }
 
     /**
@@ -71,15 +163,20 @@ class ProductCategoryController extends Controller
             'parent_category_id' => ['nullable', 'exists:product_categories,category_id'],
             'description' => ['nullable', 'string'],
         ], [
-            'category_name.required' => 'Category name is required.',
-            'category_name.unique' => 'This category name already exists.',
-            'parent_category_id.exists' => 'Selected parent category is invalid.',
+            'category_name.required' => 'Please enter a category name.',
+            'category_name.string' => 'Category name must be a valid text.',
+            'category_name.max' => 'Category name may not be longer than 150 characters.',
+            'category_name.unique' => 'This category name is already in use.',
+            'parent_category_id.exists' => 'The selected parent category does not exist.',
+            'description.string' => 'Description must be a valid text.',
         ]);
 
         DB::beginTransaction();
         try {
+            $categoryCode = CodeGeneratorHelper::generateProductCategoryCode();
+
             $categoryId = DB::table('product_categories')->insertGetId([
-                'category_code' => strtoupper(Str::random(10)),
+                'category_code' => $categoryCode,
                 'category_name' => $validated['category_name'],
                 'parent_category_id' => $validated['parent_category_id'] ?? null,
                 'description' => $validated['description'] ?? null,
@@ -98,7 +195,7 @@ class ProductCategoryController extends Controller
             DB::commit();
             
             return redirect()
-                ->route('admin.products.categories.index')
+                ->route('admin.products-materials.categories.index')
                 ->with('success', 'Product category created successfully');
                 
         } catch (\Exception $e) {
@@ -110,7 +207,7 @@ class ProductCategoryController extends Controller
     }
 
     /**
-     * Show category details with products
+     * Show category details 
      */
     public function show($categoryCode)
     {
@@ -157,7 +254,7 @@ class ProductCategoryController extends Controller
             ->orderBy('category_name')
             ->get();
         
-        return view('admin.products.categories.show', compact('category', 'products', 'subcategories'));
+        return view('admin.products-materials.categories.show', compact('category', 'products', 'subcategories'));
     }
 
     /**
@@ -180,7 +277,7 @@ class ProductCategoryController extends Controller
             ->orderBy('category_name')
             ->get();
         
-        return view('admin.products.categories.edit', compact('category', 'parentCategories'));
+        return view('admin.products-materials.categories.edit', compact('category', 'parentCategories'));
     }
 
     /**
@@ -197,14 +294,22 @@ class ProductCategoryController extends Controller
         }
 
         $validated = $request->validate([
-            'category_name' => ['required', 'string', 'max:150', 'unique:product_categories,category_name,' . $category->category_id . ',category_id'],
+            'category_name' => [
+                'required',
+                'string',
+                'max:150',
+                'unique:product_categories,category_name,' . $category->category_id . ',category_id'
+            ],
             'parent_category_id' => ['nullable', 'exists:product_categories,category_id'],
             'description' => ['nullable', 'string'],
         ], [
-            'category_name.required' => 'Category name is required.',
-            'category_name.unique' => 'This category name already exists.',
-            'parent_category_id.exists' => 'Selected parent category is invalid.',
+            'category_name.required' => 'Please enter a category name.',
+            'category_name.unique' => 'The category name is already in use.',
+            'category_name.max' => 'The category name may not be longer than 150 characters.',
+            'parent_category_id.exists' => 'The selected parent category is not valid.',
+            'description.string' => 'The description must be a valid text.',
         ]);
+
 
         // Prevent setting self as parent
         if (isset($validated['parent_category_id']) && $validated['parent_category_id'] == $category->category_id) {
@@ -215,7 +320,6 @@ class ProductCategoryController extends Controller
 
         DB::beginTransaction();
         try {
-            // Capture old data
             $oldData = [
                 'category_name' => $category->category_name,
                 'parent_category_id' => $category->parent_category_id,
@@ -243,7 +347,7 @@ class ProductCategoryController extends Controller
             DB::commit();
             
             return redirect()
-                ->route('admin.products.categories.index')
+                ->route('admin.products-materials.categories.index')
                 ->with('success', 'Product category updated successfully');
                 
         } catch (\Exception $e) {
@@ -287,7 +391,6 @@ class ProductCategoryController extends Controller
 
         DB::beginTransaction();
         try {
-            // Capture data before deletion
             $oldData = [
                 'category_code' => $category->category_code,
                 'category_name' => $category->category_name,
@@ -310,7 +413,7 @@ class ProductCategoryController extends Controller
             DB::commit();
             
             return redirect()
-                ->route('admin.products.categories.index')
+                ->route('admin.products-materials.categories.index')
                 ->with('success', 'Product category deleted successfully');
                 
         } catch (\Exception $e) {

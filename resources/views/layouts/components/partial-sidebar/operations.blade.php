@@ -19,10 +19,10 @@
                     <a href="javascript:void(0)">Products & Materials</a>
                 </li>
                 <li class="menu-item">
-                    <a href="javascript:void(0)" class="menu-link">Products</a>
+                    <a href="{{ route('products.index') }}" class="menu-link">Products</a>
                 </li>
                 <li class="menu-item">
-                    <a href="javascript:void(0)" class="menu-link">Product Categories</a>
+                    <a href="{{ route('products.categories.index') }}" class="menu-link">Product Categories</a>
                 </li>
             </ul>
         </li>

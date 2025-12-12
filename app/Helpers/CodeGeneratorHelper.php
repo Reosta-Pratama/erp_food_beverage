@@ -170,6 +170,14 @@ class CodeGeneratorHelper
     }
 
     /**
+     * Generate Product Category Code
+     */
+    public static function generateProductCategoryCode(): string
+    {
+        return self::generate('product_categories', 'category_code', 'PCG');
+    }
+
+    /**
      * Generate BOM Code
      */
     public static function generateBOMCode(): string
