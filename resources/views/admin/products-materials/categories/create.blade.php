@@ -71,30 +71,22 @@
     @endif
 
     <!-- Container -->
-    <form action="{{ route('products.categories.create') }}" method="POST"
+    <form action="{{ route('products.categories.store') }}" method="POST"
         id="categoryForm" class="row">
         @csrf
-    </form>
-    <!-- Container -->
 
-
-
-<div class="container-fluid">
-   
-    <div class="row">
         <div class="col-lg-8">
-            <form action="{{ route('products.categories.store') }}" method="POST" id="categoryForm">
-                @csrf
-                
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h5 class="mb-0">Category Information</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3">
+            <div class="card custom">
+                <div class="card-header">
+                    <div class="card-title">Category Information</div>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-12">
                             <label for="category_name" class="form-label">
                                 Category Name <span class="text-danger">*</span>
                             </label>
+
                             <input type="text" 
                                    class="form-control @error('category_name') is-invalid @enderror" 
                                    id="category_name" 
@@ -102,103 +94,191 @@
                                    value="{{ old('category_name') }}"
                                    required
                                    placeholder="e.g., Raw Materials, Finished Goods">
+
                             @error('category_name')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
-                        <div class="mb-3">
+                        <div class="col-12">
                             <label for="parent_category_id" class="form-label">
                                 Parent Category
                             </label>
-                            <select class="form-select @error('parent_category_id') is-invalid @enderror" 
-                                    id="parent_category_id" 
-                                    name="parent_category_id">
-                                <option value="">None (Root Category)</option>
-                                @foreach($parentCategories as $parent)
-                                <option value="{{ $parent->category_id }}" 
-                                        {{ old('parent_category_id') == $parent->category_id ? 'selected' : '' }}>
-                                    {{ $parent->category_name }}
-                                </option>
-                                @endforeach
-                            </select>
+
+                            <div>
+                                <select class="form-select single-select @error('parent_category_id') is-invalid @enderror" 
+                                        id="parent_category_id" 
+                                        name="parent_category_id">
+                                    <option value="">None (Root Category)</option>
+                                    @foreach($parentCategories as $parent)
+                                        <option value="{{ $parent->category_id }}" 
+                                                {{ old('parent_category_id') == $parent->category_id ? 'selected' : '' }}>
+                                            {{ $parent->category_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
                             @error('parent_category_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                             <small class="text-muted">Optional: Select a parent category to create hierarchy</small>
                         </div>
 
-                        <div class="mb-3">
+                        <div class="col-12">
                             <label for="description" class="form-label">Description</label>
+                            
                             <textarea class="form-control @error('description') is-invalid @enderror" 
                                       id="description" 
                                       name="description" 
                                       rows="4"
                                       placeholder="Describe this category...">{{ old('description') }}</textarea>
+                            
                             @error('description')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                            
                             <small class="text-muted">Optional</small>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="card">
-                    <div class="card-body">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-save me-2"></i>Save Category
-                        </button>
-                        <a href="{{ route('products.categories.index') }}" class="btn btn-secondary">
-                            <i class="bi bi-x-circle me-2"></i>Cancel
+            <div class="card custom">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="{{ route('products.categories.index') }}" 
+                            class="btn btn-outline-secondary">
+                            <i class="ti ti-x me-2"></i>
+                            Cancel
                         </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="ti ti-circle-check me-2"></i>
+                            Create Category
+                        </button>
                     </div>
                 </div>
-            </form>
+            </div>
         </div>
-
-        <!-- Info Sidebar -->
         <div class="col-lg-4">
-            <div class="card bg-light">
-                <div class="card-body">
-                    <h6 class="card-title">
-                        <i class="bi bi-info-circle text-primary me-2"></i>Category Guidelines
-                    </h6>
-                    <ul class="small mb-0">
-                        <li class="mb-2">Category code is auto-generated</li>
-                        <li class="mb-2">Use clear, descriptive names</li>
-                        <li class="mb-2">Categories can be organized hierarchically</li>
-                        <li class="mb-2">Root categories have no parent</li>
-                        <li>Subcategories inherit parent structure</li>
+            <div class="card custom">
+                <div class="card-header">
+                    <div class="card-title">Category Guidelines</div>
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush small">
+                        <li class="list-group-item"> 
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <span class="fs-15 text-success">
+                                        <i class="ti ti-circle-check"></i>
+                                    </span>
+                                </div>
+                                <div class="ms-2">
+                                    A unique code will be auto-generated
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item"> 
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <span class="fs-15 text-success">
+                                        <i class="ti ti-circle-check"></i>
+                                    </span>
+                                </div>
+                                <div class="ms-2">
+                                    Use clear, descriptive names
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item"> 
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <span class="fs-15 text-success">
+                                        <i class="ti ti-circle-check"></i>
+                                    </span>
+                                </div>
+                                <div class="ms-2">
+                                    Categories can be organized hierarchically
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item"> 
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <span class="fs-15 text-success">
+                                        <i class="ti ti-circle-check"></i>
+                                    </span>
+                                </div>
+                                <div class="ms-2">
+                                    Root categories have no parent
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item"> 
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <span class="fs-15 text-success">
+                                        <i class="ti ti-circle-check"></i>
+                                    </span>
+                                </div>
+                                <div class="ms-2">
+                                    Subcategories inherit parent structure
+                                </div>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </div>
 
-            <div class="card mt-3">
-                <div class="card-body">
-                    <h6 class="card-title">
-                        <i class="bi bi-diagram-3 text-success me-2"></i>Category Structure Example
-                    </h6>
-                    <div class="small">
-                        <div class="mb-2">
-                            <strong><i class="bi bi-folder-fill text-primary me-1"></i> Raw Materials</strong>
-                            <div class="ms-3 mt-1">
-                                <i class="bi bi-arrow-return-right text-muted me-1"></i> Ingredients<br>
-                                <i class="bi bi-arrow-return-right text-muted me-1"></i> Packaging
+            <div class="card custom">
+                <div class="card-header">
+                    <div class="card-title">Structure Example</div>
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush small">
+                        <li class="list-group-item">
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <span class="fs-15 text-primary">
+                                        <i class="ti ti-folder-filled"></i>
+                                    </span>
+                                </div>
+                                <div class="ms-2">
+                                    <strong>Raw Materials</strong>
+                                </div>
                             </div>
-                        </div>
-                        <div class="mb-2">
-                            <strong><i class="bi bi-folder-fill text-primary me-1"></i> Finished Goods</strong>
-                            <div class="ms-3 mt-1">
-                                <i class="bi bi-arrow-return-right text-muted me-1"></i> Beverages<br>
-                                <i class="bi bi-arrow-return-right text-muted me-1"></i> Snacks
+
+                            <ol class="list-group list-group-numbered">
+                                <li class="list-group-item"> Ingredients </li>
+                                <li class="list-group-item"> Packaging </li>
+                            </ol>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <span class="fs-15 text-primary">
+                                        <i class="ti ti-folder-filled"></i>
+                                    </span>
+                                </div>
+                                <div class="ms-2">
+                                    <strong>Finished Goods</strong>
+                                </div>
                             </div>
-                        </div>
-                    </div>
+
+                            <ol class="list-group list-group-numbered">
+                                <li class="list-group-item"> Beverages </li>
+                                <li class="list-group-item"> Snacks </li>
+                            </ol>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+
+    </form>
+    <!-- Container -->
+
 @endsection
 
 @section('scripts')

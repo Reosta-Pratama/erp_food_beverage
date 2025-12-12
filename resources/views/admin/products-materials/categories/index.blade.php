@@ -347,6 +347,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <form method="POST" id="deleteForm" class="modal-content">
                 @csrf
+                @method('DELETE')
 
                 <div class="modal-header d-flex justify-content-between bg-danger">
                     <h6 class="modal-title text-white">

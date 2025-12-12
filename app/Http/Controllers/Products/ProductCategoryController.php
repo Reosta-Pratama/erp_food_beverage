@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\LogsActivity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class ProductCategoryController extends Controller
 {
@@ -195,7 +194,7 @@ class ProductCategoryController extends Controller
             DB::commit();
             
             return redirect()
-                ->route('admin.products-materials.categories.index')
+                ->route('products.categories.index')
                 ->with('success', 'Product category created successfully');
                 
         } catch (\Exception $e) {
@@ -310,7 +309,6 @@ class ProductCategoryController extends Controller
             'description.string' => 'The description must be a valid text.',
         ]);
 
-
         // Prevent setting self as parent
         if (isset($validated['parent_category_id']) && $validated['parent_category_id'] == $category->category_id) {
             return back()
@@ -347,7 +345,7 @@ class ProductCategoryController extends Controller
             DB::commit();
             
             return redirect()
-                ->route('admin.products-materials.categories.index')
+                ->route('products.categories.index')
                 ->with('success', 'Product category updated successfully');
                 
         } catch (\Exception $e) {
@@ -413,7 +411,7 @@ class ProductCategoryController extends Controller
             DB::commit();
             
             return redirect()
-                ->route('admin.products-materials.categories.index')
+                ->route('products.categories.index')
                 ->with('success', 'Product category deleted successfully');
                 
         } catch (\Exception $e) {
