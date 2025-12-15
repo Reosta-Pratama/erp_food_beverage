@@ -73,6 +73,9 @@ Route::middleware('auth')->group(function () {
     // SPRINT 11: Delivery & Distribution
     require __DIR__.'/sprint/sprint_11_delivery_distribution.php';
 
+    // SPRINT 12: Returns Management
+    require __DIR__.'/sprint/sprint_12_returns_management.php';
+
     // ROLE-BASED DASHBOARDS
     require __DIR__.'/sprint/dashboards.php';
     
