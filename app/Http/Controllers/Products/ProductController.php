@@ -14,7 +14,7 @@ class ProductController extends Controller
     use LogsActivity;
 
     /**
-     * List products with advanced filtering
+     * List products 
      */
     public function index(Request $request)
     {
@@ -32,35 +32,138 @@ class ProductController extends Controller
                 'products.created_at',
                 'product_categories.category_name',
                 'product_categories.category_code',
-                'units_of_measure.uom_name'
+                'units_of_measure.uom_name',
+                DB::raw('(products.selling_price - products.standard_cost) as profit_margin'),
+                DB::raw('CASE 
+                    WHEN products.standard_cost > 0 
+                    THEN ROUND(((products.selling_price - products.standard_cost) / products.standard_cost) * 100, 2)
+                    ELSE 0 
+                END as margin_percentage')
             );
+
+        // Search filter (multi-column)
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('products.product_name', 'like', "%{$search}%")
+                ->orWhere('products.product_code', 'like', "%{$search}%")
+                ->orWhere('product_categories.category_name', 'like', "%{$search}%");
+            });
+        }
 
         // Filter by product type
         if ($request->filled('product_type')) {
-            $query->where('products.product_type', $request->product_type);
+            $query->where('products.product_type', $request->input('product_type'));
         }
 
         // Filter by category
         if ($request->filled('category_id')) {
-            $query->where('products.category_id', $request->category_id);
+            $query->where('products.category_id', $request->input('category_id'));
         }
 
         // Filter by status
-        if ($request->filled('is_active')) {
-            $query->where('products.is_active', $request->boolean('is_active'));
+        if ($request->filled('status')) {
+            if ($request->input('status') === 'active') {
+                $query->where('products.is_active', 1);
+            } elseif ($request->input('status') === 'inactive') {
+                $query->where('products.is_active', 0);
+            }
+        }
+        
+        // Filter by price range
+        if ($request->filled('price_filter')) {
+            switch ($request->input('price_filter')) {
+                case 'budget': // Below 10,000
+                    $query->where('products.selling_price', '<', 10000);
+                    break;
+                case 'mid': // 10,000 - 50,000
+                    $query->whereBetween('products.selling_price', [10000, 50000]);
+                    break;
+                case 'premium': // Above 50,000
+                    $query->where('products.selling_price', '>', 50000);
+                    break;
+                case 'not_set': // Price = 0
+                    $query->where('products.selling_price', 0);
+                    break;
+            }
+        }
+        
+        // Filter by margin status
+        if ($request->filled('margin_filter')) {
+            switch ($request->input('margin_filter')) {
+                case 'negative': // Loss (margin < 0)
+                    $query->whereRaw('products.selling_price < products.standard_cost');
+                    break;
+                case 'low': // Low margin (0-20%)
+                    $query->whereRaw('products.selling_price >= products.standard_cost')
+                        ->whereRaw('((products.selling_price - products.standard_cost) / products.standard_cost * 100) <= 20');
+                    break;
+                case 'healthy': // Healthy margin (20-50%)
+                    $query->whereRaw('((products.selling_price - products.standard_cost) / products.standard_cost * 100) BETWEEN 20 AND 50');
+                    break;
+                case 'high': // High margin (>50%)
+                    $query->whereRaw('((products.selling_price - products.standard_cost) / products.standard_cost * 100) > 50');
+                    break;
+            }
         }
 
-        // Search
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('products.product_name', 'like', "%{$search}%")
-                  ->orWhere('products.product_code', 'like', "%{$search}%");
-            });
+        // Sorting
+        $sortBy = $request->get('sort_by', 'product_name');
+        $sortOrder = $request->get('sort_order', 'asc');
+        
+        // Validate sort order
+        $sortOrder = \in_array(strtolower($sortOrder), ['asc', 'desc']) ? strtolower($sortOrder) : 'asc';
+        
+        // Whitelist allowed sort columns
+        $allowedSort = [
+            'product_code',
+            'product_name',
+            'product_type',
+            'category_name',
+            'standard_cost',
+            'selling_price',
+            'profit_margin',
+            'margin_percentage',
+            'created_at'
+        ];
+        
+        if (\in_array($sortBy, $allowedSort)) {
+            if ($sortBy === 'product_code') {
+                $query->orderBy('products.product_code', $sortOrder);
+            } elseif ($sortBy === 'product_name') {
+                $query->orderBy('products.product_name', $sortOrder);
+            } elseif ($sortBy === 'product_type') {
+                $query->orderBy('products.product_type', $sortOrder);
+            } elseif ($sortBy === 'category_name') {
+                $query->orderBy('product_categories.category_name', $sortOrder);
+            } elseif ($sortBy === 'standard_cost') {
+                $query->orderBy('products.standard_cost', $sortOrder);
+            } elseif ($sortBy === 'selling_price') {
+                $query->orderBy('products.selling_price', $sortOrder);
+            } elseif ($sortBy === 'created_at') {
+                $query->orderBy('products.created_at', $sortOrder);
+            } elseif ($sortBy === 'profit_margin') {
+                // Computed column - Simple calculation
+                $query->orderByRaw("(products.selling_price - products.standard_cost) {$sortOrder}");
+            } elseif ($sortBy === 'margin_percentage') {
+                // Computed column - Complex CASE
+                $query->orderByRaw("CASE 
+                    WHEN products.standard_cost > 0 
+                    THEN ROUND(((products.selling_price - products.standard_cost) / products.standard_cost) * 100, 2)
+                    ELSE 0 
+                END {$sortOrder}");
+            }
+        } else {
+            // Fallback to default
+            $query->orderBy('products.product_name', 'asc');
+        }
+        
+        // Add secondary sort for consistency
+        if ($sortBy !== 'product_name' && $sortBy !== 'product_code') {
+            $query->orderBy('products.product_name', 'asc');
         }
 
-        $products = $query->orderBy('products.product_name')
-            ->paginate(50);
+        $products = $query->paginate(10)->withQueryString();
 
         // Get filter options
         $categories = DB::table('product_categories')
@@ -70,9 +173,10 @@ class ProductController extends Controller
         $productTypes = DB::table('products')
             ->select('product_type', DB::raw('COUNT(*) as count'))
             ->groupBy('product_type')
+            ->orderBy('product_type')
             ->get();
         
-        return view('admin.products.index', compact('products', 'categories', 'productTypes'));
+        return view('admin.products-materials.products.index', compact('products', 'categories', 'productTypes'));
     }
 
     /**
@@ -89,7 +193,7 @@ class ProductController extends Controller
             ->orderBy('uom_name')
             ->get();
         
-        return view('admin.products.create', compact('categories', 'uoms'));
+        return view('admin.products-materials.products.create', compact('categories', 'uoms'));
     }
 
     /**
@@ -147,7 +251,7 @@ class ProductController extends Controller
             DB::commit();
             
             return redirect()
-                ->route('admin.products.index')
+                ->route('products.index')
                 ->with('success', 'Product created successfully');
                 
         } catch (\Exception $e) {
@@ -209,7 +313,7 @@ class ProductController extends Controller
             ->where('is_active', true)
             ->exists();
         
-        return view('admin.products.show', compact('product', 'inventorySummary', 'hasBOM', 'hasRecipe'));
+        return view('admin.products-materials.products.show', compact('product', 'inventorySummary', 'hasBOM', 'hasRecipe'));
     }
 
     /**
@@ -234,7 +338,7 @@ class ProductController extends Controller
             ->orderBy('uom_name')
             ->get();
         
-        return view('admin.products.edit', compact('product', 'categories', 'uoms'));
+        return view('admin.products-materials.products.edit', compact('product', 'categories', 'uoms'));
     }
 
     /**
@@ -313,7 +417,7 @@ class ProductController extends Controller
             DB::commit();
             
             return redirect()
-                ->route('admin.products.index')
+                ->route('products.index')
                 ->with('success', 'Product updated successfully');
                 
         } catch (\Exception $e) {
@@ -379,7 +483,7 @@ class ProductController extends Controller
             DB::commit();
             
             return redirect()
-                ->route('admin.products.index')
+                ->route('products.index')
                 ->with('success', 'Product deleted successfully');
                 
         } catch (\Exception $e) {
@@ -503,25 +607,127 @@ class ProductController extends Controller
                 'units_of_measure.uom_name',
                 'products.standard_cost',
                 'products.selling_price',
-                'products.is_active'
+                DB::raw('(products.selling_price - products.standard_cost) as profit_margin'),
+                DB::raw('CASE 
+                    WHEN products.standard_cost > 0 
+                    THEN ROUND(((products.selling_price - products.standard_cost) / products.standard_cost) * 100, 2)
+                    ELSE 0 
+                END as margin_percentage'),
+                'products.is_active',
+                'products.created_at'
             );
 
-        // Apply same filters as index
+        // Search filter
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('products.product_name', 'like', "%{$search}%")
+                ->orWhere('products.product_code', 'like', "%{$search}%")
+                ->orWhere('product_categories.category_name', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter by product type
         if ($request->filled('product_type')) {
-            $query->where('products.product_type', $request->product_type);
+            $query->where('products.product_type', $request->input('product_type'));
         }
+
+        // Filter by category
         if ($request->filled('category_id')) {
-            $query->where('products.category_id', $request->category_id);
-        }
-        if ($request->filled('is_active')) {
-            $query->where('products.is_active', $request->boolean('is_active'));
+            $query->where('products.category_id', $request->input('category_id'));
         }
 
-        $products = $query->orderBy('products.product_name')
-            ->limit(10000)
-            ->get();
+        // Filter by status
+        if ($request->filled('status')) {
+            if ($request->input('status') === 'active') {
+                $query->where('products.is_active', 1);
+            } elseif ($request->input('status') === 'inactive') {
+                $query->where('products.is_active', 0);
+            }
+        }
+        
+        // Filter by price range
+        if ($request->filled('price_filter')) {
+            switch ($request->input('price_filter')) {
+                case 'budget':
+                    $query->where('products.selling_price', '<', 10000);
+                    break;
+                case 'mid':
+                    $query->whereBetween('products.selling_price', [10000, 50000]);
+                    break;
+                case 'premium':
+                    $query->where('products.selling_price', '>', 50000);
+                    break;
+                case 'not_set':
+                    $query->where('products.selling_price', 0);
+                    break;
+            }
+        }
+        
+        // Filter by margin status
+        if ($request->filled('margin_filter')) {
+            switch ($request->input('margin_filter')) {
+                case 'negative':
+                    $query->whereRaw('products.selling_price < products.standard_cost');
+                    break;
+                case 'low':
+                    $query->whereRaw('products.selling_price >= products.standard_cost')
+                        ->whereRaw('((products.selling_price - products.standard_cost) / products.standard_cost * 100) <= 20');
+                    break;
+                case 'healthy':
+                    $query->whereRaw('((products.selling_price - products.standard_cost) / products.standard_cost * 100) BETWEEN 20 AND 50');
+                    break;
+                case 'high':
+                    $query->whereRaw('((products.selling_price - products.standard_cost) / products.standard_cost * 100) > 50');
+                    break;
+            }
+        }
 
-        $filename = 'products_' . now()->format('Y-m-d_His') . '.csv';
+        // sorting 
+        $sortBy = $request->get('sort_by', 'product_name');
+        $sortOrder = $request->get('sort_order', 'asc');
+        $sortOrder = \in_array(strtolower($sortOrder), ['asc', 'desc']) ? strtolower($sortOrder) : 'asc';
+        
+        $allowedSort = [
+            'product_code', 'product_name', 'product_type', 'category_name',
+            'standard_cost', 'selling_price', 'profit_margin', 'margin_percentage', 'created_at'
+        ];
+        
+        if (\in_array($sortBy, $allowedSort)) {
+            if ($sortBy === 'product_code') {
+                $query->orderBy('products.product_code', $sortOrder);
+            } elseif ($sortBy === 'product_name') {
+                $query->orderBy('products.product_name', $sortOrder);
+            } elseif ($sortBy === 'product_type') {
+                $query->orderBy('products.product_type', $sortOrder);
+            } elseif ($sortBy === 'category_name') {
+                $query->orderBy('product_categories.category_name', $sortOrder);
+            } elseif ($sortBy === 'standard_cost') {
+                $query->orderBy('products.standard_cost', $sortOrder);
+            } elseif ($sortBy === 'selling_price') {
+                $query->orderBy('products.selling_price', $sortOrder);
+            } elseif ($sortBy === 'created_at') {
+                $query->orderBy('products.created_at', $sortOrder);
+            } elseif ($sortBy === 'profit_margin') {
+                $query->orderByRaw("(products.selling_price - products.standard_cost) {$sortOrder}");
+            } elseif ($sortBy === 'margin_percentage') {
+                $query->orderByRaw("CASE 
+                    WHEN products.standard_cost > 0 
+                    THEN ROUND(((products.selling_price - products.standard_cost) / products.standard_cost) * 100, 2)
+                    ELSE 0 
+                END {$sortOrder}");
+            }
+        } else {
+            $query->orderBy('products.product_name', 'asc');
+        }
+        
+        if ($sortBy !== 'product_name' && $sortBy !== 'product_code') {
+            $query->orderBy('products.product_name', 'asc');
+        }
+
+        $products = $query->limit(10000)->get();
+
+        $filename = 'products_export_' . now()->format('Y-m-d_His') . '.csv';
 
         $headers = [
             'Content-Type' => 'text/csv',
@@ -531,7 +737,7 @@ class ProductController extends Controller
         $callback = function() use ($products) {
             $file = fopen('php://output', 'w');
             
-            // Header
+            // Header CSV
             fputcsv($file, [
                 'Product Code',
                 'Product Name',
@@ -540,10 +746,13 @@ class ProductController extends Controller
                 'UOM',
                 'Standard Cost',
                 'Selling Price',
-                'Status'
+                'Profit Margin',
+                'Margin %',
+                'Status',
+                'Created At'
             ]);
             
-            // Data
+            // Data rows
             foreach ($products as $product) {
                 fputcsv($file, [
                     $product->product_code,
@@ -551,9 +760,12 @@ class ProductController extends Controller
                     $product->product_type,
                     $product->category_name,
                     $product->uom_name,
-                    $product->standard_cost,
-                    $product->selling_price,
+                    number_format($product->standard_cost, 2, '.', ''),
+                    number_format($product->selling_price, 2, '.', ''),
+                    number_format($product->profit_margin, 2, '.', ''),
+                    number_format($product->margin_percentage, 2, '.', ''),
                     $product->is_active ? 'Active' : 'Inactive',
+                    $product->created_at,
                 ]);
             }
             
