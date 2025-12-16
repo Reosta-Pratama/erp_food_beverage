@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Bussiness\PurchaseOrderController;
-use App\Http\Controllers\Bussiness\PurchaseReceiptController;
-use App\Http\Controllers\Bussiness\SupplierController;
+use App\Http\Controllers\Business\PurchaseOrderController;
+use App\Http\Controllers\Business\PurchaseReceiptController;
+use App\Http\Controllers\Business\SupplierController;
 use Illuminate\Support\Facades\Route;
 
 /*

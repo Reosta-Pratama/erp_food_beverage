@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Bussiness;
+namespace App\Http\Controllers\Business;
 
 use App\Helpers\CodeGeneratorHelper;
 use App\Http\Controllers\Controller;
