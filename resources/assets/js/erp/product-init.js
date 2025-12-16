@@ -85,6 +85,8 @@ function showBulkPriceModal() {
         bulkSelectedCountEl.textContent = ids.length;
     }
 
+    console.log(bulkProductIdsEl)
+
     const modalEl = document.getElementById('bulkPriceModal');
     if (modalEl) {
         const modal = new bootstrap.Modal(modalEl);

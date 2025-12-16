@@ -444,13 +444,30 @@ class ProductController extends Controller
             abort(404, 'Product not found');
         }
 
-        // Check dependencies
         $dependencies = [
-            'inventory' => DB::table('inventory')->where('product_id', $product->product_id)->count(),
-            'bom_items' => DB::table('bom_items')->where('material_id', $product->product_id)->count(),
-            'work_orders' => DB::table('work_orders')->where('product_id', $product->product_id)->count(),
-            'sales_order_items' => DB::table('sales_order_items')->where('product_id', $product->product_id)->count(),
-            'purchase_order_items' => DB::table('purchase_order_items')->where('product_id', $product->product_id)->count(),
+            'inventory' => DB::table('inventory')
+                ->where('product_id', $product->product_id)
+                ->count(),
+
+            'bom_items' => DB::table('bom_items')
+                ->where('material_id', $product->product_id)
+                ->count(),
+
+            'bill_of_materials' => DB::table('bill_of_materials')
+                ->where('product_id', $product->product_id)
+                ->count(),
+
+            'work_orders' => DB::table('work_orders')
+                ->where('product_id', $product->product_id)
+                ->count(),
+
+            'sales_order_items' => DB::table('sales_order_items')
+                ->where('product_id', $product->product_id)
+                ->count(),
+
+            'purchase_order_items' => DB::table('purchase_order_items')
+                ->where('product_id', $product->product_id)
+                ->count(),
         ];
 
         $totalDependencies = array_sum($dependencies);
@@ -461,7 +478,6 @@ class ProductController extends Controller
 
         DB::beginTransaction();
         try {
-            // Capture data before deletion
             $oldData = [
                 'product_code' => $product->product_code,
                 'product_name' => $product->product_name,
@@ -522,7 +538,7 @@ class ProductController extends Controller
             // Log status change
             $this->logActivity(
                 'Status Changed',
-                "Product '{$product->product_name}' " . ($newStatus ? 'activated' : 'deactivated'),
+                "Product '{$product->product_name}' (Code: {$product->product_code})" . ($newStatus ? 'activated' : 'deactivated'),
                 'Products - Management'
             );
 
@@ -542,12 +558,29 @@ class ProductController extends Controller
      */
     public function bulkUpdatePrices(Request $request)
     {
+        if (\is_string($request->input('product_ids'))) {
+            $request->merge([
+                'product_ids' => json_decode($request->input('product_ids'), true),
+            ]);
+        }
+
         $validated = $request->validate([
             'product_ids' => ['required', 'array', 'min:1'],
             'product_ids.*' => ['exists:products,product_id'],
             'price_type' => ['required', 'in:standard_cost,selling_price'],
             'adjustment_type' => ['required', 'in:percentage,fixed'],
             'adjustment_value' => ['required', 'numeric'],
+        ], [
+            'product_ids.required' => 'Please select at least one product.',
+            'product_ids.array' => 'The selected products format is invalid.',
+            'product_ids.min' => 'Please select at least one product.',
+            'product_ids.*.exists' => 'One or more selected products are invalid.',
+            'price_type.required' => 'Please select a price type.',
+            'price_type.in' => 'The selected price type is invalid.',
+            'adjustment_type.required' => 'Please select an adjustment type.',
+            'adjustment_type.in' => 'The selected adjustment type is invalid.',
+            'adjustment_value.required' => 'Please enter an adjustment value.',
+            'adjustment_value.numeric' => 'The adjustment value must be a number.',
         ]);
 
         DB::beginTransaction();
@@ -559,11 +592,9 @@ class ProductController extends Controller
             foreach ($products as $product) {
                 $currentPrice = $product->{$validated['price_type']};
                 
-                if ($validated['adjustment_type'] === 'percentage') {
-                    $newPrice = $currentPrice * (1 + ($validated['adjustment_value'] / 100));
-                } else {
-                    $newPrice = $currentPrice + $validated['adjustment_value'];
-                }
+                $newPrice = $validated['adjustment_type'] === 'percentage'
+                    ? $currentPrice * (1 + $validated['adjustment_value'] / 100)
+                    : $currentPrice + $validated['adjustment_value'];
 
                 $newPrice = max(0, $newPrice); // Ensure non-negative
 
@@ -584,7 +615,7 @@ class ProductController extends Controller
 
             DB::commit();
             
-            return back()->with('success', 'Prices updated successfully for ' . count($products) . ' products');
+            return back()->with('success', 'Prices updated successfully for ' . \count($products) . ' products');
                 
         } catch (\Exception $e) {
             DB::rollBack();

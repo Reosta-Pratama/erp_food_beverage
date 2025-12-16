@@ -47,6 +47,23 @@
         </div>
     @endif
 
+    @if($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show">
+            <h6 class="d-flex align-items-center">
+                <i class="ti ti-exclamation-circle fs-18 me-2"></i>
+                Please fix the following errors:
+            </h6>
+            <ul class="mb-0">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert">
+                <i class="ti ti-x"></i>
+            </button>
+        </div>
+    @endif
+
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h2 class="fs-22 mb-1">Products Management</h2>
@@ -294,8 +311,7 @@
                                         <tr>
                                             <td>
                                                 <input type="checkbox" class="form-check-input product-checkbox" 
-                                                    value="{{ $product->product_id }}" 
-                                                    onchange="updateSelectedCount()">
+                                                    value="{{ $product->product_id }}">
                                             </td>
 
                                             <td>
@@ -414,20 +430,29 @@
 
 @section('modals')
 
-
-<!-- Bulk Price Update Modal -->
-<div class="modal fade" id="bulkPriceModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form action="{{ route('products.bulk-update-prices') }}" method="POST" id="bulkPriceForm">
+    <!-- Bulk Price Update Modal -->
+    <div class="modal fade" id="bulkPriceModal" 
+        data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="bulkPriceModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <form action="{{ route('products.bulk-update-prices') }}" method="POST" 
+                id="bulkPriceForm" class="modal-content">
                 @csrf
-                <div class="modal-header">
-                    <h5 class="modal-title">Bulk Update Prices</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
+                <div class="modal-header d-flex justify-content-between bg-success">
+                    <h6 class="modal-title text-white">
+                        Bulk Update Prices
+                    </h6>
+
+                    <button type="button" class="btn btn-icon btn-white-transparent" 
+                        data-bs-dismiss="modal" aria-label="Close">
+                        <i class="ti ti-x"></i>
+                    </button>
                 </div>
+
                 <div class="modal-body">
                     <div class="alert alert-info">
-                        <i class="bi bi-info-circle me-2"></i>
+                        <i class="ti ti-info-circle me-2"></i>
                         <span id="bulkSelectedCount">0</span> product(s) selected
                     </div>
 
@@ -435,7 +460,7 @@
 
                     <div class="mb-3">
                         <label for="price_type" class="form-label">Price Type <span class="text-danger">*</span></label>
-                        <select class="form-select" id="price_type" name="price_type" required>
+                        <select class="form-select single-select" id="price_type" name="price_type" required>
                             <option value="standard_cost">Standard Cost</option>
                             <option value="selling_price">Selling Price</option>
                         </select>
@@ -443,7 +468,7 @@
 
                     <div class="mb-3">
                         <label for="adjustment_type" class="form-label">Adjustment Type <span class="text-danger">*</span></label>
-                        <select class="form-select" id="adjustment_type" name="adjustment_type" required>
+                        <select class="form-select single-select" id="adjustment_type" name="adjustment_type" required>
                             <option value="percentage">Percentage (%)</option>
                             <option value="fixed">Fixed Amount</option>
                         </select>
@@ -461,14 +486,23 @@
                         <small class="text-muted">Use positive values to increase, negative to decrease</small>
                     </div>
                 </div>
+
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Update Prices</button>
+                    <button type="button" class="btn btn-outline-secondary"
+                        data-bs-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="ti ti-trash me-2"></i>
+                        Update Prices
+                    </button>
                 </div>
+
             </form>
         </div>
     </div>
-</div>
+    <!-- Bulk Price Update Modal -->
+
 @endsection
 
 @section('scripts')
