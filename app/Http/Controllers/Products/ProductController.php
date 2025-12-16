@@ -164,7 +164,7 @@ class ProductController extends Controller
             $query->orderBy('products.product_name', 'asc');
         }
 
-        $products = $query->paginate(10)->withQueryString();
+        $products = $query->paginate(20)->withQueryString();
 
         // Get filter options
         $categories = DB::table('product_categories')
