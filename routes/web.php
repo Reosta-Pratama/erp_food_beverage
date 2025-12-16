@@ -76,8 +76,11 @@ Route::middleware('auth')->group(function () {
     // SPRINT 12: Returns Management
     require __DIR__.'/sprint/sprint_12_returns_management.php';
 
-    // ROLE-BASED DASHBOARDS
+    // SPRINT 13: ROLE-BASED DASHBOARDS
     require __DIR__.'/sprint/dashboards.php';
+
+    // SPRINT 14: Basic Finance
+    require __DIR__.'/sprint/sprint_14_basic_finance.php';
     
     // DEVELOPMENT TEMPLATES (Optional - can be disabled in production)
     if (config('app.debug')) {
