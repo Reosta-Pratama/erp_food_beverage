@@ -88,6 +88,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 value = value.trim();
                 field.value = value; 
             }
+
+            if (!isValid) return;
             
             if (!value) {
                 isValid = false;

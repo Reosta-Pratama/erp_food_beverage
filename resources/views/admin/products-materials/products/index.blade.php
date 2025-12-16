@@ -244,177 +244,164 @@
                         Showing {{ $products->firstItem() ?? 0 }} - {{ $products->lastItem() ?? 0 }} of {{ $products->total() }}
                     </div>
                 </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center gap-2">
+                        <div>
+                            <button type="button"   
+                                id="selectAll"
+                                class="btn btn-sm btn-outline-primary" 
+                                onclick="selectAll()">
+                                <i class="ti ti-square-check me-1"></i>
+                                Select All
+                            </button>
+                            <button type="button" 
+                                class="btn btn-sm btn-outline-secondary" 
+                                onclick="deselectAll()">
+                                <i class="ti ti-square me-1"></i>
+                                Deselect All
+                            </button>
+                            <span class="ms-3 text-muted" id="selectedCount">0 selected</span>
+                        </div>
+
+                        <button type="button" 
+                            class="btn btn-sm btn-outline-success" 
+                            onclick="showBulkPriceModal()">
+                            <i class="ti ti-cash me-1"></i>
+                            Bulk Update Prices
+                        </button>
+                    </div>
+                </div>
+                <div class="card-footer p-0">
+                    @if ($products->count() > 0)
+                        <div class="table-responsive">
+                            <table class="table text-nowrap table-borderless table-hover mb-0">
+                                <thead>
+                                    <th width="50">
+                                        <input type="checkbox" class="form-check-input" id="selectAllCheckbox" onchange="toggleAll(this)">
+                                    </th>
+                                    <th scope="col">Code</th>
+                                    <th scope="col">Product Name</th>
+                                    <th scope="col">Type</th>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">UOM</th>
+                                    <th scope="col">Standard Cost</th>
+                                    <th scope="col">Selling Price</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col" class="text-center">Actions</th>
+                                </thead>
+                                <tbody>
+                                    @foreach ($products as $product)
+                                        <tr>
+                                            <td>
+                                                <input type="checkbox" class="form-check-input product-checkbox" 
+                                                    value="{{ $product->product_id }}" 
+                                                    onchange="updateSelectedCount()">
+                                            </td>
+
+                                            <td>
+                                                <span class="badge bg-primary">{{ $product->product_code }}</span>
+                                            </td>
+
+                                            <td>
+                                                <strong>{{ $product->product_name }}</strong>
+                                            </td>
+
+                                            <td>
+                                                @if($product->product_type === 'Raw Material')
+                                                    <span class="badge bg-secondary">Raw Material</span>
+                                                @elseif($product->product_type === 'Semi-Finished')
+                                                    <span class="badge bg-warning">Semi-Finished</span>
+                                                @elseif($product->product_type === 'Finished Goods')
+                                                    <span class="badge bg-success">Finished Goods</span>
+                                                @elseif($product->product_type === 'Packaging')
+                                                    <span class="badge bg-info">Packaging</span>
+                                                @else
+                                                    <span class="badge bg-light text-dark">{{ $product->product_type }}</span>
+                                                @endif
+                                            </td>
+
+                                            <td>
+                                                <a href="{{ route('products.categories.show', $product->category_code) }}" 
+                                                    class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover text-decoration-underline">
+                                                    {{ $product->category_name }}
+                                                </a>
+                                            </td>
+
+                                            <td>{{ $product->uom_name }}</td>
+                                            <td>{{ number_format($product->standard_cost, 2) }}</td>
+                                            <td>{{ number_format($product->selling_price, 2) }}</td>
+
+                                            <td>
+                                                @if($product->is_active)
+                                                    <span class="badge bg-success">Active</span>
+                                                @else
+                                                    <span class="badge bg-danger">Inactive</span>
+                                                @endif
+                                            </td>
+
+                                            <td class="text-center">
+                                                <div class="d-grid gap-2 d-md-block">
+                                                    @hasPermission('products.manage')
+                                                        <form action="{{ route('products.toggle-status', $product->product_code) }}" 
+                                                            method="POST" class="d-inline">
+                                                            @csrf
+                                                            @method('PATCH')
+                                                            <button type="submit" 
+                                                                    class="btn btn-sm btn-{{ $product->is_active ? 'secondary' : 'success' }}" 
+                                                                    title="{{ $product->is_active ? 'Deactivate' : 'Activate' }}">
+                                                                <i class="ti ti-toggle-{{ $product->is_active ? 'right' : 'left' }}"></i>
+                                                            </button>
+                                                        </form>
+
+                                                        <a href="{{ route('products.show', $product->product_code) }}" 
+                                                            class="btn btn-sm btn-outline-primary"
+                                                            title="View Details">
+                                                                <i class="ti ti-eye"></i>
+                                                        </a>
+
+                                                        <a href="{{ route('products.edit', $product->product_code) }}" 
+                                                            class="btn btn-sm btn-outline-warning"
+                                                            title="Edit">
+                                                                <i class="ti ti-pencil"></i>
+                                                        </a>
+
+                                                        <button type="button" 
+                                                                class="btn btn-sm btn-outline-danger"
+                                                                onclick="confirmDelete('{{ $product->product_code }}', '{{ $product->product_name }}')"
+                                                                title="Delete">
+                                                            <i class="ti ti-trash"></i>
+                                                        </button>
+                                                    @endhasPermission
+                                                </div>
+                                            </td>
+
+                                        </tr>
+                                    @endforeach 
+                                </tbody>
+                            </table>
+                        </div>
+                    @else
+                        <div class="text-center py-5">
+                            <i class="ti ti-database-off text-muted display-1"></i>
+                            <h5 class="text-muted mt-3">No Product Found</h5>
+                            <p class="text-muted">Try adjusting your filters or check back later</p>
+                            <a href="{{ route('products.create') }}" class="btn btn-primary">
+                                <i class="ti ti-plus me-1"></i> 
+                                Create First Product
+                            </a>
+                        </div>
+                    @endif
+
+                    @if($products->hasPages())
+                        <div class="d-flex justify-content-center border-top p-4">
+                            {{ $products->links('pagination.default') }}
+                        </div>
+                    @endif
+                </div>
             </div>
         </div>
     </div>
     <!-- Container -->
-
-
-
-
-
-
-
-
-
-
-<div class="container-fluid">
-  
-    <!-- Actions Bar -->
-    <div class="card mb-4">
-        <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <button type="button" id="selectAll" class="btn btn-sm btn-outline-primary" onclick="selectAll()">
-                        <i class="bi bi-check-square me-1"></i>Select All
-                    </button>
-                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="deselectAll()">
-                        <i class="bi bi-square me-1"></i>Deselect All
-                    </button>
-                    <span class="ms-3 text-muted" id="selectedCount">0 selected</span>
-                </div>
-                <div class="btn-group">
-                    @canUpdate('products')
-                    <button type="button" class="btn btn-sm btn-outline-success" onclick="showBulkPriceModal()">
-                        <i class="bi bi-cash-stack me-1"></i>Bulk Update Prices
-                    </button>
-                    @endcanUpdate
-                    <a href="{{ route('products.export', request()->query()) }}" class="btn btn-sm btn-outline-info">
-                        <i class="bi bi-download me-1"></i>Export CSV
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Products Table -->
-    <div class="card">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th width="50">
-                                <input type="checkbox" class="form-check-input" id="selectAllCheckbox" onchange="toggleAll(this)">
-                            </th>
-                            <th>Code</th>
-                            <th>Product Name</th>
-                            <th>Type</th>
-                            <th>Category</th>
-                            <th>UOM</th>
-                            <th>Standard Cost</th>
-                            <th>Selling Price</th>
-                            <th>Status</th>
-                            <th width="180">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($products as $product)
-                        <tr>
-                            <td>
-                                <input type="checkbox" class="form-check-input product-checkbox" 
-                                       value="{{ $product->product_id }}" 
-                                       onchange="updateSelectedCount()">
-                            </td>
-                            <td>
-                                <code class="text-primary">{{ $product->product_code }}</code>
-                            </td>
-                            <td>
-                                <strong>{{ $product->product_name }}</strong>
-                            </td>
-                            <td>
-                                @if($product->product_type === 'Raw Material')
-                                    <span class="badge bg-secondary">Raw Material</span>
-                                @elseif($product->product_type === 'Semi-Finished')
-                                    <span class="badge bg-warning">Semi-Finished</span>
-                                @elseif($product->product_type === 'Finished Goods')
-                                    <span class="badge bg-success">Finished Goods</span>
-                                @elseif($product->product_type === 'Packaging')
-                                    <span class="badge bg-info">Packaging</span>
-                                @else
-                                    <span class="badge bg-dark">{{ $product->product_type }}</span>
-                                @endif
-                            </td>
-                            <td>
-                                <a href="{{ route('products.categories.show', $product->category_code) }}" 
-                                   class="text-decoration-none">
-                                    {{ $product->category_name }}
-                                </a>
-                            </td>
-                            <td>{{ $product->uom_name }}</td>
-                            <td>{{ number_format($product->standard_cost, 2) }}</td>
-                            <td>{{ number_format($product->selling_price, 2) }}</td>
-                            <td>
-                                @if($product->is_active)
-                                    <span class="badge bg-success">Active</span>
-                                @else
-                                    <span class="badge bg-secondary">Inactive</span>
-                                @endif
-                            </td>
-                            <td>
-                                <div class="btn-group btn-group-sm">
-                                    @canRead('products')
-                                    <a href="{{ route('products.show', $product->product_code) }}" 
-                                       class="btn btn-outline-primary" 
-                                       title="View">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
-                                    @endcanRead
-                                    
-                                    @canUpdate('products')
-                                    <form action="{{ route('products.toggle-status', $product->product_code) }}" 
-                                          method="POST" class="d-inline">
-                                        @csrf
-                                        @method('PATCH')
-                                        <button type="submit" 
-                                                class="btn btn-outline-{{ $product->is_active ? 'warning' : 'success' }}" 
-                                                title="{{ $product->is_active ? 'Deactivate' : 'Activate' }}">
-                                            <i class="bi bi-toggle-{{ $product->is_active ? 'on' : 'off' }}"></i>
-                                        </button>
-                                    </form>
-                                    
-                                    <a href="{{ route('products.edit', $product->product_code) }}" 
-                                       class="btn btn-outline-warning" 
-                                       title="Edit">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                    @endcanUpdate
-                                    
-                                    @canDelete('products')
-                                    <button type="button" 
-                                            class="btn btn-outline-danger" 
-                                            title="Delete"
-                                            onclick="confirmDelete('{{ $product->product_code }}', '{{ $product->product_name }}')">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                    @endcanDelete
-                                </div>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="10" class="text-center py-4 text-muted">
-                                <i class="bi bi-inbox fs-1 d-block mb-2"></i>
-                                No products found
-                            </td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Pagination -->
-            <div class="d-flex justify-content-between align-items-center mt-3">
-                <div class="text-muted">
-                    Showing {{ $products->firstItem() ?? 0 }} to {{ $products->lastItem() ?? 0 }} of {{ $products->total() }} products
-                </div>
-                <div>
-                    {{ $products->appends(request()->query())->links() }}
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
     <!-- Delete Confirmation Form -->
     <form id="deleteForm" method="POST" style="display: none;">
@@ -513,72 +500,6 @@
 
             return false;
         }
-    </script>
-
-    <script>
-        function selectAll() {
-            document.querySelectorAll('.product-checkbox').forEach(cb => cb.checked = true);
-            document.getElementById('selectAllCheckbox').checked = true;
-            updateSelectedCount();
-        }
-
-        function deselectAll() {
-            document.querySelectorAll('.product-checkbox').forEach(cb => cb.checked = false);
-            document.getElementById('selectAllCheckbox').checked = false;
-            updateSelectedCount();
-        }
-
-        function toggleAll(checkbox) {
-            document.querySelectorAll('.product-checkbox').forEach(cb => cb.checked = checkbox.checked);
-            updateSelectedCount();
-        }
-
-        function updateSelectedCount() {
-            const checked = document.querySelectorAll('.product-checkbox:checked');
-            const allCheckboxes = document.querySelectorAll('.product-checkbox');
-            const selectAllBtn = document.getElementById('selectAll'); // ⬅️ tombol select all
-
-            document.getElementById('selectedCount').textContent =
-                checked.length > 0 ? `${checked.length} selected` : '';
-
-            const allSelected = checked.length === allCheckboxes.length && allCheckboxes.length > 0;
-            document.getElementById('selectAllCheckbox').checked = allSelected;
-
-            if (selectAllBtn) {
-                selectAllBtn.classList.toggle('active', allSelected);
-            }
-
-            const selectedIds = Array.from(checked).map(cb => cb.value);
-            localStorage.setItem('selectedProducts', JSON.stringify(selectedIds));
-        }
-
-        function showBulkPriceModal() {
-            const checked = document.querySelectorAll('.product-checkbox:checked');
-
-            if (checked.length === 0) {
-                alert('Please select at least one product');
-                return;
-            }
-
-            const ids = Array.from(checked).map(cb => cb.value);
-            document.getElementById('bulkProductIds').value = JSON.stringify(ids);
-            document.getElementById('bulkSelectedCount').textContent = ids.length;
-
-            const modal = new bootstrap.Modal(document.getElementById('bulkPriceModal'));
-            modal.show();
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            const saved = JSON.parse(localStorage.getItem('selectedProducts')) || [];
-
-            document.querySelectorAll('.product-checkbox').forEach(cb => {
-                if (saved.includes(cb.value)) {
-                    cb.checked = true;
-                }
-            });
-
-            updateSelectedCount(); 
-        });
     </script>
 
 @endsection

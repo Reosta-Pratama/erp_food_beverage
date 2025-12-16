@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Products;
 
+use App\Helpers\CodeGeneratorHelper;
 use App\Http\Controllers\Controller;
 use App\LogsActivity;
 use Illuminate\Http\Request;
@@ -226,8 +227,10 @@ class ProductController extends Controller
 
         DB::beginTransaction();
         try {
+            $productCode = CodeGeneratorHelper::generateProductCode();
+
             $productId = DB::table('products')->insertGetId([
-                'product_code' => strtoupper(Str::random(10)),
+                'product_code' => $productCode,
                 'product_name' => $validated['product_name'],
                 'product_type' => $validated['product_type'],
                 'category_id' => $validated['category_id'],

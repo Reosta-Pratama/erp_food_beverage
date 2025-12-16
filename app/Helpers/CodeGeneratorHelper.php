@@ -178,6 +178,14 @@ class CodeGeneratorHelper
     }
 
     /**
+     * Generate Product Code
+     */
+    public static function generateProductCode(): string
+    {
+        return self::generate('products', 'product_code', 'PRD');
+    }
+
+    /**
      * Generate BOM Code
      */
     public static function generateBOMCode(): string
@@ -191,14 +199,6 @@ class CodeGeneratorHelper
     public static function generateRecipeCode(): string
     {
         return self::generate('recipes', 'recipe_code', 'RCP');
-    }
-
-    /**
-     * Generate Product Code
-     */
-    public static function generateProductCode(): string
-    {
-        return self::generate('products', 'product_code', 'PRD');
     }
 
     /**

@@ -29,6 +29,9 @@ class DatabaseSeeder extends Seeder
             
             // Sprint 3: HR Foundation
             HRMModuleSeeder::class,
+
+            // Sprint 4: Recipe & BOM
+            RecipeBOMModuleSeeder::class
         ]);
     }
 }
