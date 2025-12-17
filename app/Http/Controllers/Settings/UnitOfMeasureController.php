@@ -64,11 +64,9 @@ class UnitOfMeasureController extends Controller
 
         DB::beginTransaction();
         try {
-            // Generate unique BOM code
-            $uomCode = CodeGeneratorHelper::generateUOMCode();
-
+           
             $uomId = DB::table('units_of_measure')->insertGetId([
-                'uom_code' => $uomCode,
+                'uom_code' => $this->generateUomCode($validated['uom_name']),
                 'uom_name' => $validated['uom_name'],
                 'uom_type' => $validated['uom_type'],
                 'created_at' => now(),
@@ -271,5 +269,179 @@ class UnitOfMeasureController extends Controller
             DB::rollBack();
             return back()->with('error', 'Failed to delete unit of measure: ' . $e->getMessage());
         }
+    }
+
+    private function generateUomCode($uomName)
+    {
+        $commonUnits = [
+            // Weight / Mass
+            'kilogram' => 'KG',
+            'gram' => 'G',
+            'milligram' => 'MG',
+            'ton' => 'TON',
+            'metric ton' => 'MT',
+            'pound' => 'LB',
+            'ounce' => 'OZ',
+            'quintal' => 'QTL',
+            
+            // Volume
+            'liter' => 'L',
+            'milliliter' => 'ML',
+            'kiloliter' => 'KL',
+            'gallon' => 'GAL',
+            'barrel' => 'BBL',
+            'cubic meter' => 'M3',
+            'cubic centimeter' => 'CC',
+            
+            // Length
+            'meter' => 'M',
+            'centimeter' => 'CM',
+            'millimeter' => 'MM',
+            'kilometer' => 'KM',
+            'inch' => 'IN',
+            'foot' => 'FT',
+            'feet' => 'FT',
+            'yard' => 'YD',
+            'mile' => 'MI',
+            
+            // Area
+            'square meter' => 'M2',
+            'square foot' => 'FT2',
+            'square feet' => 'FT2',
+            'hectare' => 'HA',
+            'acre' => 'AC',
+            'are' => 'ARE',
+            'square kilometer' => 'KM2',
+            'square centimeter' => 'CM2',
+            
+            // Quantity / Count
+            'piece' => 'PC',
+            'pieces' => 'PCS',
+            'unit' => 'UNIT',
+            'each' => 'EA',
+            'item' => 'ITM',
+            'pair' => 'PR',
+            'set' => 'SET',
+            
+            // Packaging
+            'box' => 'BOX',
+            'carton' => 'CTN',
+            'case' => 'CS',
+            'pack' => 'PACK',
+            'packet' => 'PKT',
+            'dozen' => 'DOZ',
+            'gross' => 'GR',
+            'pallet' => 'PLT',
+            'container' => 'CNTR',
+            'bag' => 'BAG',
+            'sack' => 'SACK',
+            'pouch' => 'PCH',
+            'crate' => 'CRT',
+            
+            // Roll & Bundle
+            'roll' => 'RL',
+            'bundle' => 'BDL',
+            'bale' => 'BALE',
+            'coil' => 'COIL',
+            'reel' => 'REEL',
+            'skid' => 'SKID',
+            
+            // Bottle & Container
+            'bottle' => 'BTL',
+            'can' => 'CAN',
+            'jar' => 'JAR',
+            'jug' => 'JUG',
+            'drum' => 'DRM',
+            'tank' => 'TNK',
+            'tube' => 'TUBE',
+            'vial' => 'VIAL',
+            'ampoule' => 'AMP',
+            
+            // Time
+            'hour' => 'HR',
+            'day' => 'DAY',
+            'week' => 'WK',
+            'month' => 'MO',
+            'year' => 'YR',
+            'minute' => 'MIN',
+            'second' => 'SEC',
+            
+            // Paper & Sheet
+            'ream' => 'RM',
+            'sheet' => 'SHT',
+            'page' => 'PG',
+            'book' => 'BK',
+            'pad' => 'PAD',
+            
+            // Food & Beverage Specific
+            'slice' => 'SLC',
+            'loaf' => 'LOAF',
+            'serving' => 'SRV',
+            'portion' => 'POR',
+            'tray' => 'TRY',
+            'cup' => 'CUP',
+            'glass' => 'GLS',
+            'plate' => 'PLT',
+            
+            // Medical & Pharmaceutical
+            'tablet' => 'TAB',
+            'capsule' => 'CAP',
+            'strip' => 'STRIP',
+            'blister' => 'BLSTR',
+            'dose' => 'DOSE',
+            'injection' => 'INJ',
+            
+            // Textile & Fashion
+            'meter of cloth' => 'MTR',
+            'yard of fabric' => 'YRD',
+            'bolt' => 'BOLT',
+            'length' => 'LEN',
+            
+            // Construction & Hardware
+            'cubic yard' => 'YD3',
+            'cubic foot' => 'FT3',
+            'board foot' => 'BF',
+            'linear meter' => 'LM',
+            'linear foot' => 'LF',
+            
+            // Electronics & Technology
+            'bit' => 'BIT',
+            'byte' => 'B',
+            'kilobyte' => 'KB',
+            'megabyte' => 'MB',
+            'gigabyte' => 'GB',
+            'terabyte' => 'TB',
+            
+            // Energy & Power
+            'watt' => 'W',
+            'kilowatt' => 'KW',
+            'megawatt' => 'MW',
+            'kilowatt hour' => 'KWH',
+            'joule' => 'J',
+            'calorie' => 'CAL',
+            
+            // Others
+            'load' => 'LD',
+            'lot' => 'LOT',
+            'batch' => 'BCH',
+            'sample' => 'SMPL',
+            'trip' => 'TRIP',
+            'visit' => 'VST',
+            'session' => 'SESS',
+            'cycle' => 'CYC',
+        ];
+        
+        $lowercaseName = strtolower(trim($uomName));
+        
+        if (isset($commonUnits[$lowercaseName])) {
+            return $commonUnits[$lowercaseName];
+        }
+        
+        if (strpos($lowercaseName, ' ') !== false) {
+            $words = explode(' ', $lowercaseName);
+            return strtoupper(implode('', array_map(fn($w) => substr($w, 0, 1), $words)));
+        }
+        
+        return strtoupper(substr($lowercaseName, 0, min(4, strlen($lowercaseName))));
     }
 }
