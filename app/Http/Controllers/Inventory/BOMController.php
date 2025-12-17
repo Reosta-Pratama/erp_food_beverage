@@ -80,13 +80,13 @@ class BOMController extends Controller
                 break;
         }
         
-        $boms = $query->paginate(20)->appends($request->except('page'));
+        $boms = $query->paginate(10)->appends($request->except('page'));
         
         return view('inventory.bom.index', compact('boms'));
     }
 
     /**
-     * Show the form for creating a new BOM
+     * Form Create
      */
     public function create()
     {
@@ -133,7 +133,7 @@ class BOMController extends Controller
     }
 
     /**
-     * Store a newly created BOM
+     * Store new BOM
      */
     public function store(Request $request)
     {
@@ -245,7 +245,7 @@ class BOMController extends Controller
     }
 
     /**
-     * Display the specified BOM
+     * Detail BOM
      */
     public function show($bomCode)
     {
@@ -300,7 +300,7 @@ class BOMController extends Controller
     }
 
     /**
-     * Show the form for editing the specified BOM
+     * Form Edit
      */
     public function edit($bomCode)
     {
