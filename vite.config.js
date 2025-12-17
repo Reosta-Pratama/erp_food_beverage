@@ -36,6 +36,7 @@ export default defineConfig({
                         'resources/assets/js/erp/employee-init.js',
                         'resources/assets/js/erp/product-category-init.js',
                         'resources/assets/js/erp/product-init.js',
+                        'resources/assets/js/erp/bom-init.js',
 
                         'resources/assets/js/custom/alert-custom.js',
                         'resources/assets/js/custom/auto-complete-custom.js',

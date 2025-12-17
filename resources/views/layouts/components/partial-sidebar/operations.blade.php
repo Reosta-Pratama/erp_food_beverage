@@ -43,10 +43,10 @@
                     <a href="javascript:void(0)">BOM & Recipes</a>
                 </li>
                 <li class="menu-item">
-                    <a href="javascript:void(0)" class="menu-link">Bill of Materials (BOM)</a>
+                    <a href="{{ route('inventory.bom.index') }}" class="menu-link">Bill of Materials (BOM)</a>
                 </li>
                 <li class="menu-item">
-                    <a href="javascript:void(0)" class="menu-link">Recipes</a>
+                    <a href="{{ route('inventory.recipes.index') }}" class="menu-link">Recipes</a>
                 </li>
             </ul>
         </li>

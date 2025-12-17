@@ -35,54 +35,129 @@ class BOMController extends Controller
                 'uom.uom_code',
                 DB::raw('(SELECT COUNT(*) FROM bom_items WHERE bom_id = bom.bom_id) as items_count')
             );
+
+        // Extract date_from and date_to from daterange input
+        if ($request->filled('daterange')) {
+            [$dateFrom, $dateTo] = array_map('trim', explode('to', $request->input('daterange') . ' to ')); 
+            
+            $request->merge([
+                'date_from' => $dateFrom ?: null,
+                'date_to' => $dateTo ?: null,
+            ]);
+        }
         
-        // Search
+        // Search filter (multi-column)
         if ($request->filled('search')) {
-            $search = $request->search;
+            $search = $request->input('search');
             $query->where(function($q) use ($search) {
                 $q->where('bom.bom_code', 'like', "%{$search}%")
                 ->orWhere('p.product_name', 'like', "%{$search}%")
-                ->orWhere('p.product_code', 'like', "%{$search}%");
+                ->orWhere('p.product_code', 'like', "%{$search}%")
+                ->orWhere('bom.bom_version', 'like', "%{$search}%");
             });
         }
         
         // Filter by product type
         if ($request->filled('product_type')) {
-            $query->where('p.product_type', $request->product_type);
+            $query->where('p.product_type', $request->input('product_type'));
         }
         
         // Filter by status
         if ($request->filled('status')) {
-            $query->where('bom.is_active', $request->status === 'active' ? 1 : 0);
+            if ($request->input('status') === 'active') {
+                $query->where('bom.is_active', 1);
+            } elseif ($request->input('status') === 'inactive') {
+                $query->where('bom.is_active', 0);
+            }
+        }
+        
+        // Filter by product
+        if ($request->filled('product_id')) {
+            $query->where('bom.product_id', $request->input('product_id'));
+        }
+        
+        // Filter by items count
+        if ($request->filled('items_filter')) {
+            switch ($request->input('items_filter')) {
+                case 'empty': // No items
+                    $query->havingRaw('(SELECT COUNT(*) FROM bom_items WHERE bom_id = bom.bom_id) = 0');
+                    break;
+                case 'simple': // 1-3 items
+                    $query->havingRaw('(SELECT COUNT(*) FROM bom_items WHERE bom_id = bom.bom_id) BETWEEN 1 AND 3');
+                    break;
+                case 'standard': // 4-7 items
+                    $query->havingRaw('(SELECT COUNT(*) FROM bom_items WHERE bom_id = bom.bom_id) BETWEEN 4 AND 7');
+                    break;
+                case 'complex': // 8+ items
+                    $query->havingRaw('(SELECT COUNT(*) FROM bom_items WHERE bom_id = bom.bom_id) >= 8');
+                    break;
+            }
+        }
+        
+        // Filter by effective date range
+        if ($request->filled('date_from')) {
+            $query->where('bom.effective_date', '>=', $request->input('date_from'));
+        }
+        if ($request->filled('date_to')) {
+            $query->where('bom.effective_date', '<=', $request->input('date_to'));
         }
         
         // Sorting
-        $sort = $request->get('sort', 'created_at_desc');
-        switch ($sort) {
-            case 'created_at_asc':
-                $query->orderBy('bom.created_at', 'asc');
-                break;
-            case 'bom_code_asc':
-                $query->orderBy('bom.bom_code', 'asc');
-                break;
-            case 'bom_code_desc':
-                $query->orderBy('bom.bom_code', 'desc');
-                break;
-            case 'product_name_asc':
-                $query->orderBy('p.product_name', 'asc');
-                break;
-            case 'product_name_desc':
-                $query->orderBy('p.product_name', 'desc');
-                break;
-            case 'created_at_desc':
-            default:
-                $query->orderByDesc('bom.created_at');
-                break;
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+        
+        // Validate sort order
+        $sortOrder = \in_array(strtolower($sortOrder), ['asc', 'desc']) ? strtolower($sortOrder) : 'desc';
+        
+        // Whitelist allowed sort columns
+        $allowedSort = [
+            'bom_code',
+            'product_name',
+            'product_type',
+            'bom_version',
+            'effective_date',
+            'items_count',
+            'created_at'
+        ];
+        
+        if (\in_array($sortBy, $allowedSort)) {
+            if ($sortBy === 'bom_code') {
+                $query->orderBy('bom.bom_code', $sortOrder);
+            } elseif ($sortBy === 'product_name') {
+                $query->orderBy('p.product_name', $sortOrder);
+            } elseif ($sortBy === 'product_type') {
+                $query->orderBy('p.product_type', $sortOrder);
+            } elseif ($sortBy === 'bom_version') {
+                $query->orderBy('bom.bom_version', $sortOrder);
+            } elseif ($sortBy === 'effective_date') {
+                $query->orderBy('bom.effective_date', $sortOrder);
+            } elseif ($sortBy === 'created_at') {
+                $query->orderBy('bom.created_at', $sortOrder);
+            } elseif ($sortBy === 'items_count') {
+                // Computed column - Subquery
+                $query->orderByRaw("(SELECT COUNT(*) FROM bom_items WHERE bom_id = bom.bom_id) {$sortOrder}");
+            }
+        } else {
+            // Fallback to default
+            $query->orderByDesc('bom.created_at');
         }
         
-        $boms = $query->paginate(10)->appends($request->except('page'));
+        // Add secondary sort for consistency
+        if ($sortBy !== 'bom_code' && $sortBy !== 'created_at') {
+            $query->orderByDesc('bom.created_at');
+        }
         
-        return view('inventory.bom.index', compact('boms'));
+        $boms = $query->paginate(20)->withQueryString();
+        
+        // Get products for filter dropdown
+        $products = DB::table('products')
+            ->where('product_type', 'Finished Goods')
+            ->where('is_active', 1)
+            ->select('product_id', 'product_code', 'product_name')
+            ->orderBy('product_name')
+            ->get();
+        
+        return view('admin.bom-recipes.bom.index', compact('boms', 'products'));
     }
 
     /**
@@ -129,7 +204,7 @@ class BOMController extends Controller
             ->orderBy('uom_name')
             ->get();
         
-        return view('inventory.bom.create', compact('products', 'materials', 'uoms'));
+        return view('admin.bom-recipes.bom.create', compact('products', 'materials', 'uoms'));
     }
 
     /**
@@ -154,32 +229,25 @@ class BOMController extends Controller
         ], [
             'product_id.required' => 'Please select a product.',
             'product_id.exists' => 'Selected product is invalid.',
-            
             'bom_version.required' => 'BOM version is required.',
-            
             'effective_date.required' => 'Effective date is required.',
             'effective_date.date' => 'Please provide a valid date.',
-            
+
             'items.required' => 'BOM must have at least one item.',
             'items.min' => 'BOM must have at least one item.',
-            
             'items.*.material_id.required' => 'Material is required for each item.',
             'items.*.material_id.exists' => 'Selected material is invalid.',
-            
             'items.*.quantity_required.required' => 'Quantity is required for each item.',
             'items.*.quantity_required.numeric' => 'Quantity must be a number.',
             'items.*.quantity_required.min' => 'Quantity must be greater than 0.',
-            
             'items.*.uom_id.required' => 'Unit of measure is required for each item.',
             'items.*.uom_id.exists' => 'Selected unit is invalid.',
-            
             'items.*.item_type.required' => 'Item type is required for each item.',
             'items.*.item_type.in' => 'Invalid item type selected.',
         ]);
         
         DB::beginTransaction();
         try {
-            // Generate unique BOM code
             $bomCode = CodeGeneratorHelper::generateBOMCode();
             
             // Get product info for logging
@@ -296,7 +364,7 @@ class BOMController extends Controller
         // Calculate total cost
         $totalCost = $items->sum('item_cost');
         
-        return view('inventory.bom.show', compact('bom', 'items', 'totalCost'));
+        return view('admin.bom-recipes.bom.show', compact('bom', 'items', 'totalCost'));
     }
 
     /**
@@ -354,7 +422,7 @@ class BOMController extends Controller
             ->where('bom_id', $bom->bom_id)
             ->get();
         
-        return view('inventory.bom.edit', compact('bom', 'products', 'materials', 'uoms', 'bomItems'));
+        return view('admin.bom-recipes.bom.edit', compact('bom', 'products', 'materials', 'uoms', 'bomItems'));
     }
 
     /**
@@ -557,46 +625,93 @@ class BOMController extends Controller
                 'bom.created_at'
             );
         
-        // Apply same filters as index
+        // Search filter
         if ($request->filled('search')) {
-            $search = $request->search;
+            $search = $request->input('search');
             $query->where(function($q) use ($search) {
                 $q->where('bom.bom_code', 'like', "%{$search}%")
                 ->orWhere('p.product_name', 'like', "%{$search}%")
-                ->orWhere('p.product_code', 'like', "%{$search}%");
+                ->orWhere('p.product_code', 'like', "%{$search}%")
+                ->orWhere('bom.bom_version', 'like', "%{$search}%");
             });
         }
         
+        // Filter by product type
         if ($request->filled('product_type')) {
-            $query->where('p.product_type', $request->product_type);
+            $query->where('p.product_type', $request->input('product_type'));
         }
         
+        // Filter by status
         if ($request->filled('status')) {
-            $query->where('bom.is_active', $request->status === 'active' ? 1 : 0);
+            if ($request->input('status') === 'active') {
+                $query->where('bom.is_active', 1);
+            } elseif ($request->input('status') === 'inactive') {
+                $query->where('bom.is_active', 0);
+            }
         }
         
-        // Apply same sorting as index
-        $sort = $request->get('sort', 'created_at_desc');
-        switch ($sort) {
-            case 'created_at_asc':
-                $query->orderBy('bom.created_at', 'asc');
-                break;
-            case 'bom_code_asc':
-                $query->orderBy('bom.bom_code', 'asc');
-                break;
-            case 'bom_code_desc':
-                $query->orderBy('bom.bom_code', 'desc');
-                break;
-            case 'product_name_asc':
-                $query->orderBy('p.product_name', 'asc');
-                break;
-            case 'product_name_desc':
-                $query->orderBy('p.product_name', 'desc');
-                break;
-            case 'created_at_desc':
-            default:
-                $query->orderByDesc('bom.created_at');
-                break;
+        // Filter by product
+        if ($request->filled('product_id')) {
+            $query->where('bom.product_id', $request->input('product_id'));
+        }
+        
+        // Filter by items count
+        if ($request->filled('items_filter')) {
+            switch ($request->input('items_filter')) {
+                case 'empty':
+                    $query->havingRaw('(SELECT COUNT(*) FROM bom_items WHERE bom_id = bom.bom_id) = 0');
+                    break;
+                case 'simple':
+                    $query->havingRaw('(SELECT COUNT(*) FROM bom_items WHERE bom_id = bom.bom_id) BETWEEN 1 AND 3');
+                    break;
+                case 'standard':
+                    $query->havingRaw('(SELECT COUNT(*) FROM bom_items WHERE bom_id = bom.bom_id) BETWEEN 4 AND 7');
+                    break;
+                case 'complex':
+                    $query->havingRaw('(SELECT COUNT(*) FROM bom_items WHERE bom_id = bom.bom_id) >= 8');
+                    break;
+            }
+        }
+
+        // Filter by effective date range
+        if ($request->filled('date_from')) {
+            $query->where('bom.effective_date', '>=', $request->input('date_from'));
+        }
+        if ($request->filled('date_to')) {
+            $query->where('bom.effective_date', '<=', $request->input('date_to'));
+        }
+        
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+        $sortOrder = \in_array(strtolower($sortOrder), ['asc', 'desc']) ? strtolower($sortOrder) : 'desc';
+        
+        $allowedSort = [
+            'bom_code', 'product_name', 'product_type', 'bom_version',
+            'effective_date', 'items_count', 'created_at'
+        ];
+        
+        if (\in_array($sortBy, $allowedSort)) {
+            if ($sortBy === 'bom_code') {
+                $query->orderBy('bom.bom_code', $sortOrder);
+            } elseif ($sortBy === 'product_name') {
+                $query->orderBy('p.product_name', $sortOrder);
+            } elseif ($sortBy === 'product_type') {
+                $query->orderBy('p.product_type', $sortOrder);
+            } elseif ($sortBy === 'bom_version') {
+                $query->orderBy('bom.bom_version', $sortOrder);
+            } elseif ($sortBy === 'effective_date') {
+                $query->orderBy('bom.effective_date', $sortOrder);
+            } elseif ($sortBy === 'created_at') {
+                $query->orderBy('bom.created_at', $sortOrder);
+            } elseif ($sortBy === 'items_count') {
+                $query->orderByRaw("(SELECT COUNT(*) FROM bom_items WHERE bom_id = bom.bom_id) {$sortOrder}");
+            }
+        } else {
+            $query->orderByDesc('bom.created_at');
+        }
+        
+        if ($sortBy !== 'bom_code' && $sortBy !== 'created_at') {
+            $query->orderByDesc('bom.created_at');
         }
         
         $boms = $query->limit(10000)->get();
