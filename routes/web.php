@@ -81,6 +81,9 @@ Route::middleware('auth')->group(function () {
 
     // SPRINT 14: Basic Finance
     require __DIR__.'/sprint/sprint_14_basic_finance.php';
+
+    // SPRINT 15: Payment Processing
+    require __DIR__.'/sprint/sprint_15_payment_processing.php';
     
     // DEVELOPMENT TEMPLATES (Optional - can be disabled in production)
     if (config('app.debug')) {
