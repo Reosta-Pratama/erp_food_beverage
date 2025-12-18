@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Helpers\CodeGeneratorHelper;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -334,14 +335,7 @@ class SettingsModuleSeeder extends Seeder
         ];
 
         foreach ($taxRates as $tax) {
-            do {
-                $taxCode = strtoupper(Str::random(10));
-
-                // Check if the generated code already exists in the database
-                $exists = DB::table('tax_rates')
-                    ->where('tax_code', $taxCode)
-                    ->exists();
-            } while ($exists); // Repeat until a unique code is found
+            $taxCode = CodeGeneratorHelper::generateTaxRateCode();
 
             DB::table('tax_rates')->insert([
                 'tax_code' => $taxCode,

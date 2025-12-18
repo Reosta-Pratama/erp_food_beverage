@@ -65,7 +65,7 @@ class CodeGeneratorHelper
             $timestamp = base_convert(time(), 10, 36);
             
             // Calculate remaining length
-            $remainingLength = 15 - strlen($prefix) - strlen($timestamp) - 1;
+            $remainingLength = 15 - \strlen($prefix) - \strlen($timestamp) - 1;
             
             // Generate random string for remaining space
             $random = strtoupper(substr(
@@ -108,7 +108,7 @@ class CodeGeneratorHelper
             $uuidParts = explode('-', $uuid);
             
             // Take first segments to fit in 15 chars
-            $remainingLength = 15 - strlen($prefix) - 1;
+            $remainingLength = 15 - \strlen($prefix) - 1;
             $shortUuid = strtoupper(substr(str_replace('-', '', $uuid), 0, $remainingLength));
             
             $code = $prefix . '-' . $shortUuid;
