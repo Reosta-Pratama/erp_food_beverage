@@ -80,16 +80,16 @@ class BOMController extends Controller
         if ($request->filled('items_filter')) {
             switch ($request->input('items_filter')) {
                 case 'empty': // No items
-                    $query->havingRaw('(SELECT COUNT(*) FROM bom_items WHERE bom_id = bom.bom_id) = 0');
+                    $query->whereRaw('(SELECT COUNT(*) FROM bom_items WHERE bom_id = bom.bom_id) = 0');
                     break;
                 case 'simple': // 1-3 items
-                    $query->havingRaw('(SELECT COUNT(*) FROM bom_items WHERE bom_id = bom.bom_id) BETWEEN 1 AND 3');
+                    $query->whereRaw('(SELECT COUNT(*) FROM bom_items WHERE bom_id = bom.bom_id) BETWEEN 1 AND 3');
                     break;
                 case 'standard': // 4-7 items
-                    $query->havingRaw('(SELECT COUNT(*) FROM bom_items WHERE bom_id = bom.bom_id) BETWEEN 4 AND 7');
+                    $query->whereRaw('(SELECT COUNT(*) FROM bom_items WHERE bom_id = bom.bom_id) BETWEEN 4 AND 7');
                     break;
                 case 'complex': // 8+ items
-                    $query->havingRaw('(SELECT COUNT(*) FROM bom_items WHERE bom_id = bom.bom_id) >= 8');
+                    $query->whereRaw('(SELECT COUNT(*) FROM bom_items WHERE bom_id = bom.bom_id) >= 8');
                     break;
             }
         }
@@ -259,7 +259,7 @@ class BOMController extends Controller
                 'product_id' => $validated['product_id'],
                 'bom_version' => $validated['bom_version'],
                 'effective_date' => $validated['effective_date'],
-                'is_active' => $request->has('is_active') ? 1 : 0,
+                'is_active' => $request->boolean('is_active'),
                 'notes' => $validated['notes'] ?? null,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -294,7 +294,7 @@ class BOMController extends Controller
                     'bom_version' => $validated['bom_version'],
                     'effective_date' => $validated['effective_date'],
                     'is_active' => $request->has('is_active') ? 1 : 0,
-                    'items_count' => count($validated['items']),
+                    'items_count' => \count($validated['items']),
                 ]
             );
             
@@ -449,6 +449,29 @@ class BOMController extends Controller
             'items.*.uom_id' => ['required', 'exists:units_of_measure,uom_id'],
             'items.*.item_type' => ['required', 'in:Raw Material,Semi-Finished,Packaging'],
             'items.*.scrap_percentage' => ['nullable', 'numeric', 'min:0', 'max:100'],
+        ], [
+            'product_id.required' => 'Product is required.',
+            'product_id.exists' => 'Selected product is invalid.',
+            'bom_version.required' => 'BOM version is required.',
+            'bom_version.max' => 'BOM version may not be greater than :max characters.',
+            'effective_date.required' => 'Effective date is required.',
+            'effective_date.date' => 'Effective date must be a valid date.',
+
+            'items.required' => 'BOM must have at least one item.',
+            'items.array' => 'BOM items format is invalid.',
+            'items.min' => 'BOM must have at least one item.',
+            'items.*.material_id.required' => 'Material is required.',
+            'items.*.material_id.exists' => 'Selected material is invalid.',
+            'items.*.quantity_required.required' => 'Quantity is required.',
+            'items.*.quantity_required.numeric' => 'Quantity must be a number.',
+            'items.*.quantity_required.min' => 'Quantity must be greater than 0.',
+            'items.*.uom_id.required' => 'Unit of measure is required.',
+            'items.*.uom_id.exists' => 'Selected unit of measure is invalid.',
+            'items.*.item_type.required' => 'Item type is required.',
+            'items.*.item_type.in' => 'Invalid item type selected.',
+            'items.*.scrap_percentage.numeric' => 'Scrap percentage must be a number.',
+            'items.*.scrap_percentage.min' => 'Scrap percentage must be at least 0.',
+            'items.*.scrap_percentage.max' => 'Scrap percentage may not be greater than 100.',
         ]);
         
         DB::beginTransaction();
@@ -474,7 +497,7 @@ class BOMController extends Controller
                     'product_id' => $validated['product_id'],
                     'bom_version' => $validated['bom_version'],
                     'effective_date' => $validated['effective_date'],
-                    'is_active' => $request->has('is_active') ? 1 : 0,
+                    'is_active' => $request->boolean('is_active'),
                     'notes' => $validated['notes'] ?? null,
                     'updated_at' => now(),
                 ]);
@@ -658,17 +681,17 @@ class BOMController extends Controller
         // Filter by items count
         if ($request->filled('items_filter')) {
             switch ($request->input('items_filter')) {
-                case 'empty':
-                    $query->havingRaw('(SELECT COUNT(*) FROM bom_items WHERE bom_id = bom.bom_id) = 0');
+                case 'empty': // No items
+                    $query->whereRaw('(SELECT COUNT(*) FROM bom_items WHERE bom_id = bom.bom_id) = 0');
                     break;
-                case 'simple':
-                    $query->havingRaw('(SELECT COUNT(*) FROM bom_items WHERE bom_id = bom.bom_id) BETWEEN 1 AND 3');
+                case 'simple': // 1-3 items
+                    $query->whereRaw('(SELECT COUNT(*) FROM bom_items WHERE bom_id = bom.bom_id) BETWEEN 1 AND 3');
                     break;
-                case 'standard':
-                    $query->havingRaw('(SELECT COUNT(*) FROM bom_items WHERE bom_id = bom.bom_id) BETWEEN 4 AND 7');
+                case 'standard': // 4-7 items
+                    $query->whereRaw('(SELECT COUNT(*) FROM bom_items WHERE bom_id = bom.bom_id) BETWEEN 4 AND 7');
                     break;
-                case 'complex':
-                    $query->havingRaw('(SELECT COUNT(*) FROM bom_items WHERE bom_id = bom.bom_id) >= 8');
+                case 'complex': // 8+ items
+                    $query->whereRaw('(SELECT COUNT(*) FROM bom_items WHERE bom_id = bom.bom_id) >= 8');
                     break;
             }
         }

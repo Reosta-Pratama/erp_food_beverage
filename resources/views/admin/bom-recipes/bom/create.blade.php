@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="{{ asset('assets/plugin/flatpickr/flatpickr.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugin/flatpickr/flatpickr.min.css') }}">
 
+    <!-- Select 2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 @endsection
 
 @section('content')
@@ -99,7 +102,7 @@
                                 @foreach($products as $product)
                                     <option value="{{ $product->product_id }}" 
                                             {{ old('product_id') == $product->product_id ? 'selected' : '' }}>
-                                        {{ $product->product_name }} ({{ $product->product_code }}) - {{ $product->uom_code }}
+                                        {{ $product->product_name }} - {{ $product->uom_code }}
                                     </option>
                                 @endforeach
                             </select>
@@ -268,7 +271,7 @@
                                 Material <span class="text-danger">*</span>
                             </label>
 
-                            <select class="form-select material-select" 
+                            <select class="form-select material-select select-2" 
                                     name="items[INDEX_PLACEHOLDER][material_id]" 
                                     onchange="updateMaterialInfo(this)"
                                     data-name="Material">
@@ -279,7 +282,7 @@
                                             data-uom="{{ $material->uom_id }}"
                                             data-uom-code="{{ $material->uom_code }}"
                                             data-type="{{ $material->product_type }}">
-                                        {{ $material->product_name }} ({{ $material->product_code }})
+                                        {{ $material->product_name }} 
                                     </option>
                                 @endforeach
                             </select>
@@ -290,7 +293,7 @@
                             <label class="form-label">
                                 Item Type <span class="text-danger">*</span>
                             </label>
-                            <select class="form-select" 
+                            <select class="form-select select-2" 
                                     name="items[INDEX_PLACEHOLDER][item_type]" 
                                     required>
                                 <option value="">Select Type...</option>
@@ -319,7 +322,7 @@
                             <label class="form-label">
                                 UOM <span class="text-danger">*</span>
                             </label>
-                            <select class="form-select" 
+                            <select class="form-select select-2" 
                                     name="items[INDEX_PLACEHOLDER][uom_id]" 
                                     required>
                                 <option value="">Select UOM...</option>
@@ -371,6 +374,10 @@
 
     <!-- FlatPickr JS -->
     <script src="{{ asset('assets/plugin/flatpickr/flatpickr.min.js') }}"></script>
+    
+    <!-- Select 2 JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     @vite(['resources/assets/js/erp/bom-init.js'])
 

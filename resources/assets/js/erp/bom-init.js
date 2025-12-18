@@ -27,6 +27,16 @@ function formatCurrency(amount) {
     return 'Rp ' + amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 }
 
+function initSelect2(context = document) {
+    context.querySelectorAll('.select-2').forEach(el => {
+        if (!$(el).hasClass("select2-hidden-accessible")) {
+            $(el).select2({
+                width: '100%'
+            });
+        }
+    });
+}
+
 // Add / Remove BOM Item
 function addBOMItem() {
     itemIndex++;
@@ -36,12 +46,16 @@ function addBOMItem() {
     const clone = template.content.cloneNode(true);
     
     // Replace placeholders
-    const div = document.createElement('div');
-    div.innerHTML = clone.querySelector('.bom-item').outerHTML.replace(/INDEX_PLACEHOLDER/g, itemIndex);
-    
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = clone.querySelector('.bom-item').outerHTML.replace(/INDEX_PLACEHOLDER/g, itemIndex);
+
+    const newItem = wrapper.firstElementChild;
+
     // Append to container
-    document.getElementById('bomItemsContainer').appendChild(div.firstElementChild);
+    document.getElementById('bomItemsContainer').appendChild(newItem);
     
+    initSelect2(newItem);
+
     // Hide empty state
     document.getElementById('emptyState').style.display = 'none';
     
@@ -89,16 +103,16 @@ function updateMaterialInfo(select) {
     if (option.value) {
         // Auto-fill UOM
         const uomSelect = card.querySelector('select[name*="[uom_id]"]');
-        const uomValue = option.getAttribute('data-uom');
-        if (uomValue) {
-            uomSelect.value = uomValue;
+        const uomValue = option.dataset.uom;
+        if (uomSelect && uomValue) {
+            $(uomSelect).val(uomValue).trigger('change');
         }
         
         // Auto-fill Item Type
         const typeSelect = card.querySelector('select[name*="[item_type]"]');
-        const materialType = option.getAttribute('data-type');
-        if (materialType) {
-            typeSelect.value = materialType;
+        const materialType = option.dataset.type;
+        if (typeSelect && materialType) {
+            $(typeSelect).val(materialType).trigger('change');
         }
         
         // Update unit cost display
@@ -156,24 +170,28 @@ function updateTotalItems() {
 function initFormValidation() {
     const bomForm = document.getElementById('bomForm');
     const required = ['product_id'];
-    let isValid = true;
-    let lastInvalidField = '';
     
     if (!bomForm) return;
 
     bomForm.addEventListener('submit', async function (e) {
+        // Reset validation state on each submit
+        let isValid = true;
+        let lastInvalidField = '';
+        
         const items = document.querySelectorAll('.bom-item');
 
+        // Validate required fields
         required.forEach(fieldName => {
             const field = document.getElementById(fieldName);
-            let value = field.value;
-
-            if (!isValid) return;
+            
+            if (!field) return; 
+            
+            let value = field.value.trim(); 
 
             if (!value) {
                 isValid = false;
                 field.classList.add('is-invalid');
-                lastInvalidField = field.getAttribute('data-name') || fieldName.replace('_', ' ');
+                lastInvalidField = field.getAttribute('data-name') || fieldName.replace(/_/g, ' ');
             } else {
                 field.classList.remove('is-invalid');
             }
@@ -198,14 +216,12 @@ function initFormValidation() {
             await Swal.fire({
                 icon: 'warning',
                 title: 'Validation',
-                text: `Please add at least one BOM item`,
+                text: 'Please add at least one BOM item',
                 confirmButtonText: 'OK'
             });
 
             return;
         }
-
-        
 
         const submitBtn = this.querySelector('button[type="submit"]');
         if (submitBtn) {
@@ -234,20 +250,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const dateRanges = document.querySelectorAll('.daterange');
     if (dateRanges.length > 0) {
-        dateRanges.forEach((element) => {
-            // Get date_from and date_to attributes
-            const dateFrom = element.getAttribute('date_from') || null;
-            const dateTo = element.getAttribute('date_to') || null;
+        dateRanges.forEach(element => {
+            const dateFrom = element.dataset.dateFrom;
+            const dateTo   = element.dataset.dateTo;
 
-            // Determine default date range (only if both have value)
-            const defaultDates = dateFrom && dateTo ? [dateFrom, dateTo] : null;
+            const config = {
+                mode: "range",
+                dateFormat: "Y-m-d",
+                disableMobile: true
+            };
 
-            flatpickr(element, {
-                mode: "range",            
-                dateFormat: "Y-m-d",      
-                disableMobile: true,      
-                defaultDate: defaultDates 
-            });
+            if (dateFrom && dateTo) {
+                config.defaultDate = [dateFrom, dateTo];
+            }
+
+            flatpickr(element, config);
         });
     }
 
@@ -265,6 +282,8 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
+
+    initSelect2();
 
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('search') || urlParams.has('product_type') || urlParams.has('status') || urlParams.has('sort')) {

@@ -144,7 +144,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="text-muted" width="150">Product Code:</td>
+                                    <td class="text-muted" width="150">Product Name:</td>
                                     <td class="fw-bold">{{ $bom->product_name }}</td>
                                 </tr>
                                 <tr>
